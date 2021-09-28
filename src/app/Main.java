@@ -3,7 +3,7 @@ package app;
 import java.sql.PreparedStatement;
 import javafx.application.Application;
 import javafx.stage.Stage;
-import weka.core.converters.ArffLoader;
+import weka.core.converters.*;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.fxml.FXMLLoader;
