@@ -1,0 +1,103 @@
+package com.aiim.app.controller;
+
+import java.io.IOException;
+import java.util.ResourceBundle;
+import com.aiim.app.resource.ViewNames;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.SubScene;
+import javafx.stage.Stage;
+
+/* The following class handles the switching between views and is the only class aware of the path to each view. Part of MVC design Pattern as a controller.
+ * Neil Campbell 07/05/2021, B00361078
+ */
+
+public class ViewController {
+	
+	private Parent root;
+	private ResourceBundle strBundle;
+	private String viewResource;
+	private Stage currentStage;
+	private Scene mainScene;
+	private Scene currentScene;
+	private SubScene currentSubScene;
+	private static int currentID;
+	
+	public ViewController () {
+		strBundle = ResourceBundle.getBundle("com.aiim.app.resource.bundle");
+	}
+	
+	public void setCurrentStage(Stage stage) {
+		this.currentStage = stage;
+	}
+	public void setCurrentScene(Scene scene) {
+		this.currentScene = scene;
+	}
+	public void setCurrentSubScene(SubScene subScene) {
+		this.currentSubScene = subScene;
+	}
+	public static void setCurrentID(int currentID){
+		ViewController.currentID = currentID;
+	}
+	public static int getCurrentID() {
+		return currentID;
+	}
+		
+	public void initialiseStage() {
+		mainScene = new Scene(root, 800, 600);
+        currentStage.setTitle(strBundle.getString("appName"));
+        currentStage.setScene(mainScene);
+        currentStage.setResizable(false);
+        currentStage.show();
+	}
+	
+	public void initialiseScene() {
+		currentScene.setRoot(root);
+	}
+	public void initialiseSubScene() {
+		currentSubScene.setRoot(root);
+	}
+	private void setRoot(String viewResource2) throws IOException {
+		FXMLLoader loader = new FXMLLoader();
+		loader.setLocation(getClass().getResource(viewResource));
+		root = loader.load();
+	}
+	
+	public void switchToView(ViewNames view) throws IOException {
+		switch(view) {
+		  case LOGIN:
+				viewResource  = "/com/aiim/app/view/login.fxml";
+				setRoot(viewResource);
+				initialiseStage();
+			break;
+		  case DASHBOARD:
+			  	viewResource  = "/com/aiim/app/view/dashboard.fxml";
+			  	setRoot(viewResource);
+			  	initialiseScene();
+		    break;
+		  case CLIENTS:
+			  	viewResource  = "/com/app/views/client.fxml";
+			  	setRoot(viewResource);
+			  	initialiseSubScene();
+			break;
+		  case SETTINGS:
+			  	viewResource  = "/com/app/views/settings.fxml";
+			  	setRoot(viewResource);
+			  	initialiseSubScene();
+			break;
+		  case STATISTICS:
+			  	viewResource  = "/com/app/views/stats.fxml";
+			  	setRoot(viewResource);
+			  	initialiseSubScene();
+			break;
+		  case CHANGECLIENT:
+			  	viewResource  = "/com/app/views/changeclient.fxml";
+			  	setRoot(viewResource);
+			  	initialiseStage();
+			break;
+		  default:
+			  currentStage.close();
+			}
+	}
+}
