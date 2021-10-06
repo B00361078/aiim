@@ -41,7 +41,7 @@ public class DatabaseConnect {
 			dbPass = strBundle.getString("dbPass");
 			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
 			String connectionURL = "jdbc:sqlserver://"+dbEndpoint+":"+dbPort+";"+"user="+dbUser+";password="+dbPass;
-			System.out.println(connectionURL);
+			//System.out.println(connectionURL);
 			con = DriverManager.getConnection(connectionURL); 
 			con.setAutoCommit(false);
 			return con;
