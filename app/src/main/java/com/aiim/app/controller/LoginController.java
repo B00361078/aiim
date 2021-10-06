@@ -71,36 +71,20 @@ public class LoginController {
     		//stmt.executeUpdate();
         	while(rs.next()){
         		hashString = rs.getString(2);
-                passBytes = rs.getBytes(2);
-                thesalt = rs.getBytes(5);
-                
-
-//               System.out.println("full hashed bytes in db are  = " +passBytes);
-//                System.out.println("full hashed tring in db is  = " +hashString);
-//                System.out.println("full salt bytes  = " + thesalt);
-//                System.out.println("full salt string  = " + saltString);
-//                byteToHexString(thesalt);
-//
-//                System.out.println(Arrays.toString(stringToByte(saltString)));
-//                System.out.println(Arrays.toString(thesalt));
-                
-                
-                
-
-                //saltString = rs.getString(5);
-                //System.out.println("salt string is "+ saltString);
-                //System.out.println("salt string is this from the bytes  = " +bytetoString(thesalt));
-                //System.out.println("salt bytes in db are now2  = " +getBytesCorrectly(saltString));
-                //String mysalt = rs.getString(5);
-
-                //System.out.println(hash);
-                //System.out.println(passBytes);
-                //System.out.println(thesalt);
+        		saltString = rs.getString(5);
             }
         	con.close();
-        	String str = "AvaArran3934BCF0-8D65-444B-A87C-4B0AE192480B";
-        	System.out.println("this was the test" + DigestUtils.sha1Hex(str).toUpperCase());
-//        	MessageDigest md = MessageDigest.getInstance("SHA1");
+        	if (DigestUtils.sha1Hex(passwordField.getText()+saltString).equalsIgnoreCase(hashString)) {
+        		System.out.println("match");
+        		//viewController.setCurrentScene(scene);
+            	//viewController.switchToView(ViewNames.DASHBOARD);
+    			}
+    		else {
+    			new Alert(Alert.AlertType.ERROR, strBundle.getString("e10")).showAndWait();
+
+        	}
+        	con.close();
+        	
 //    
 //            byte[] bytes  = md.digest(str.getBytes());
 //            StringBuilder sb = new StringBuilder();
@@ -295,13 +279,6 @@ public class LoginController {
 //        }
 //			if(validation.stringValidator(passwordField.getText(), adminD.getPassword()) && 
 //				//	validation.stringValidator(usernameField.getText(), adminD.getUsername())== true) {
-//        	viewController.setCurrentScene(scene);
-//        	viewController.switchToView(ViewNames.DASHBOARD);
-//			//}
-			//else
-			//	new Alert(Alert.AlertType.ERROR, strBundle.getString("e10")).showAndWait();
-		//} catch (IOException e1) {
-			//e1.printStackTrace();
-		//}
+        	
    // }
 //}
