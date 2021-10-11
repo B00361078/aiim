@@ -10,13 +10,13 @@
 .label {
     -fx-font-size: 12px;
     -fx-font-weight: bold;
-    -fx-text-fill: #4123a6;
+    -fx-text-fill: #000000;
     -fx-effect: innershadow( three-pass-box , rgba(0,0,0,0.7) , 6, 0.0 , 0 , 2 );
 }
 #welcome-text {
    -fx-font-size: 32px;
    -fx-font-family: "Arial Black";
-   -fx-fill: #4123a6;
+   -fx-fill: #000000;
    -fx-effect: innershadow( three-pass-box , rgba(0,0,0,0.7) , 6, 0.0 , 0 , 2 );
 }
 #actiontarget {
@@ -28,11 +28,11 @@
     -fx-text-fill: white;
     -fx-font-family: "Arial Narrow";
     -fx-font-weight: bold;
-    -fx-background-color: linear-gradient(#4123a6, #2A5058);
+    -fx-background-color: #0800ff;
     -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 );
 }
 .button:hover {
-    -fx-background-color: linear-gradient(#2A5058, #61a2b1);
+    -fx-background-color: #06036b;
 }
 #ipad-dark-grey {
     -fx-background-color: 

@@ -17,9 +17,9 @@
 
 <BorderPane style="-fx-background-color: #ffffff;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.aiim.app.controller.LoginController">
    <center>
-      <GridPane alignment="center" hgap="10" prefHeight="202.0" prefWidth="275.0" styleClass="root" vgap="10">
+      <GridPane alignment="center" hgap="10.0" prefHeight="186.0" prefWidth="275.0" styleClass="root" vgap="10.0">
       <padding>
-            <Insets bottom="10" left="25" right="25" top="25" />
+            <Insets bottom="10.0" left="25.0" right="25.0" />
          </padding>
         <stylesheets>
           <URL value="@style/style.css" />
@@ -36,7 +36,7 @@
                  
                  <HBox alignment="bottom_right" spacing="10" GridPane.columnIndex="1" GridPane.rowIndex="5">
                     <children>
-                    <Button onAction="#dashView" prefHeight="21.0" prefWidth="61.0" text="Sign In" />
+                    <Button onAction="#dashView" prefHeight="42.0" prefWidth="74.0" text="Sign In" />
                     </children>
                  
          </HBox>
@@ -57,7 +57,7 @@
       </GridPane>
    </center>
    <top>
-      <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
+      <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="BOTTOM_CENTER">
          <image>
             <Image url="@../../../../../../../../../../../Users/User/Pictures/aiim.PNG" />
          </image>

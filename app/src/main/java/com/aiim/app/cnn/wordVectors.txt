@@ -1,0 +1,28 @@
+Guidewire PolicyCenter is Avivas main commercial policy application.
+Guidewire ClaimCenter is Avivas global claims application.
+Network issue causing 404 error.
+Network issue causing 402 error.
+Network issue causing 403 error.
+403 errors relate to authentication issues with the network.
+Oracle is Avivas main finance system.
+Finesse softphone is Avivas main telephony software handled by Cisco.
+Financial transactions are handled by oracle.
+Unable to connect normally points to a network issue.
+Network team will handle network issues.
+Guidewire team will handle issues relating to the Guidewire applications.
+Avivas finance team will rectify issues relating to oracle finance.
+The telephony team will handle issues with softphone, specifically finesse or hardware such as the cisco hardphones.
+Hardphones are supplied by cisco.
+Any authentication issues relate to ciso.
+Ciso deal with authentication problems.
+Ciso handle issues with authorisation or security.
+Ciso will rectify 403 issues.
+Login authentication or authorisation is handled by ciso.
+ciso handle authentication
+ciso handle authentication
+ciso handle authentication
+ciso handle authentication
+ciso handle authentication
+ciso handle authentication
+ciso handle authentication
+ciso handle authentication
