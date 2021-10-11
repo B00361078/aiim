@@ -6,30 +6,47 @@ import java.util.ResourceBundle;
 
 public class DatabaseConnect {
 	
-	private static volatile DatabaseConnect instance = null;
-	private String dbEndpoint;
-	private String dbPort;
-	private String dbUser;
-	private String dbPass;
-	private ResourceBundle strBundle;
+	//private static volatile DatabaseConnect instance = null;
+	private static volatile Connection con = null;
+	private static String dbEndpoint;
+	private static String dbPort;
+	private static String dbUser;
+	private static String dbPass;
+	private static ResourceBundle strBundle;
 	
 	private DatabaseConnect() {
-		if(instance != null) {
-			throw new RuntimeException("Use getInstance() method to create");
+		if(con != null) {
+			throw new RuntimeException("Use getConnection() method to connect");
 		}
 	};
 	
-	public static DatabaseConnect getInstance() {
-		if(instance == null) {
+	public static Connection getConnection() {
+		if(con == null) {
 			synchronized (DatabaseConnect.class) {
-				if(instance == null) {
-					instance = new DatabaseConnect(); 
+				if(con == null) {
+					try {
+						strBundle = ResourceBundle.getBundle("com.aiim.app.resource.jdbc");
+						dbEndpoint = strBundle.getString("dbEndpoint");
+						dbPort = strBundle.getString("dbPort");
+						dbUser = strBundle.getString("dbUser");
+						dbPass = strBundle.getString("dbPass");
+						Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+						String connectionURL = "jdbc:sqlserver://"+dbEndpoint+":"+dbPort+";"+"user="+dbUser+";password="+dbPass;
+						//System.out.println(connectionURL);
+						con = DriverManager.getConnection(connectionURL); 
+						con.setAutoCommit(false);
+						return con;
+					}
+					catch (Exception e) {
+						// TODO: handle exception
+					}
+					return con;
 				}
 			}
 		}
-		return instance;
+		return con;
 	}
-	
+	/**
 	public Connection getConnection() throws ClassNotFoundException {
 		Connection con = null;
 
@@ -51,4 +68,5 @@ public class DatabaseConnect {
 		}
 		return con;
 	}
+	*/
 }
