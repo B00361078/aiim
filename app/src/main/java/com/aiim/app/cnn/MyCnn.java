@@ -138,7 +138,18 @@ public class MyCnn {
 
         System.out.println("\n\nPredictions for first gw file:");
         for( int i=0; i<labels.size(); i++ ){
-            System.out.println("Prediction(" + labels.get(i) + ") = " + predictionsFirstGW.getDouble(i)); //should be negative
+            System.out.println("Prediction(" + labels.get(i) + ") = " + predictionsFirstGW.getDouble(i)); 
+        }
+        
+        String pathFirstcisoFile = FilenameUtils.concat(DATA_PATH, "aclImdb/test/ciso/0_10.txt");
+        String contentsFirstciso = FileUtils.readFileToString(new File(pathFirstcisoFile));
+        INDArray featuresFirstciso = ((CnnSentenceDataSetIterator)testIter).loadSingleSentence(contentsFirstciso);
+
+        INDArray predictionsFirstciso = net.outputSingle(featuresFirstciso);
+
+        System.out.println("\n\nPredictions for first ciso file:");
+        for( int i=0; i<labels.size(); i++ ){
+            System.out.println("Prediction(" + labels.get(i) + ") = " + predictionsFirstciso.getDouble(i)); 
         }
     }
 
