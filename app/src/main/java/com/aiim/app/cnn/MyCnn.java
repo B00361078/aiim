@@ -20,12 +20,14 @@ import org.deeplearning4j.nn.conf.layers.OutputLayer;
 import org.deeplearning4j.nn.conf.layers.PoolingType;
 import org.deeplearning4j.nn.graph.ComputationGraph;
 import org.deeplearning4j.nn.weights.WeightInit;
+import org.deeplearning4j.util.ModelSerializer;
 import org.nd4j.linalg.activations.Activation;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.dataset.api.iterator.DataSetIterator;
 import org.nd4j.linalg.lossfunctions.LossFunctions;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.*;
 
@@ -126,6 +128,9 @@ public class MyCnn {
 
             System.out.println(evaluation.stats());
         }
+        System.out.println("saving model");
+        File trained_model = new File("trained_model.zip");
+    	ModelSerializer.writeModel(net, trained_model, false);
 
 
         //After training: load a single sentence and generate a prediction

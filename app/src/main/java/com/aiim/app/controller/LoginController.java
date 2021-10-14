@@ -64,24 +64,27 @@ public class LoginController {
     	Scene scene = passwordField.getScene();
     	String mystr = usernameField.getText();
     	
+    	viewController.setCurrentScene(scene);
+    	viewController.switchToView(ViewNames.DASHBOARD);
+    	
    
-        	con = DatabaseConnect.getConnection();
-        	stmt = con.prepareStatement("USE [honsdb] SELECT* FROM tblUser WHERE username = 'neil0310'");
-        	ResultSet rs = stmt.executeQuery();
-    		//stmt.executeUpdate();
-        	while(rs.next()){
-        		hashString = rs.getString(2);
-        		saltString = rs.getString(5);
-            }
-        	con.close();
-        	if (DigestUtils.sha1Hex(passwordField.getText()+saltString).equalsIgnoreCase(hashString)) {
-        		System.out.println("match");
-        		//viewController.setCurrentScene(scene);
-            	//viewController.switchToView(ViewNames.DASHBOARD);
-    			}
-    		else {
-    			new Alert(Alert.AlertType.ERROR, strBundle.getString("e10")).showAndWait();
-
-        	}
+//        	con = DatabaseConnect.getConnection();
+//        	//stmt = con.prepareStatement("USE [honsdb] SELECT* FROM tblUser WHERE username = 'neil0310'");
+//        	ResultSet rs = stmt.executeQuery();
+//    		stmt.executeUpdate();
+//        	while(rs.next()){
+//        		hashString = rs.getString(2);
+//        		saltString = rs.getString(5);
+//            }
+//        	con.close();
+//        	if (DigestUtils.sha1Hex(passwordField.getText()+saltString).equalsIgnoreCase(hashString)) {
+//        		System.out.println("match");
+//        		//viewController.setCurrentScene(scene);
+//            	//viewController.switchToView(ViewNames.DASHBOARD);
+//    			}
+//    		else {
+//    			new Alert(Alert.AlertType.ERROR, strBundle.getString("e10")).showAndWait();
+//
+//        	}
     }
 }

@@ -34,6 +34,7 @@ import org.nd4j.linalg.dataset.api.iterator.DataSetIterator;
 import org.nd4j.linalg.lossfunctions.LossFunctions;
 
 import java.io.File;
+import java.nio.file.Paths;
 import java.util.*;
 
 /**
@@ -44,7 +45,7 @@ import java.util.*;
  * @author Alex Black
  */
 public class CnnSentenceClassificationExample {
-
+	public static String currentDirectory = Paths.get("").toAbsolutePath().toString();
     /** Data URL for downloading */
     public static final String DATA_URL = "http://ai.stanford.edu/~amaas/data/sentiment/aclImdb_v1.tar.gz";
     /** Location to save and extract the training/testing data */
@@ -126,7 +127,8 @@ public class CnnSentenceClassificationExample {
 
         //Load word vectors and get the DataSetIterators for training and testing
         System.out.println("Loading word vectors and creating DataSetIterators");
-        WordVectors wordVectors = WordVectorSerializer.loadStaticModel(new File("C:/UWS/dlj4/deep-learning-samples/dl4j-examples/src/main/java/org/deeplearning4j/examples/convolution/sentenceclassification/model.txt"));
+        WordVectors wordVectors = WordVectorSerializer.loadStaticModel(new File(currentDirectory + "/newVector.txt"));
+        
         //WordVectors wordVectors = WordVectorSerializer.readWord2VecModel("C:/UWS/dlj4/deep-learning-samples/dl4j-examples/src/main/java/org/deeplearning4j/examples/convolution/sentenceclassification/model.txt");
         DataSetIterator trainIter = getDataSetIterator(true, wordVectors, batchSize, truncateReviewsToLength, rng);
         DataSetIterator testIter = getDataSetIterator(false, wordVectors, batchSize, truncateReviewsToLength, rng);
@@ -134,6 +136,7 @@ public class CnnSentenceClassificationExample {
         System.out.println("Starting training");
 
         for (int i = 0; i < nEpochs; i++) {
+        	System.out.println("got here");
             net.fit(trainIter);
             System.out.println("Epoch " + i + " complete. Starting evaluation:");
 
@@ -145,8 +148,9 @@ public class CnnSentenceClassificationExample {
 
 
         //After training: load a single sentence and generate a prediction
-        String gwfiletotest = FilenameUtils.concat(DATA_PATH, "aclImdb/test/gw//gw_01.txt");
-        String contentsFirstNegative = FileUtils.readFileToString(new File(gwfiletotest));
+        //String gwfiletotest = FilenameUtils.concat(DATA_PATH, "aclImdb/test/gw/gw_01.txt");
+        String pathFirstNegativeFile = FilenameUtils.concat(DATA_PATH, "aclImdb/test/gw/gw_01.txt");
+        String contentsFirstNegative = FileUtils.readFileToString(new File(pathFirstNegativeFile));
         INDArray featuresFirstNegative = ((CnnSentenceDataSetIterator)testIter).loadSingleSentence(contentsFirstNegative);
 
         INDArray predictionsFirstNegative = net.outputSingle(featuresFirstNegative);
@@ -161,42 +165,56 @@ public class CnnSentenceClassificationExample {
 
     private static DataSetIterator getDataSetIterator(boolean isTraining, WordVectors wordVectors, int minibatchSize,
                                                       int maxSentenceLength, Random rng ){
+    	
+//    	String path = FilenameUtils.concat(DATA_PATH, (isTraining ? "aclImdb/train/" : "aclImdb/test/"));
+//        String positiveBaseDir = FilenameUtils.concat(path, "gw");
+//        String negativeBaseDir = FilenameUtils.concat(path, "ciso");
+//
+//        File filePositive = new File(positiveBaseDir);
+//        File fileNegative = new File(negativeBaseDir);
+//
+//        Map<String,List<File>> reviewFilesMap = new HashMap<>();
+//        reviewFilesMap.put("Guidewire", Arrays.asList(filePositive.listFiles()));
+//        reviewFilesMap.put("Ciso", Arrays.asList(fileNegative.listFiles()));
     	List<String> gwlabel = new ArrayList<>();
         final List<String> gwtraindata = new ArrayList<>();
         // add lgic for single file iteration
         gwlabel.add("Guidewire");
-        gwlabel.add("GW");
-        gwtraindata.add("I have an issue with Guidewire PolicyCenter");
-        gwtraindata.add("I have an issue with Policcenter");
+        gwlabel.add("Ciso");
+        gwtraindata.add("Guidewire Policycenter");
+        gwtraindata.add("Guidewire Policycenter");
 
    
         
         
-        SentenceIterator iter = new LineSentenceIterator(new File("C:/UWS/dlj4/deep-learning-samples/dl4j-examples/src/main/java/org/deeplearning4j/examples/convolution/sentenceclassification/rawdata.txt"));
-		iter.setPreProcessor(new SentencePreProcessor() {
-		    @Override
-		    public String preProcess(String sentence) {
-		    	gwtraindata.add(sentence);
-		    	System.out.println(sentence);
-		        return sentence.toLowerCase();
-		    }
-		});
+//        SentenceIterator iter = new LineSentenceIterator(new File("C:/UWS/dlj4/deep-learning-samples/dl4j-examples/src/main/java/org/deeplearning4j/examples/convolution/sentenceclassification/rawdata.txt"));
+//		iter.setPreProcessor(new SentencePreProcessor() {
+//		    @Override
+//		    public String preProcess(String sentence) {
+//		    	gwtraindata.add(sentence);
+//		    	System.out.println(sentence);
+//		        return sentence.toLowerCase();
+//		    }
+//		});
 		
-        String path = FilenameUtils.concat(DATA_PATH, (isTraining ? "aclImdb/train/" : "aclImdb/test/"));
-        String gwtrain = FilenameUtils.concat(path, "gw");
-        String extrain = FilenameUtils.concat(path, "ex");
-
-        File filePositive = new File(gwtrain);
-        File fileNegative = new File(extrain);
-
-        Map<String,List<File>> reviewFilesMap = new HashMap<>();
-        
-        
-        reviewFilesMap.put("gw", Arrays.asList(filePositive.listFiles()));
-        reviewFilesMap.put("ex", Arrays.asList(fileNegative.listFiles()));
- 
-        
+//        String path = FilenameUtils.concat(DATA_PATH, (isTraining ? "aclImdb/train/" : "aclImdb/test/"));
+//        String gwtrain = FilenameUtils.concat(path, "gw");
+//        String cisotrain = FilenameUtils.concat(path, "ciso");
+//
+//        File fileguidewire = new File(gwtrain);
+//        File fileciso = new File(cisotrain);
+//
+//        Map<String,List<File>> reviewFilesMap = new HashMap<>();
+//        
+//        
+//        reviewFilesMap.put("Guidewire", Arrays.asList(fileguidewire.listFiles()));
+//        reviewFilesMap.put("Ciso", Arrays.asList(fileciso.listFiles()));
+// 
+//        
 		LabeledSentenceProvider sentenceProvider = new CollectionLabeledSentenceProvider(gwtraindata, gwlabel);
+		while (sentenceProvider.hasNext()) {}
+		System.out.println(sentenceProvider.nextSentence());
+		//abeledSentenceProvider sentenceProvider = new FileLabeledSentenceProvider(reviewFilesMap, rng);
         
 
         return new CnnSentenceDataSetIterator.Builder()

@@ -1,0 +1,67 @@
+.button {
+    -fx-background-color: #3638ad;
+    -fx-text-fill: white;
+}
+
+.label {
+    -fx-font-size: 12px;
+    -fx-text-fill: #4123a6;
+}
+
+.button:hover {
+    -fx-background-color: #030340;
+}
+.button:pressed {
+    -fx-background-color: #1c1cb0;
+}
+.table-view .column-header,
+.table-view .column-header-background .filler {
+    -fx-background-color:  #04055e; 
+}
+.table-view .column-header .label{
+   -fx-text-fill: white;
+   -fx-font-weight: bold; 
+   -fx-alignment: CENTER_LEFT;
+}
+.default-color0.chart-bar { -fx-bar-fill: #3638ad }
+
+.axis-label {
+  -fx-text-fill: #3638ad ;
+  -fx-font-weight: bold; 
+}
+.chart-title {
+  -fx-text-fill: #3638ad;
+  -fx-font-size: 1.6em;
+  -fx-font-weight: bold; 
+}
+
+/* Selected row */
+.table-view:focused .table-row-cell:filled:focused:selected {
+    -fx-background-color: #947de3;
+    -fx-text-fill: white;
+}
+/* Selected row when table not focused */
+.table-row-cell:filled:focused:selected {
+    -fx-background-color: #947de3;
+    -fx-text-fill: white;
+}
+
+/* Row hovered */
+.table-view:row-selection .table-row-cell:filled:hover {
+    -fx-background-color: #947de3;
+    -fx-text-fill: white;
+}
+
+/* Selected row hovered */
+.table-view:focused .table-row-cell:filled:focused:selected:hover {
+    -fx-background-color: #947de3;
+    -fx-text-fill: white;
+}
+
+/* Selected row hovered when table not focused */
+.table-view:row-selection .table-row-cell:filled:focused:hover {
+    -fx-background-color: #947de3;
+    -fx-text-fill: white;
+}
+
+

@@ -27,11 +27,11 @@
           
              <Label text="User Name:" textFill="WHITE" GridPane.rowIndex="2" />
           
-             <TextField fx:id="usernameField" prefHeight="25.0" prefWidth="251.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+             <TextField fx:id="usernameField" maxWidth="-Infinity" prefHeight="25.0" prefWidth="183.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" />
           
              <Label text="Password:" GridPane.rowIndex="3" />
           
-             <PasswordField fx:id="passwordField" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+             <PasswordField fx:id="passwordField" maxWidth="-Infinity" prefHeight="25.0" prefWidth="184.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="3" />
                  
                  <HBox alignment="bottom_right" prefHeight="43.0" prefWidth="251.0" spacing="10" GridPane.columnIndex="1" GridPane.rowIndex="5">
                     <children>

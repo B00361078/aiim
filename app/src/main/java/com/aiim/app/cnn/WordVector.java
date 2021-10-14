@@ -57,7 +57,7 @@ public class WordVector {
             .iterations(10)
             .layerSize(200)
             .seed(42)
-            .windowSize(7)
+            .windowSize(5)
             .iterate(iter)
             .tokenizerFactory(t)
             .build();

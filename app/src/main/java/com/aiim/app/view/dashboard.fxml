@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.geometry.*?>
+<?import de.jensd.fx.glyphs.fontawesome.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.shape.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.collections.FXCollections?>
+
+<AnchorPane prefHeight="715.0" prefWidth="892.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.aiim.app.controller.DashboardController">
+   <children>
+      <VBox prefHeight="718.0" prefWidth="228.0" style="-fx-background-color: #04055e;">
+         <children>
+            <Pane blendMode="EXCLUSION" prefHeight="120.0" prefWidth="192.0">
+               <effect>
+                  <Reflection />
+               </effect>
+               <children>
+                  <ImageView blendMode="BLUE" depthTest="DISABLE" fitHeight="98.0" fitWidth="99.0" layoutX="54.0" layoutY="23.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@styling/icon.png" />
+                     </image>
+                     <effect>
+                        <Lighting diffuseConstant="2.0" specularConstant="2.0" specularExponent="0.0" surfaceScale="0.0">
+                           <bumpInput>
+                              <Shadow>
+                                 <input>
+                                    <Lighting>
+                                       <bumpInput>
+                                          <Shadow />
+                                       </bumpInput>
+                                       <light>
+                                          <Light.Distant />
+                                       </light>
+                                    </Lighting>
+                                 </input>
+                              </Shadow>
+                           </bumpInput>
+                           <light>
+                              <Light.Distant />
+                           </light>
+                        </Lighting>
+                     </effect>
+                  </ImageView>
+               </children>
+            </Pane>
+            <Text fill="WHITE" fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0" text="My PT App" textOrigin="CENTER" wrappingWidth="120.4345703125">
+               <font>
+                  <Font name="Comic Sans MS" size="24.0" />
+               </font>
+               <VBox.margin>
+                  <Insets left="50.0" />
+               </VBox.margin>
+            </Text>
+            <Button fx:id="clientBtn" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#clientView" prefHeight="53.0" prefWidth="259.0" stylesheets="@style/main.css" text="Clients" textFill="WHITE">
+               <padding>
+                  <Insets left="50.0" />
+               </padding>
+               <graphic>
+               </graphic>
+               <font>
+                  <Font size="18.0" />
+               </font></Button>
+            <Button fx:id="settingsBtn" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#settingsView" prefHeight="53.0" prefWidth="262.0" stylesheets="@style/main.css" text="Settings" textFill="WHITE">
+               <graphic>
+               </graphic>
+               <padding>
+                  <Insets left="50.0" />
+               </padding>
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Button>
+            <Button fx:id="statsBtn" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#statsView" prefHeight="53.0" prefWidth="228.0" stylesheets="@style/main.css" text="Statistics" textFill="WHITE">
+               <graphic>
+               </graphic>
+               <padding>
+                  <Insets left="50.0" />
+               </padding>
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Button>
+            <Button fx:id="logout" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#logout" prefHeight="53.0" prefWidth="228.0" stylesheets="@style/main.css" text="Logout" textFill="WHITE">
+               <font>
+                  <Font size="18.0" />
+               </font>
+               <padding>
+                  <Insets left="50.0" />
+               </padding>
+               <VBox.margin>
+                  <Insets top="200.0" />
+               </VBox.margin>
+            </Button>
+           
+         </children>
+      </VBox>
+      <SubScene fx:id="subScene" height="718.0" layoutX="228.0" width="667.0">
+        <root>
+          <Region />
+        </root>
+      </SubScene>
+   </children>
+</AnchorPane>
