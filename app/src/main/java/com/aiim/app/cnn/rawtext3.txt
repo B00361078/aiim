@@ -1,0 +1,4 @@
+Recently I have been having issues with my latop as I'm not able to login successfully, even when using the correct username and password. It usually comes up with a message that I must contact ciso the security team.
+So generally when I login to guidewire policycenter or guidewire claimcenter the screen layouts are unstable and I'm unable to view certain policies.
+Everytime I try and login to my laptop I continually get authentication errors stating that ciso need to reset my account. This is so frustrating.
+I have an issue with my guidewire policycenter application. Everytime I try and load the page it just hangs and therefore the guidewire logo disappears.
