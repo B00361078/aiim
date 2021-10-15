@@ -26,9 +26,9 @@ public class Main extends Application {
 		viewController.setCurrentStage(stage);
 		viewController.switchToView(ViewNames.LOGIN);
 		//con = DatabaseConnect.getConnection();
-		//WordVector wv = new WordVector();
-		//wv.generateVectors();
-		//MyCnn.cnn();
+		WordVector wv = new WordVector();
+		wv.generateVectors();
+		MyCnn.cnn();
 		//CnnSentenceClassificationExample.cnn();
 		//System.out.println(con);
 		

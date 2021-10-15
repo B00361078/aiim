@@ -26,7 +26,7 @@ public class WordVector {
 	//String filePath = new ClassPathResource(currentDirectory + "/src/main/java/com/aiim/app/cnn/rawdata.txt").getFile().getAbsolutePath();
 	//System.out.println(filePath);
 	//String currentDirectory = Paths.get("").toAbsolutePath().toString();
-	File f = new File(currentDirectory + "/src/main/java/com/aiim/app/cnn/rawtext3.txt");
+	File f = new File(currentDirectory + "/src/main/java/com/aiim/app/cnn/rawtext4.txt");
 	String filePath = f.getPath();
 	//System.out.println(filePath);
 
@@ -57,7 +57,7 @@ public class WordVector {
             .iterations(10)
             .layerSize(200)
             .seed(42)
-            .windowSize(5)
+            .windowSize(11)
             .iterate(iter)
             .tokenizerFactory(t)
             .build();
@@ -66,10 +66,10 @@ public class WordVector {
 
 
     // Write word vectors to file
-    WordVectorSerializer.writeWord2VecModel(vec, "latestVecNow.txt");
+    WordVectorSerializer.writeWord2VecModel(vec, "latestVectors.txt");
     
-    String word = "ciso";
-    String word2 = "guidewire";
+    String word = "policycenter";
+    String word2 = "ciso";
     // Prints out the closest 10 words to "day". An example on what to do with these Word Vectors.
     Collection<String> lst = vec.wordsNearest(word, 10);
     Collection<String> lstone = vec.wordsNearest(word2, 10);

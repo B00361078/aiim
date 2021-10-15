@@ -49,7 +49,7 @@ public class MyCnn {
 
     public static void cnn() throws Exception {
        
-
+    	System.out.println(DATA_PATH);
         //Basic configuration
         int batchSize = 32;
         int vectorSize = 300;               //Size of the word vectors. 300 in the Google News model
@@ -98,7 +98,7 @@ public class MyCnn {
                 .lossFunction(LossFunctions.LossFunction.MCXENT)
                 .activation(Activation.SOFTMAX)
                 .nIn(3*cnnLayerFeatureMaps)
-                .nOut(2)    //2 classes: guidewire or ciso
+                .nOut(4)    //2 classes: guidewire or ciso
                 .build(), "globalPool")
             .setOutputs("out")
             .build();
@@ -113,7 +113,7 @@ public class MyCnn {
 
         //Load word vectors and get the DataSetIterators for training and testing
         System.out.println("Loading word vectors and creating DataSetIterators");
-        WordVectors wordVectors = WordVectorSerializer.loadStaticModel(new File(currentDirectory + "/latestVecNow.txt")); // need to add new vectors specific for it issues
+        WordVectors wordVectors = WordVectorSerializer.loadStaticModel(new File(currentDirectory + "/latestVectors.txt")); // need to add new vectors specific for it issues
         //WordVectors wordVectors = WordVectorSerializer.loadStaticModel(new File(WORD_VECTORS_PATH));
         DataSetIterator trainIter = getDataSetIterator(true, wordVectors, batchSize, truncateReviewsToLength, rng);
         DataSetIterator testIter = getDataSetIterator(false, wordVectors, batchSize, truncateReviewsToLength, rng);
@@ -121,12 +121,12 @@ public class MyCnn {
         System.out.println("Starting training");
         for (int i = 0; i < nEpochs; i++) {
             net.fit(trainIter);
-            System.out.println("Epoch " + i + " complete. Starting evaluation:");
+            //System.out.println("Epoch " + i + " complete. Starting evaluation:");
 
             //Run evaluation. This is on 25k reviews, so can take some time
-            Evaluation evaluation = net.evaluate(testIter);
-
-            System.out.println(evaluation.stats());
+//            Evaluation evaluation = net.evaluate(testIter);
+//
+//            System.out.println(evaluation.stats());
         }
         System.out.println("saving model");
         File trained_model = new File("trained_model.zip");
@@ -134,43 +134,50 @@ public class MyCnn {
 
 
         //After training: load a single sentence and generate a prediction
-        String pathFirstGWFile = FilenameUtils.concat(DATA_PATH, "aclImdb/test/gw/0_2.txt");
-        String contentsFirstGW = FileUtils.readFileToString(new File(pathFirstGWFile));
-        INDArray featuresFirstGW = ((CnnSentenceDataSetIterator)testIter).loadSingleSentence(contentsFirstGW);
+        //String pathFirstGWFile = FilenameUtils.concat(DATA_PATH, "aclImdb/test/gw/0_2.txt");
+        //String contentsFirstGW = FileUtils.readFileToString(new File(pathFirstGWFile));
+        String myteststring = "Data request for CISO by HP Data request for CISO byHP. Third Party teamsite access for the CISO Remediation";
+        INDArray featuresFirstGW = ((CnnSentenceDataSetIterator)testIter).loadSingleSentence(myteststring);
 
         INDArray predictionsFirstGW = net.outputSingle(featuresFirstGW);
         List<String> labels = testIter.getLabels();
 
-        System.out.println("\n\nPredictions for first gw file:");
+        System.out.println("\n\nPredictions for my sentence is:");
         for( int i=0; i<labels.size(); i++ ){
             System.out.println("Prediction(" + labels.get(i) + ") = " + predictionsFirstGW.getDouble(i)); 
         }
-        
-        String pathFirstcisoFile = FilenameUtils.concat(DATA_PATH, "aclImdb/test/ciso/0_10.txt");
-        String contentsFirstciso = FileUtils.readFileToString(new File(pathFirstcisoFile));
-        INDArray featuresFirstciso = ((CnnSentenceDataSetIterator)testIter).loadSingleSentence(contentsFirstciso);
-
-        INDArray predictionsFirstciso = net.outputSingle(featuresFirstciso);
-
-        System.out.println("\n\nPredictions for first ciso file:");
-        for( int i=0; i<labels.size(); i++ ){
-            System.out.println("Prediction(" + labels.get(i) + ") = " + predictionsFirstciso.getDouble(i)); 
-        }
+//        
+//        String pathFirstcisoFile = FilenameUtils.concat(DATA_PATH, "aclImdb/test/ciso/0_10.txt");
+//        String contentsFirstciso = FileUtils.readFileToString(new File(pathFirstcisoFile));
+//        INDArray featuresFirstciso = ((CnnSentenceDataSetIterator)testIter).loadSingleSentence(contentsFirstciso);
+//
+//        INDArray predictionsFirstciso = net.outputSingle(featuresFirstciso);
+//
+//        System.out.println("\n\nPredictions for first ciso file:");
+//        for( int i=0; i<labels.size(); i++ ){
+//            System.out.println("Prediction(" + labels.get(i) + ") = " + predictionsFirstciso.getDouble(i)); 
+//        }
     }
 
 
     private static DataSetIterator getDataSetIterator(boolean isTraining, WordVectors wordVectors, int minibatchSize,
                                                       int maxSentenceLength, Random rng ){
         String path = FilenameUtils.concat(DATA_PATH, (isTraining ? "aclImdb/train/" : "aclImdb/test/"));
-        String cisoDir = FilenameUtils.concat(path, "ciso");
-        String gwDir = FilenameUtils.concat(path, "gw");
+        String secdir = FilenameUtils.concat(path, "securitydata");
+        String gwDir = FilenameUtils.concat(path, "gwdata");
+        String telephonyDir = FilenameUtils.concat(path, "telephonydata");
+        String financeDir = FilenameUtils.concat(path, "financedata");
 
-        File fileCiso = new File(cisoDir);
+        File fileSec = new File(secdir);
         File fileGW = new File(gwDir);
+        File fileTel = new File(telephonyDir);
+        File fileFinance = new File(financeDir);
 
         Map<String,List<File>> reviewFilesMap = new HashMap<>();
-        reviewFilesMap.put("ciso", Arrays.asList(fileCiso.listFiles()));
+        reviewFilesMap.put("security", Arrays.asList(fileSec.listFiles()));
         reviewFilesMap.put("guidewire", Arrays.asList(fileGW.listFiles()));
+        reviewFilesMap.put("telephony", Arrays.asList(fileTel.listFiles()));
+        reviewFilesMap.put("finance", Arrays.asList(fileFinance.listFiles()));
 
         LabeledSentenceProvider sentenceProvider = new FileLabeledSentenceProvider(reviewFilesMap, rng);
 
