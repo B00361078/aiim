@@ -194,6 +194,19 @@ public class MyCnn {
         for( int i=0; i<labels.size(); i++ ){
             System.out.println("Prediction(" + labels.get(i) + ") = " + predictions.getDouble(i)); 
         }
+        
+        double max = predictions.getDouble(0);
+        
+        int i;
+
+        for (i = 1; i < predictions.length(); i++) {
+            if (predictions.getDouble(i) > max) {
+              max = predictions.getDouble(i);
+            }
+        }
+        System.out.println(i);
+        System.out.println(max);
+        System.out.println(labels.get(i-1) + " is the prediction");
     	
 		return predictions;
     	
