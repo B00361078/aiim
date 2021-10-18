@@ -5,6 +5,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.deeplearning4j.eval.Evaluation;
 import org.deeplearning4j.iterator.CnnSentenceDataSetIterator;
 import org.deeplearning4j.iterator.LabeledSentenceProvider;
+import org.deeplearning4j.iterator.provider.CollectionLabeledSentenceProvider;
 import org.deeplearning4j.iterator.provider.FileLabeledSentenceProvider;
 import org.deeplearning4j.models.embeddings.loader.WordVectorSerializer;
 import org.deeplearning4j.models.embeddings.wordvectors.WordVectors;
@@ -20,14 +21,24 @@ import org.deeplearning4j.nn.conf.layers.OutputLayer;
 import org.deeplearning4j.nn.conf.layers.PoolingType;
 import org.deeplearning4j.nn.graph.ComputationGraph;
 import org.deeplearning4j.nn.weights.WeightInit;
+import org.deeplearning4j.text.tokenization.tokenizer.TokenPreProcess;
+import org.deeplearning4j.text.tokenization.tokenizer.Tokenizer;
+import org.deeplearning4j.text.tokenization.tokenizerfactory.DefaultTokenizerFactory;
+import org.deeplearning4j.text.tokenization.tokenizerfactory.TokenizerFactory;
 import org.deeplearning4j.util.ModelSerializer;
 import org.nd4j.linalg.activations.Activation;
 import org.nd4j.linalg.api.ndarray.INDArray;
+import org.nd4j.linalg.dataset.DataSet;
+import org.nd4j.linalg.dataset.api.DataSetPreProcessor;
 import org.nd4j.linalg.dataset.api.iterator.DataSetIterator;
+import org.nd4j.linalg.factory.Nd4j;
+import org.nd4j.linalg.indexing.INDArrayIndex;
+import org.nd4j.linalg.indexing.NDArrayIndex;
 import org.nd4j.linalg.lossfunctions.LossFunctions;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Paths;
 import java.util.*;
 
@@ -42,6 +53,11 @@ public class MyCnn {
 
     /** Data URL for downloading */
 	public static String currentDirectory = Paths.get("").toAbsolutePath().toString();
+	private static WordVectors wordVectors;
+	private static TokenizerFactory tokenizerFactory = new DefaultTokenizerFactory();
+	private static DataSetIterator trainIter;
+	private static DataSetIterator testIter;
+	private static ComputationGraph net;
     /** Location to save and extract the training/testing data */
     public static final String DATA_PATH = FilenameUtils.concat(System.getProperty("java.io.tmpdir"), "dl4j_w2vSentiment/");
     /** Location (local file system) for the Google News vectors. Set this manually. */
@@ -103,7 +119,7 @@ public class MyCnn {
             .setOutputs("out")
             .build();
 
-        ComputationGraph net = new ComputationGraph(config);
+        net = new ComputationGraph(config);
         net.init();
 
         System.out.println("Number of parameters by layer:");
@@ -113,10 +129,10 @@ public class MyCnn {
 
         //Load word vectors and get the DataSetIterators for training and testing
         System.out.println("Loading word vectors and creating DataSetIterators");
-        WordVectors wordVectors = WordVectorSerializer.loadStaticModel(new File(currentDirectory + "/latestVectors.txt")); // need to add new vectors specific for it issues
+        wordVectors = WordVectorSerializer.loadStaticModel(new File(currentDirectory + "/latestVectors.txt")); // need to add new vectors specific for it issues
         //WordVectors wordVectors = WordVectorSerializer.loadStaticModel(new File(WORD_VECTORS_PATH));
-        DataSetIterator trainIter = getDataSetIterator(true, wordVectors, batchSize, truncateReviewsToLength, rng);
-        DataSetIterator testIter = getDataSetIterator(false, wordVectors, batchSize, truncateReviewsToLength, rng);
+        trainIter = getDataSetIterator(true, wordVectors, batchSize, truncateReviewsToLength, rng);
+        testIter = getDataSetIterator(false, wordVectors, batchSize, truncateReviewsToLength, rng);
 
         System.out.println("Starting training");
         for (int i = 0; i < nEpochs; i++) {
@@ -131,32 +147,8 @@ public class MyCnn {
         System.out.println("saving model");
         File trained_model = new File("trained_model.zip");
     	ModelSerializer.writeModel(net, trained_model, false);
-
-
-        //After training: load a single sentence and generate a prediction
-        //String pathFirstGWFile = FilenameUtils.concat(DATA_PATH, "aclImdb/test/gw/0_2.txt");
-        //String contentsFirstGW = FileUtils.readFileToString(new File(pathFirstGWFile));
-        String myteststring = "Data request for CISO by HP Data request for CISO byHP. Third Party teamsite access for the CISO Remediation";
-        INDArray featuresFirstGW = ((CnnSentenceDataSetIterator)testIter).loadSingleSentence(myteststring);
-
-        INDArray predictionsFirstGW = net.outputSingle(featuresFirstGW);
-        List<String> labels = testIter.getLabels();
-
-        System.out.println("\n\nPredictions for my sentence is:");
-        for( int i=0; i<labels.size(); i++ ){
-            System.out.println("Prediction(" + labels.get(i) + ") = " + predictionsFirstGW.getDouble(i)); 
-        }
-//        
-//        String pathFirstcisoFile = FilenameUtils.concat(DATA_PATH, "aclImdb/test/ciso/0_10.txt");
-//        String contentsFirstciso = FileUtils.readFileToString(new File(pathFirstcisoFile));
-//        INDArray featuresFirstciso = ((CnnSentenceDataSetIterator)testIter).loadSingleSentence(contentsFirstciso);
-//
-//        INDArray predictionsFirstciso = net.outputSingle(featuresFirstciso);
-//
-//        System.out.println("\n\nPredictions for first ciso file:");
-//        for( int i=0; i<labels.size(); i++ ){
-//            System.out.println("Prediction(" + labels.get(i) + ") = " + predictionsFirstciso.getDouble(i)); 
-//        }
+    	
+    	ticketClassifier("This is a sentence about guidewire claimcenter");
     }
 
 
@@ -167,6 +159,8 @@ public class MyCnn {
         String gwDir = FilenameUtils.concat(path, "gwdata");
         String telephonyDir = FilenameUtils.concat(path, "telephonydata");
         String financeDir = FilenameUtils.concat(path, "financedata");
+        
+        
 
         File fileSec = new File(secdir);
         File fileGW = new File(gwDir);
@@ -189,4 +183,21 @@ public class MyCnn {
             .useNormalizedWordVectors(false)
             .build();
     }
-}
+
+    public static INDArray ticketClassifier(String verbatim) {
+    	INDArray features = ((CnnSentenceDataSetIterator) trainIter).loadSingleSentence(verbatim);
+    	INDArray predictions = net.outputSingle(features);
+        List<String> labels = trainIter.getLabels();
+               
+
+        System.out.println("\n\nPredictions for my sentence is:");
+        for( int i=0; i<labels.size(); i++ ){
+            System.out.println("Prediction(" + labels.get(i) + ") = " + predictions.getDouble(i)); 
+        }
+    	
+		return predictions;
+    	
+    }
+   }
+    
+
