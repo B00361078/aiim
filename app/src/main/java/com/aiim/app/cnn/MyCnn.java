@@ -72,7 +72,7 @@ public class MyCnn {
         int nEpochs = 1;                    //Number of epochs (full passes of training data) to train on
         int truncateReviewsToLength = 256;  //Truncate reviews with length (# words) greater than this
 
-        int cnnLayerFeatureMaps = 100;      //Number of feature maps / channels / depth for each CNN layer
+        int cnnLayerFeatureMaps = 10;      //Number of feature maps / channels / depth for each CNN layer
         PoolingType globalPoolingType = PoolingType.MAX;
         Random rng = new Random(12345); //For shuffling repeatability
 
@@ -148,10 +148,10 @@ public class MyCnn {
         File trained_model = new File("trained_model.zip");
     	ModelSerializer.writeModel(net, trained_model, false);
     	
-    	ticketClassifier("This is a sentence about guidewire claimcenter");
+    	ticketClassifier("Guidewire services SVC GUIDEWIRE CLAIMCENTER SVC GUIDEWIRE CONTACTMANAGER SVC GUIDEWIRE POLICYCENTER These services are showing as pipeline. They are live services and need to be updated to reflect that. Please check any other HSN's or services that relate to Guidewire");
     }
 
-
+    // split this out, can either be train, test or update only
     private static DataSetIterator getDataSetIterator(boolean isTraining, WordVectors wordVectors, int minibatchSize,
                                                       int maxSentenceLength, Random rng ){
         String path = FilenameUtils.concat(DATA_PATH, (isTraining ? "aclImdb/train/" : "aclImdb/test/"));
@@ -184,7 +184,7 @@ public class MyCnn {
             .build();
     }
 
-    public static INDArray ticketClassifier(String verbatim) {
+    public static String ticketClassifier(String verbatim) {
     	INDArray features = ((CnnSentenceDataSetIterator) trainIter).loadSingleSentence(verbatim);
     	INDArray predictions = net.outputSingle(features);
         List<String> labels = trainIter.getLabels();
@@ -194,21 +194,18 @@ public class MyCnn {
         for( int i=0; i<labels.size(); i++ ){
             System.out.println("Prediction(" + labels.get(i) + ") = " + predictions.getDouble(i)); 
         }
-        
-        double max = predictions.getDouble(0);
-        
-        int i;
+                
+        int maxAt = 0;
 
-        for (i = 1; i < predictions.length(); i++) {
-            if (predictions.getDouble(i) > max) {
-              max = predictions.getDouble(i);
-            }
+        for (int a = 0; a < predictions.length(); a++) {
+            maxAt = predictions.getDouble(a) > predictions.getDouble(maxAt) ? a : maxAt;
         }
-        System.out.println(i);
-        System.out.println(max);
-        System.out.println(labels.get(i-1) + " is the prediction");
+        System.out.println("max is at " + maxAt);
+        String classification = labels.get(maxAt);
+
+        System.out.println(classification);
     	
-		return predictions;
+		return classification;
     	
     }
    }
