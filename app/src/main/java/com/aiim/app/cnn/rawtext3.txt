@@ -1,5 +1,33 @@
-Recently I have been having issues with my latop as I'm not able to login successfully, even when using the correct username and password. It usually comes up with a message that I must contact ciso the security team.
-So generally when I login to guidewire policycenter or guidewire claimcenter the screen layouts are unstable and I'm unable to view certain policies.
-Everytime I try and login to my laptop I continually get authentication errors stating that ciso need to reset my account. This is so frustrating.
-I have an issue with my guidewire policycenter application. Everytime I try and load the page it just hangs and therefore the guidewire logo disappears.
-Recently having issues with guidewire policycenter. policycneter is a guidewire application.
+guidewire policycenter is one of three main applications used at Aviva.
+guidewire policycenter is Aviva's main commercial policy management system.
+guidewire claimcenter is Avivas global claims management application.
+guidewire is an insurance management application.
+The configuration size of guidewire policycenter is the largest.
+Within guidewire policycenter there are several products offered.
+Over the last 6 years, guidewire policycenter has evolved.
+Ciso are Avivas security team. Ciso deal with cyber security as well as authorisation, authentication and permissions.
+Ciso take security very seriously and are extremly strict in their approach.
+All of the claims data is held on guidewire claimcenter.
+Guidewire claimcenter has over 1000 integrations within the IT estate.
+Within the platform guidewire claimcenter developers require skills relating to Java.
+Any authentication or authorisation problems are resolved by ciso.
+Permissions dealt with by ciso.
+If I have issues with permissions then ciso will resolve.
+Guidewire claim errors will be looked at by the developer team on guidewire platform.
+Policy issues relate to policycenter in general.
+Ciso security team.
+Authentication and authorisation tickets for ciso to analyse.
+Policycenter is guidewire pc.
+Guidewire policycenter has the highest rate of change.
+Guidewire policycenter and claimcenter are up an running.
+Guidewire policycenter is currently down.
+Guidewire policycenter is unable to connect to RDS.
+Guidewire policycenter has been upgraded to version 10 recently.
+Ciso will also anaylse authentication.
+Ciso fixed my permissions settings.
+Ciso permissions policy has been amended.
+Security and authorisation ciso security team.
+Ciso permissions preventing access.
+Cyber security ciso team.
+Guidewire owns policycenter ootb.
+Guidewire policycenter server can take a while.

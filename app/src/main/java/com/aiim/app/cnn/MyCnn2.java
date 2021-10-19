@@ -37,6 +37,7 @@ import org.nd4j.linalg.indexing.NDArrayIndex;
 import org.nd4j.linalg.lossfunctions.LossFunctions;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Paths;
@@ -49,7 +50,7 @@ import java.util.*;
  *
  * @author Alex Black
  */
-public class MyCnn {
+public class MyCnn2 {
 
     /** Data URL for downloading */
 	public static String currentDirectory = Paths.get("").toAbsolutePath().toString();
@@ -132,7 +133,7 @@ public class MyCnn {
         wordVectors = WordVectorSerializer.loadStaticModel(new File(currentDirectory + "/latestVectors.txt")); // need to add new vectors specific for it issues
         //WordVectors wordVectors = WordVectorSerializer.loadStaticModel(new File(WORD_VECTORS_PATH));
         trainIter = getDataSetIterator(true, wordVectors, batchSize, truncateReviewsToLength, rng);
-        testIter = getDataSetIterator(false, wordVectors, batchSize, truncateReviewsToLength, rng);
+        //testIter = getDataSetIterator(false, wordVectors, batchSize, truncateReviewsToLength, rng);
 
         System.out.println("Starting training");
         for (int i = 0; i < nEpochs; i++) {
@@ -144,36 +145,39 @@ public class MyCnn {
 //
 //            System.out.println(evaluation.stats());
         }
-        System.out.println("saving model");
-        File trained_model = new File("trained_model.zip");     
-    	ModelSerializer.writeModel(net, trained_model, false);
+        System.out.println("done");
+        //System.out.println("saving model");
+        //File trained_model = new File("trained_model.zip");     
+    	//ModelSerializer.writeModel(net, trained_model, false);
     	
-    	ticketClassifier("Guidewire services SVC GUIDEWIRE CLAIMCENTER SVC GUIDEWIRE CONTACTMANAGER SVC GUIDEWIRE POLICYCENTER These services are showing as pipeline. They are live services and need to be updated to reflect that. Please check any other HSN's or services that relate to Guidewire");
+    	ticketClassifier("Guidewire services SVC GUIDEWIRE CLAIMCENTER SVC GUIDEWIRE CONTACTMANAGER SVC GUIDEWIRE POLICYCENTER These services are showing as pipeline. They are live services and need to be updated to reflect that. Please check any other HSN's or services that relate to Guidewire.\r\n"
+    			);
     }
 
     // split this out, can either be train, test or update only - try loading with single sentence iterator
     private static DataSetIterator getDataSetIterator(boolean isTraining, WordVectors wordVectors, int minibatchSize,
-                                                      int maxSentenceLength, Random rng ){
-        String path = FilenameUtils.concat(DATA_PATH, (isTraining ? "aclImdb/train/" : "aclImdb/test/"));
-        String secdir = FilenameUtils.concat(path, "securitydata");
-        String gwDir = FilenameUtils.concat(path, "gwdata");
-        String telephonyDir = FilenameUtils.concat(path, "telephonydata");
-        String financeDir = FilenameUtils.concat(path, "financedata");
-        
-        
-
-        File fileSec = new File(secdir);
-        File fileGW = new File(gwDir);
-        File fileTel = new File(telephonyDir);
-        File fileFinance = new File(financeDir);
-
-        Map<String,List<File>> reviewFilesMap = new HashMap<>();
-        reviewFilesMap.put("security", Arrays.asList(fileSec.listFiles()));
-        reviewFilesMap.put("guidewire", Arrays.asList(fileGW.listFiles()));
-        reviewFilesMap.put("telephony", Arrays.asList(fileTel.listFiles()));
-        reviewFilesMap.put("finance", Arrays.asList(fileFinance.listFiles()));
-
-        LabeledSentenceProvider sentenceProvider = new FileLabeledSentenceProvider(reviewFilesMap, rng);
+                                                      int maxSentenceLength, Random rng ) throws FileNotFoundException{
+    	List<String> outcomeLabels = new ArrayList<>();
+    	List<String> sentences = new ArrayList<>();
+    	List<String> sentenceLabels = new ArrayList<>();
+    	outcomeLabels.add("guidewire");
+    	outcomeLabels.add("finance");
+    	outcomeLabels.add("security");
+    	outcomeLabels.add("telephony");
+    	for (String label : outcomeLabels) {
+    		
+    		Scanner trainFile = new Scanner(new File(currentDirectory+ "/"+label+".txt"));
+    		System.out.println("trainfile is " +trainFile);
+    		while (trainFile.hasNextLine()){
+                sentences.add(trainFile.nextLine());
+                sentenceLabels.add(label);
+            }
+    		trainFile.close();
+        }
+    	System.out.println(sentences);
+    	System.out.println(sentenceLabels);
+    	
+        LabeledSentenceProvider sentenceProvider = new CollectionLabeledSentenceProvider(sentences, sentenceLabels);
 
         return new CnnSentenceDataSetIterator.Builder()
             .sentenceProvider(sentenceProvider)
@@ -192,7 +196,9 @@ public class MyCnn {
 
         System.out.println("\n\nPredictions for my sentence is:");
         for( int i=0; i<labels.size(); i++ ){
+        	
             System.out.println("Prediction(" + labels.get(i) + ") = " + predictions.getDouble(i)); 
+            //System.out.printf("Prediction: %f\n", predictions.getDouble(i));
         }
                 
         int maxAt = 0;

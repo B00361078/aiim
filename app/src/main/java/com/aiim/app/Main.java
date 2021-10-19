@@ -9,6 +9,7 @@ import org.deeplearning4j.iterator.CnnSentenceDataSetIterator;
 
 import com.aiim.app.cnn.CnnSentenceClassificationExample;
 import com.aiim.app.cnn.MyCnn;
+import com.aiim.app.cnn.MyCnn2;
 import com.aiim.app.cnn.WordVector;
 import com.aiim.app.controller.ViewController;
 import com.aiim.app.database.DatabaseConnect;
@@ -26,9 +27,9 @@ public class Main extends Application {
 		viewController.setCurrentStage(stage);
 		viewController.switchToView(ViewNames.LOGIN);
 		//con = DatabaseConnect.getConnection();
-		WordVector wv = new WordVector();
-		wv.generateVectors();
-		MyCnn.cnn();
+		//WordVector wv = new WordVector();
+		//wv.generateVectors();
+		MyCnn2.cnn();
 		//CnnSentenceClassificationExample.cnn();
 		//System.out.println(con);
 		
