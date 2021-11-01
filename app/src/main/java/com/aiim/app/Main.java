@@ -1,10 +1,12 @@
 package com.aiim.app;
 	
 import javafx.application.Application;
+import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ResourceBundle;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -29,15 +31,23 @@ public class Main extends Application {
 	private ViewController viewController;
 	private Connection con;
 	private CnnSentenceClassificationExample cnn;
+	private ResourceBundle strBundle;
+	private Stage stage;
+	//strBundle = ResourceBundle.getBundle("com.aiim.app.resources.bundle");
 	
 	@Override
     public void start(Stage stage) throws Exception {
+		this.stage = stage;
 		viewController = new ViewController();
 		viewController.setCurrentStage(stage);
 		viewController.switchToView(ViewNames.LOGIN);
+		strBundle = ResourceBundle.getBundle("com.aiim.app.resource.bundle");
 		con = DatabaseConnect.getConnection();
+		System.out.println("con is " + con);
+		checkDBConnect();
+		
 		//download();
-		update();
+		//update();
 		//upload();
 		//WordVector wv = new WordVector();
 		//wv.generateVectors();
@@ -46,6 +56,19 @@ public class Main extends Application {
 		//System.out.println(con);
 		
     }
+	
+	void checkDBConnect() {
+		if (con != null) {
+			System.out.println("connected to db");
+		}
+		else {
+			new javafx.scene.control.Alert(Alert.AlertType.ERROR, strBundle.getString("e11")).showAndWait();
+			stage.close();
+		}
+		
+	}
+	// upload file from db
+	
 	public void upload () throws Exception {
 
 		File file;
@@ -81,6 +104,7 @@ public class Main extends Application {
 	    		}
 	    
 	}
+	//download file from db
 	public void download() throws IOException, SQLException {
 		PreparedStatement prepared_statement2 = con.prepareStatement("USE [honsdb] SELECT *FROM tblClassifier");
 		ResultSet rs = prepared_statement2.executeQuery();
@@ -101,6 +125,7 @@ public class Main extends Application {
 		}
 		
 	}
+	//update to db
 	public void update() throws SQLException, IOException {
 		File file;
 	    file = new File("trained_model.zip");// ...(file is initialised)...

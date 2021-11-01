@@ -6,6 +6,7 @@
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -16,7 +17,7 @@
    <children>
       <Pane prefHeight="61.0" prefWidth="820.0" style="-fx-background-color: #1505a1;">
          <children>
-            <MenuButton layoutX="616.0" layoutY="12.0" mnemonicParsing="false" style="-fx-background-color: #1505a1;" text="Name" textFill="WHITE">
+            <MenuButton fx:id="menuButton" layoutX="616.0" layoutY="12.0" mnemonicParsing="false" style="-fx-background-color: #1505a1;" text="Name" textFill="WHITE">
               <items>
                 <MenuItem mnemonicParsing="false" text="Logout" />
               </items>
@@ -40,12 +41,24 @@
                </font>
             </Label>
          </children></Pane>
-      <TableView layoutX="384.0" layoutY="138.0" prefHeight="347.0" prefWidth="369.0">
+      <TableView fx:id="ticketTable" layoutX="270.0" layoutY="134.0" prefHeight="347.0" prefWidth="495.0">
         <columns>
-          <TableColumn prefWidth="75.0" text="Ticket ID" />
-          <TableColumn prefWidth="75.0" text="Status" />
-            <TableColumn prefWidth="97.66668701171875" text="Date Raised" />
-            <TableColumn prefWidth="120.0" text="Assigned Team" />
+          <TableColumn fx:id="ticketIDCol" prefWidth="75.0" text="Ticket ID">
+          <cellValueFactory><PropertyValueFactory property="ticketID" />
+        </cellValueFactory>
+        </TableColumn>
+          <TableColumn fx:id="statusCol" prefWidth="75.0" text="Status">
+          <cellValueFactory><PropertyValueFactory property="status" />
+        </cellValueFactory>
+        </TableColumn>
+            <TableColumn fx:id="dateCol" prefWidth="97.66668701171875" text="Date Raised">
+            <cellValueFactory><PropertyValueFactory property="date" />
+        </cellValueFactory>
+        </TableColumn>
+            <TableColumn fx:id="assignedCol" prefWidth="90.0" text="Assigned Team">
+            <cellValueFactory><PropertyValueFactory property="assignedTeam" />
+        </cellValueFactory>
+        </TableColumn>
         </columns>
       </TableView>
       <Button layoutX="63.0" layoutY="321.0" mnemonicParsing="false" prefHeight="61.0" prefWidth="143.0" text="Configure Settings" />

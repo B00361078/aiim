@@ -35,6 +35,7 @@ public class DatabaseConnect {
 						//System.out.println(connectionURL);
 						con = DriverManager.getConnection(connectionURL); 
 						con.setAutoCommit(false);
+						
 						return con;
 					}
 					catch (Exception e) {
