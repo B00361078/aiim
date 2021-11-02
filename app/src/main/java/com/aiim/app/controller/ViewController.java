@@ -25,7 +25,6 @@ public class ViewController {
 	private Scene mainScene;
 	private Scene currentScene;
 	private SubScene currentSubScene;
-	private static int currentID;
 	
 	
 	private ViewController() {
@@ -60,12 +59,6 @@ public class ViewController {
 	}
 	public void setCurrentSubScene(SubScene subScene) {
 		this.currentSubScene = subScene;
-	}
-	public static void setCurrentID(int currentID){
-		ViewController.currentID = currentID;
-	}
-	public static int getCurrentID() {
-		return currentID;
 	}
 		
 	public void initialiseStage() {
