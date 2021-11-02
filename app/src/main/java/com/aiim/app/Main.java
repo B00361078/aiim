@@ -38,13 +38,17 @@ public class Main extends Application {
 	@Override
     public void start(Stage stage) throws Exception {
 		this.stage = stage;
-		viewController = new ViewController();
-		viewController.setCurrentStage(stage);
-		viewController.switchToView(ViewNames.LOGIN);
+		ViewController.createInstance();
+		//ViewController vc = new ViewController();
+		//viewController.createViewController();
+		ViewController.createInstance().setCurrentStage(stage);
+		//viewController.setCurrentStage(stage);
+		//viewController.switchToView(ViewNames.LOGIN);
+		ViewController.createInstance().switchToView(ViewNames.LOGIN);
 		strBundle = ResourceBundle.getBundle("com.aiim.app.resource.bundle");
-		con = DatabaseConnect.getConnection();
-		System.out.println("con is " + con);
-		checkDBConnect();
+		//con = DatabaseConnect.getConnection();
+		//System.out.println("con is " + con);
+		//checkDBConnect();
 		
 		//download();
 		//update();

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.SubScene?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="600.0" style="-fx-background-color: #ffffff;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.aiim.app.controller.HomeController">
+   <children>
+      <Pane prefHeight="61.0" prefWidth="820.0" style="-fx-background-color: #1505a1;">
+         <children>
+            <MenuButton fx:id="menuButton" layoutX="616.0" layoutY="12.0" mnemonicParsing="false" style="-fx-background-color: #1505a1;" text="Name" textFill="WHITE">
+              <items>
+                <MenuItem fx:id="menuItemLogout" mnemonicParsing="false" onAction="#logout" text="Logout" />
+              </items>
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </MenuButton>
+            <ImageView fitHeight="36.0" fitWidth="107.0" layoutX="38.0" layoutY="13.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@style/aiimWhite.png" />
+               </image>
+            </ImageView>
+         </children>
+      </Pane>
+      <Pane layoutY="61.0" prefHeight="20.0" prefWidth="820.0" style="-fx-background-color: #6255d9;" AnchorPane.topAnchor="61.0">
+         <children>
+            <Label alignment="CENTER" layoutX="279.0" layoutY="2.0" text="Artificial Intelligence Incident Management" textAlignment="CENTER" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Label>
+         </children></Pane>
+      <SubScene fx:id="subScene" height="513.0" layoutX="2.0" layoutY="83.0" width="816.0">
+        <root>
+          <Region />
+        </root>
+      </SubScene>
+   </children>
+</AnchorPane>

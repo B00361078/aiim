@@ -1,66 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.MenuButton?>
-<?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.cell.PropertyValueFactory?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.Pane?>
-<?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="600.0" style="-fx-background-color: #ffffff;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.aiim.app.controller.DashboardController">
+<AnchorPane prefHeight="476.0" prefWidth="765.0" style="-fx-background-color: #ffffff;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.aiim.app.controller.DashboardController">
    <children>
-      <Pane prefHeight="61.0" prefWidth="820.0" style="-fx-background-color: #1505a1;">
-         <children>
-            <MenuButton fx:id="menuButton" layoutX="616.0" layoutY="12.0" mnemonicParsing="false" style="-fx-background-color: #1505a1;" text="Name" textFill="WHITE">
-              <items>
-                <MenuItem mnemonicParsing="false" text="Logout" />
-              </items>
-               <font>
-                  <Font size="14.0" />
-               </font>
-            </MenuButton>
-            <ImageView fitHeight="36.0" fitWidth="107.0" layoutX="38.0" layoutY="13.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@style/aiimWhite.png" />
-               </image>
-            </ImageView>
-         </children>
-      </Pane>
-      <Button layoutX="63.0" layoutY="238.0" mnemonicParsing="false" prefHeight="61.0" prefWidth="143.0" text="Raise New Incident" />
-      <Pane layoutY="61.0" prefHeight="20.0" prefWidth="820.0" style="-fx-background-color: #6255d9;" AnchorPane.topAnchor="61.0">
-         <children>
-            <Label alignment="CENTER" layoutX="279.0" layoutY="2.0" text="Artificial Intelligence Incident Management" textAlignment="CENTER" textFill="WHITE">
-               <font>
-                  <Font name="System Bold" size="14.0" />
-               </font>
-            </Label>
-         </children></Pane>
-      <TableView fx:id="ticketTable" layoutX="270.0" layoutY="134.0" prefHeight="347.0" prefWidth="495.0">
+      <Button fx:id="raiseNewBtn" layoutX="63.0" layoutY="238.0" mnemonicParsing="false" onAction="#raiseIncidentView" prefHeight="61.0" prefWidth="143.0" text="Raise New Incident" />
+      <TableView fx:id="ticketTable" layoutX="312.0" layoutY="71.0" prefHeight="347.0" prefWidth="374.0">
         <columns>
           <TableColumn fx:id="ticketIDCol" prefWidth="75.0" text="Ticket ID">
           <cellValueFactory><PropertyValueFactory property="ticketID" />
         </cellValueFactory>
         </TableColumn>
-          <TableColumn fx:id="statusCol" prefWidth="75.0" text="Status">
+          <TableColumn fx:id="statusCol" prefWidth="64.0" text="Status">
           <cellValueFactory><PropertyValueFactory property="status" />
         </cellValueFactory>
         </TableColumn>
-            <TableColumn fx:id="dateCol" prefWidth="97.66668701171875" text="Date Raised">
+            <TableColumn fx:id="dateCol" prefWidth="109.0" text="Date Raised">
             <cellValueFactory><PropertyValueFactory property="date" />
         </cellValueFactory>
         </TableColumn>
-            <TableColumn fx:id="assignedCol" prefWidth="90.0" text="Assigned Team">
+            <TableColumn fx:id="assignedCol" prefWidth="126.0" text="Assigned Team">
             <cellValueFactory><PropertyValueFactory property="assignedTeam" />
         </cellValueFactory>
         </TableColumn>
         </columns>
       </TableView>
-      <Button layoutX="63.0" layoutY="321.0" mnemonicParsing="false" prefHeight="61.0" prefWidth="143.0" text="Configure Settings" />
+      <Button fx:id="settingsBtn" layoutX="63.0" layoutY="321.0" mnemonicParsing="false" prefHeight="61.0" prefWidth="143.0" text="Configure Settings" />
    </children>
 </AnchorPane>

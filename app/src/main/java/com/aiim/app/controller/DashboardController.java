@@ -16,6 +16,7 @@ import javafx.fxml.FXML;
 import javafx.scene.SubScene;
 import javafx.scene.control.Button;
 import javafx.scene.control.MenuButton;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableView;
 import javafx.stage.Stage;
@@ -31,23 +32,23 @@ public class DashboardController {
 	@FXML private javafx.scene.control.TableColumn<Ticket, String> assignedCol;
 	@FXML private javafx.scene.control.TableColumn<Ticket, String> dateCol;
 	@FXML private MenuButton menuButton;
-	@FXML private Button clientBtn;
+	@FXML private MenuItem menuItemLogout;;
+	@FXML private Button raiseNewBtn;
 	@FXML private Button settingsBtn;
-	@FXML private Button statsBtn;
 	@FXML private Button logout;
-	@FXML public SubScene subScene;
     private ViewController viewController;
 	private int permLevel;
 	private Connection con;
 	private PreparedStatement stmt;
    
     public void initialize() throws IOException, SQLException {
-    	viewController = new ViewController();
-    	viewController.setCurrentSubScene(subScene);
-    	menuButton.setText(Session.getFullname());
+    	//ViewController.createInstance();
+    	//subScene = viewController.getCurrentSubScene();
+    	//System.out.println(subScene);
+    	//menuButton.setText(Session.getFullname());
     	ticketTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
     	ticketTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-    	updateTable();
+    	//updateTable();
     	//viewController.switchToView(ViewNames.CLIENTS);
     }
 	public void updateTable() throws SQLException {
@@ -92,7 +93,7 @@ public class DashboardController {
     
     @FXML protected void logout(){
     	try {
-    			Stage currentStage = (Stage) logout.getScene().getWindow();
+    			Stage currentStage = (Stage) menuButton.getScene().getWindow();
     			viewController.setCurrentStage(currentStage);
     			viewController.switchToView(ViewNames.LOGIN);
 		
@@ -102,35 +103,17 @@ public class DashboardController {
 
     }
     
-    @FXML protected void clientView(ActionEvent event) {
+    @FXML protected void raiseIncidentView(ActionEvent event) {
    	
         try {
-        		viewController.setCurrentSubScene(subScene);
-        		viewController.switchToView(ViewNames.CLIENTS);
+        		//viewController.setCurrentSubScene(subScene);
+        	ViewController.createInstance().switchToView(ViewNames.TICKET);
 			
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
     }
     
-    @FXML protected void settingsView(ActionEvent event) {
-    	
-        try {	viewController.setCurrentSubScene(subScene);
-        		viewController.switchToView(ViewNames.SETTINGS);
-			
-		} catch (IOException e1) {
-			e1.printStackTrace();
-		}
-    }
+   
     
-    @FXML protected void statsView(ActionEvent event) throws IOException {
-    	
-        try {
-        		viewController.setCurrentSubScene(subScene);
-        		viewController.switchToView(ViewNames.STATISTICS);
-			
-		} catch (LoadException e1) {
-			e1.printStackTrace();
-		}
-    }
 }

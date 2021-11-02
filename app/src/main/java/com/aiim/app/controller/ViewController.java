@@ -3,6 +3,8 @@ package com.aiim.app.controller;
 import java.io.IOException;
 import java.util.ResourceBundle;
 import com.aiim.app.resource.ViewNames;
+import com.aiim.app.util.Session;
+
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -15,8 +17,9 @@ import javafx.stage.Stage;
 
 public class ViewController {
 	
+	private static volatile ViewController vc = null;
 	private Parent root;
-	private ResourceBundle strBundle;
+	private static ResourceBundle strBundle;
 	private String viewResource;
 	private Stage currentStage;
 	private Scene mainScene;
@@ -24,8 +27,29 @@ public class ViewController {
 	private SubScene currentSubScene;
 	private static int currentID;
 	
-	public ViewController () {
-		strBundle = ResourceBundle.getBundle("com.aiim.app.resource.bundle");
+	
+	private ViewController() {
+		if(vc != null) {
+			throw new RuntimeException("Use createInstance() method to create");
+		}
+	};
+	
+	public static ViewController createInstance() {
+		if(vc == null) {
+			synchronized (ViewController.class) {
+				if(vc == null) {
+					try {	
+						vc = new ViewController();
+						strBundle = ResourceBundle.getBundle("com.aiim.app.resource.bundle");
+						return vc;
+					}
+					catch (Exception e) {
+					}
+					return vc;
+				}
+			}
+		}
+		return vc;
 	}
 	
 	public void setCurrentStage(Stage stage) {
@@ -74,10 +98,10 @@ public class ViewController {
 		  case DASHBOARD:
 			  	viewResource  = "/com/aiim/app/view/dashboard.fxml";
 			  	setRoot(viewResource);
-			  	initialiseScene();
+			  	initialiseSubScene();
 		    break;
-		  case CLIENTS:
-			  	viewResource  = "/com/app/views/client.fxml";
+		  case TICKET:
+			  	viewResource  = "/com/aiim/app/view/ticket.fxml";
 			  	setRoot(viewResource);
 			  	initialiseSubScene();
 			break;
@@ -86,10 +110,10 @@ public class ViewController {
 			  	setRoot(viewResource);
 			  	initialiseSubScene();
 			break;
-		  case STATISTICS:
-			  	viewResource  = "/com/app/views/stats.fxml";
+		  case HOME:
+			  	viewResource  = "/com/aiim/app/view/home.fxml";
 			  	setRoot(viewResource);
-			  	initialiseSubScene();
+			  	initialiseScene();
 			break;
 		  case CHANGECLIENT:
 			  	viewResource  = "/com/app/views/changeclient.fxml";
