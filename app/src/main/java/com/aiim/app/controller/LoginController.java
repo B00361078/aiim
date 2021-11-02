@@ -61,6 +61,7 @@ public class LoginController {
 	private int permLevel;
 	private String teamName;
 	private String user;
+	private String fullname;
         
     public void initialize() throws IOException {
     	//adminD = new AdminData();
@@ -84,10 +85,11 @@ public class LoginController {
         	//stmt.executeUpdate();
         	while(rs.next()){
         		user = rs.getString(1);
-        		hashString = rs.getString(2);
-        		saltString = rs.getString(5);
-        		teamID = rs.getString(3);
-				roleID = rs.getString(4);
+        		fullname = rs.getString(4);
+        		hashString = rs.getString(5);
+        		saltString = rs.getString(8);
+        		teamID = rs.getString(6);
+				roleID = rs.getString(7);
             }
         	//con.close();
         	if (DigestUtils.sha1Hex(passwordField.getText()+saltString).equalsIgnoreCase(hashString)) {
@@ -95,6 +97,7 @@ public class LoginController {
         		
         		session = Session.createSession();
         		Session.setUsername(user);
+        		Session.setFullname(fullname);
         		
 				
 				stmt = con.prepareStatement("USE [honsdb] SELECT* FROM tblRole WHERE roleID = '" +roleID+"'");

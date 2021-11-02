@@ -6,7 +6,8 @@ public class Session {
 	private static int permissionLevel;
 	private static String teamName;
 	private static String username;
-	
+	private static String fullname;
+
 	private Session() {
 		if(session != null) {
 			throw new RuntimeException("Use createSession() method to create");
@@ -49,6 +50,12 @@ public class Session {
 	}
 	public static String getTeamName() {
 		return teamName;
+	}
+	public static String getFullname() {
+		return fullname;
+	}
+	public static void setFullname(String fullname) {
+		Session.fullname = fullname;
 	}
 	
 

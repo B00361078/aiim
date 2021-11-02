@@ -6,13 +6,10 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
 import com.aiim.app.database.DatabaseConnect;
 import com.aiim.app.model.Ticket;
 import com.aiim.app.resource.ViewNames;
 import com.aiim.app.util.Session;
-
-
 import javafx.fxml.LoadException;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -47,7 +44,7 @@ public class DashboardController {
     public void initialize() throws IOException, SQLException {
     	viewController = new ViewController();
     	viewController.setCurrentSubScene(subScene);
-    	menuButton.setText(Session.getUsername());
+    	menuButton.setText(Session.getFullname());
     	ticketTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
     	ticketTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
     	updateTable();
@@ -64,9 +61,9 @@ public class DashboardController {
     	while(rs.next()){
     			
     		String ticketID = rs.getString(1);
-    		String status = rs.getString(6);
-    		String assignedTeam = rs.getString(5);
-    		Date date = rs.getDate(7);
+    		String status = rs.getString(9);
+    		String assignedTeam = rs.getString(7);
+    		Date date = rs.getDate(10);
 
 
     		ticketTable.getItems().add(new Ticket.Builder()
