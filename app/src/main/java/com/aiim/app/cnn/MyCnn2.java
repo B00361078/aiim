@@ -4,6 +4,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.deeplearning4j.eval.Evaluation;
 import org.deeplearning4j.iterator.CnnSentenceDataSetIterator;
+import org.deeplearning4j.iterator.CnnSentenceDataSetIterator.Builder;
 import org.deeplearning4j.iterator.LabeledSentenceProvider;
 import org.deeplearning4j.iterator.provider.CollectionLabeledSentenceProvider;
 import org.deeplearning4j.iterator.provider.FileLabeledSentenceProvider;
@@ -20,6 +21,7 @@ import org.deeplearning4j.nn.conf.layers.GlobalPoolingLayer;
 import org.deeplearning4j.nn.conf.layers.OutputLayer;
 import org.deeplearning4j.nn.conf.layers.PoolingType;
 import org.deeplearning4j.nn.graph.ComputationGraph;
+import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
 import org.deeplearning4j.nn.weights.WeightInit;
 import org.deeplearning4j.text.tokenization.tokenizer.TokenPreProcess;
 import org.deeplearning4j.text.tokenization.tokenizer.Tokenizer;
@@ -36,10 +38,16 @@ import org.nd4j.linalg.indexing.INDArrayIndex;
 import org.nd4j.linalg.indexing.NDArrayIndex;
 import org.nd4j.linalg.lossfunctions.LossFunctions;
 
+import java.io.BufferedOutputStream;
+import java.io.DataOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.nio.file.Paths;
 import java.util.*;
 
@@ -73,7 +81,7 @@ public class MyCnn2 {
         int nEpochs = 1;                    //Number of epochs (full passes of training data) to train on
         int truncateReviewsToLength = 256;  //Truncate reviews with length (# words) greater than this
 
-        int cnnLayerFeatureMaps = 5000;      //Number of feature maps / channels / depth for each CNN layer
+        int cnnLayerFeatureMaps = 10000;      //Number of feature maps / channels / depth for each CNN layer
         PoolingType globalPoolingType = PoolingType.MAX;
         Random rng = new Random(12345); //For shuffling repeatability
 
@@ -133,6 +141,7 @@ public class MyCnn2 {
         wordVectors = WordVectorSerializer.loadStaticModel(new File(currentDirectory + "/latestVectors.txt")); // need to add new vectors specific for it issues
         //WordVectors wordVectors = WordVectorSerializer.loadStaticModel(new File(WORD_VECTORS_PATH));
         trainIter = getDataSetIterator(true, wordVectors, batchSize, truncateReviewsToLength, rng);
+
         //testIter = getDataSetIterator(false, wordVectors, batchSize, truncateReviewsToLength, rng);
 
         System.out.println("Starting training");
@@ -146,22 +155,53 @@ public class MyCnn2 {
 //            System.out.println(evaluation.stats());
         }
         System.out.println("done");
-        //System.out.println("saving model");
-        //File trained_model = new File("trained_model.zip");     
-    	//ModelSerializer.writeModel(net, trained_model, false);
+//        String currentDirectory = Paths.get("").toAbsolutePath().toString();
+//        System.out.println(currentDirectory);
+//        ComputationGraph model = ModelSerializer.restoreComputationGraph(currentDirectory+"/trained_model.zip");
+//        System.out.println("here - " + model.getInputs());
+//        INDArray features2 = ((CnnSentenceDataSetIterator) trainIter).loadSingleSentence("guidewire");
+//        System.out.println("features2 is  " + features2);
+//        File file = new File(currentDirectory+"/myfile");
+//        saveBinary(features2, file);
+//        INDArray featuresfinal = readBinary(file);
+//        System.out.println("featuresfinal is  " + featuresfinal);
+        
+        
+        //INDArray arr = model.getInputs();
+        //System.out.println(myint);
+        //INDArray labels = model.getLabels();
+        //System.out.println("this is labels" + labels);
+        System.out.println("saving model");
+        File trained_model = new File("trained_model.zip");     
+    	ModelSerializer.writeModel(net, trained_model, false);
     	
-    	ticketClassifier("Guidewire services SVC GUIDEWIRE CLAIMCENTER SVC GUIDEWIRE CONTACTMANAGER SVC GUIDEWIRE POLICYCENTER These services are showing as pipeline. They are live services and need to be updated to reflect that. Please check any other HSN's or services that relate to Guidewire.\r\n"
-    			);
+    	//ticketClassifier("Guidewire services SVC GUIDEWIRE CLAIMCENTER SVC GUIDEWIRE CONTACTMANAGER SVC GUIDEWIRE POLICYCENTER These services are showing as pipeline. They are live services and need to be updated to reflect that. Please check any other HSN's or services that relate to Guidewire.\r\n"
+    		//	);
     }
 
-    // split this out, can either be train, test or update only - try loading with single sentence iterator
+    public static void saveBinary(INDArray arr, File saveTo) throws IOException {
+    	  BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(saveTo));
+    	  DataOutputStream dos = new DataOutputStream(bos);
+    	  Nd4j.write(arr, dos);
+    	  dos.flush();
+    	  dos.close();
+    	  bos.close();
+    	}
+   
+
+
+    public static INDArray readBinary(File myfile) throws IOException {
+  	  INDArray myarr = Nd4j.readBinary(myfile);
+  	  return myarr;
+
+  	}// split this out, can either be train, test or update only - try loading with single sentence iterator
     private static DataSetIterator getDataSetIterator(boolean isTraining, WordVectors wordVectors, int minibatchSize,
                                                       int maxSentenceLength, Random rng ) throws FileNotFoundException{
     	List<String> outcomeLabels = new ArrayList<>();
     	List<String> sentences = new ArrayList<>();
     	List<String> sentenceLabels = new ArrayList<>();
-    	outcomeLabels.add("guidewire");
     	outcomeLabels.add("finance");
+    	outcomeLabels.add("guidewire");
     	outcomeLabels.add("security");
     	outcomeLabels.add("telephony");
     	for (String label : outcomeLabels) {
@@ -188,10 +228,17 @@ public class MyCnn2 {
             .build();
     }
 
-    public static String ticketClassifier(String verbatim) {
-    	INDArray features = ((CnnSentenceDataSetIterator) trainIter).loadSingleSentence(verbatim);
-    	INDArray predictions = net.outputSingle(features);
+    public static String ticketClassifier(String verbatim) throws IOException {
+    	ComputationGraph model = ModelSerializer.restoreComputationGraph(currentDirectory+"/trained_model.zip");
+    	//File file = new File(currentDirectory+"/myfile");
+    	//INDArray features = readBinary(file);
+    	INDArray features =((CnnSentenceDataSetIterator) trainIter).loadSingleSentence(verbatim);
+		//CnnSentenceDataSetIterator = new CnnSentenceDataSetIterator();
+    	
+
+    	INDArray predictions = model.outputSingle(features);
         List<String> labels = trainIter.getLabels();
+
                
 
         System.out.println("\n\nPredictions for my sentence is:");

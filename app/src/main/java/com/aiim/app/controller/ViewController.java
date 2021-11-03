@@ -3,8 +3,6 @@ package com.aiim.app.controller;
 import java.io.IOException;
 import java.util.ResourceBundle;
 import com.aiim.app.resource.ViewNames;
-import com.aiim.app.util.Session;
-
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;

@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ComboBox?>
-<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
@@ -14,37 +12,22 @@
 <AnchorPane prefHeight="397.0" prefWidth="609.0" stylesheets="@style/main.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.aiim.app.controller.TicketController">
    <children>
       <VBox layoutX="14.0" layoutY="14.0" />
-      <GridPane layoutX="90.0" layoutY="61.0" prefHeight="235.0" prefWidth="215.0">
+      <GridPane layoutX="90.0" layoutY="34.0" prefHeight="66.0" prefWidth="215.0">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
         </columnConstraints>
         <rowConstraints>
           <RowConstraints maxHeight="85.0" minHeight="0.0" prefHeight="27.0" vgrow="SOMETIMES" />
-          <RowConstraints maxHeight="179.0" minHeight="7.0" prefHeight="27.0" vgrow="SOMETIMES" />
-          <RowConstraints maxHeight="231.0" minHeight="10.0" prefHeight="29.0" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="231.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="231.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="231.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="231.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Label text="Reporter" GridPane.rowIndex="1" />
-            <Label text="Ticket ID" />
-            <Label text="Date Raised" GridPane.rowIndex="2" />
-            <TextField fx:id="forename" promptText="first name" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <TextField fx:id="surname" promptText="second name" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <Label text="Assigned Team" GridPane.rowIndex="3" />
-            <Label text="Status" GridPane.rowIndex="4" />
-            <Label text="HPDetailsW" GridPane.rowIndex="5" />
-            <TextField fx:id="postcode" promptText="postcode" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-            <TextField fx:id="hpw" promptText="hours per week" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-            <DatePicker fx:id="dob" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-            <ComboBox fx:id="title" prefWidth="150.0" GridPane.columnIndex="1" />
+            <Label text="Reporter" />
+            <Label fx:id="reporter" text="label1" GridPane.columnIndex="1" />
          </children>
       </GridPane>
-      <Button fx:id="addClient" layoutX="357.0" layoutY="153.0" mnemonicParsing="false" />
-      <Label layoutX="29.0" layoutY="296.0" prefHeight="13.0" prefWidth="58.0" text="Notes" />
-      <Label layoutX="365.0" layoutY="296.0" prefHeight="13.0" prefWidth="58.0" text="Log" />
+      <TextArea fx:id="details" layoutX="90.0" layoutY="137.0" prefHeight="149.0" prefWidth="373.0" />
+      <Label layoutX="90.0" layoutY="120.0" text="Details of incident:" />
+      <Button fx:id="cancelBtn" layoutX="90.0" layoutY="302.0" onAction="#cancel" mnemonicParsing="false" text="Cancel" />
+      <Button fx:id="raiseBtn" layoutX="172.0" layoutY="302.0" onAction="#raise" mnemonicParsing="false" text="Raise" />
    </children>
 </AnchorPane>
