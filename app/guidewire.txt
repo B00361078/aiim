@@ -1,1 +1,2 @@
 guidewire services SVC guidewire CLAIMCENTER SVC guidewire CONTACTMANAGER SVC guidewire POLICYCENTER These services are showing as pipeline. They are live services and need to be updated to reflect that. Please check any other HSN's or services that relate to guidewire.
+guidewire services SVC guidewire CLAIMCENTER SVC guidewire CONTACTMANAGER SVC guidewire POLICYCENTER These services are showing as pipeline. They are live services and need to be updated to reflect that. Please check any other HSN's or services that relate to guidewire.

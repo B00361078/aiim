@@ -7,10 +7,14 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import org.deeplearning4j.iterator.CnnSentenceDataSetIterator;
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
 import org.deeplearning4j.util.ModelSerializer;
+import org.nd4j.linalg.api.ndarray.INDArray;
+import org.nd4j.linalg.dataset.api.iterator.DataSetIterator;
 
 import com.aiim.app.cnn.MyCnn2;
+import com.aiim.app.cnn.MyIter;
 import com.aiim.app.database.DatabaseConnect;
 import com.aiim.app.model.Ticket;
 import com.aiim.app.resource.ViewNames;
@@ -40,6 +44,7 @@ public class TicketController {
 	private PreparedStatement stmt;
 	@FXML private TextArea details;
 	@FXML private Label reporter;
+	private static DataSetIterator trainIter;
    
     public void initialize() throws IOException, SQLException {
     	reporter.setText(Session.getFullname());
@@ -52,12 +57,10 @@ public class TicketController {
     	//viewController.switchToView(ViewNames.CLIENTS);
     }
     public void raise() throws Exception {
-    //MultiLayerNetwork model = ModelSerializer.restoreMultiLayerNetwork("trained_model.zip");
-    //model.getLabels();
-    	MyCnn2 cnn = new MyCnn2();
-    	System.out.println(details.getText());
-    	MyCnn2.cnn();
-    	String prediction = cnn.ticketClassifier(details.getText());
+
+    	MyIter iter = new MyIter();
+    	trainIter = iter.getDataSetIterator();
+    	String prediction = iter.ticketClassifier(details.getText(), trainIter);
     	reporter.setText(prediction);
     }
     public void cancel() throws IOException {
