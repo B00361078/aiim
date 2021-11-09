@@ -37,6 +37,9 @@ public class Main extends Application {
 	
 	@Override
     public void start(Stage stage) throws Exception {
+		WordVector wv = new WordVector();
+		wv.generateVectors();
+		MyCnn2.cnn();
 		this.stage = stage;
 		ViewController.createInstance();
 		//ViewController vc = new ViewController();

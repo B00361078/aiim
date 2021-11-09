@@ -81,7 +81,7 @@ public class MyCnn2 {
         int nEpochs = 1;                    //Number of epochs (full passes of training data) to train on
         int truncateReviewsToLength = 256;  //Truncate reviews with length (# words) greater than this
 
-        int cnnLayerFeatureMaps = 10000;      //Number of feature maps / channels / depth for each CNN layer
+        int cnnLayerFeatureMaps = 1000;      //Number of feature maps / channels / depth for each CNN layer
         PoolingType globalPoolingType = PoolingType.MAX;
         Random rng = new Random(12345); //For shuffling repeatability
 
@@ -138,7 +138,7 @@ public class MyCnn2 {
 
         //Load word vectors and get the DataSetIterators for training and testing
         System.out.println("Loading word vectors and creating DataSetIterators");
-        wordVectors = WordVectorSerializer.loadStaticModel(new File(currentDirectory + "/latestVectors.txt")); // need to add new vectors specific for it issues
+        wordVectors = WordVectorSerializer.loadStaticModel(new File(currentDirectory + "/latestVectors5.txt")); // need to add new vectors specific for it issues
         //WordVectors wordVectors = WordVectorSerializer.loadStaticModel(new File(WORD_VECTORS_PATH));
         trainIter = getDataSetIterator(true, wordVectors, batchSize, truncateReviewsToLength, rng);
 
@@ -172,7 +172,7 @@ public class MyCnn2 {
         //INDArray labels = model.getLabels();
         //System.out.println("this is labels" + labels);
         System.out.println("saving model");
-        File trained_model = new File("trained_model.zip");     
+        File trained_model = new File("trained_model_latest.zip");     
     	ModelSerializer.writeModel(net, trained_model, false);
     	
     	//ticketClassifier("Guidewire services SVC GUIDEWIRE CLAIMCENTER SVC GUIDEWIRE CONTACTMANAGER SVC GUIDEWIRE POLICYCENTER These services are showing as pipeline. They are live services and need to be updated to reflect that. Please check any other HSN's or services that relate to Guidewire.\r\n"
@@ -228,15 +228,17 @@ public class MyCnn2 {
             .build();
     }
 
-    public static String ticketClassifier(String verbatim) throws IOException {
+    public static void ticketClassifier(String verbatim) throws IOException {
     	ComputationGraph model = ModelSerializer.restoreComputationGraph(currentDirectory+"/trained_model.zip");
     	//File file = new File(currentDirectory+"/myfile");
     	//INDArray features = readBinary(file);
-    	INDArray features =((CnnSentenceDataSetIterator) trainIter).loadSingleSentence(verbatim);
+    	MyIter iter = new MyIter();
+    
+    	//INDArray features = trainIter().loadSingleSentence(verbatim);
 		//CnnSentenceDataSetIterator = new CnnSentenceDataSetIterator();
     	
 
-    	INDArray predictions = model.outputSingle(features);
+    	//INDArray predictions = model.outputSingle(features);
         List<String> labels = trainIter.getLabels();
 
                
@@ -244,22 +246,22 @@ public class MyCnn2 {
         System.out.println("\n\nPredictions for my sentence is:");
         for( int i=0; i<labels.size(); i++ ){
         	
-            System.out.println("Prediction(" + labels.get(i) + ") = " + predictions.getDouble(i)); 
+         //   System.out.println("Prediction(" + labels.get(i) + ") = " + predictions.getDouble(i)); 
             //System.out.printf("Prediction: %f\n", predictions.getDouble(i));
         }
-                
-        int maxAt = 0;
-
-        for (int a = 0; a < predictions.length(); a++) {
-            maxAt = predictions.getDouble(a) > predictions.getDouble(maxAt) ? a : maxAt;
-        }
-        System.out.println("max is at " + maxAt);
-        String classification = labels.get(maxAt);
-
-        System.out.println(classification);
-    	//return the label classification here
-		return classification.toString();
-    	
+//                
+//        int maxAt = 0;
+//
+//        for (int a = 0; a < predictions.length(); a++) {
+//            maxAt = predictions.getDouble(a) > predictions.getDouble(maxAt) ? a : maxAt;
+//        }
+//        System.out.println("max is at " + maxAt);
+//        String classification = labels.get(maxAt);
+//
+//        System.out.println(classification);
+//    	//return the label classification here
+	//return classification.toString();
+//    	
     }
    }
     

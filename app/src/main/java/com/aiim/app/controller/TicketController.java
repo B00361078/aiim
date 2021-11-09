@@ -57,7 +57,7 @@ public class TicketController {
     	//viewController.switchToView(ViewNames.CLIENTS);
     }
     public void raise() throws Exception {
-
+    	//MyCnn2.cnn();
     	MyIter iter = new MyIter();
     	trainIter = iter.getDataSetIterator();
     	String prediction = iter.ticketClassifier(details.getText(), trainIter);

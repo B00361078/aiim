@@ -25,7 +25,7 @@ public class MyIter {
 	
 	public MyIter() {
 		currentDirectory = Paths.get("").toAbsolutePath().toString();
-		wordVectors = WordVectorSerializer.loadStaticModel(new File(currentDirectory + "/latestVectors.txt")); 
+		wordVectors = WordVectorSerializer.loadStaticModel(new File(currentDirectory + "/latestVectors5.txt")); 
 	}
 	
 		public DataSetIterator getDataSetIterator( ) throws FileNotFoundException{
@@ -60,7 +60,7 @@ public class MyIter {
 				.build();
 		}
 		public String ticketClassifier(String verbatim, DataSetIterator trainIter) throws IOException {
-	    	ComputationGraph model = ModelSerializer.restoreComputationGraph(currentDirectory+"/trained_model.zip");
+	    	ComputationGraph model = ModelSerializer.restoreComputationGraph(currentDirectory+"/trained_model_latest.zip");
 	    	//File file = new File(currentDirectory+"/myfile");
 	    	//INDArray features = readBinary(file);
 	    	MyIter iter = new MyIter();
