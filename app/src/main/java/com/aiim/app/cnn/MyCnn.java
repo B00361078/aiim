@@ -20,6 +20,7 @@ import org.deeplearning4j.nn.conf.layers.GlobalPoolingLayer;
 import org.deeplearning4j.nn.conf.layers.OutputLayer;
 import org.deeplearning4j.nn.conf.layers.PoolingType;
 import org.deeplearning4j.nn.graph.ComputationGraph;
+import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
 import org.deeplearning4j.nn.weights.WeightInit;
 import org.deeplearning4j.text.tokenization.tokenizer.TokenPreProcess;
 import org.deeplearning4j.text.tokenization.tokenizer.Tokenizer;
@@ -147,6 +148,9 @@ public class MyCnn {
         System.out.println("saving model");
         File trained_model = new File("trained_model.zip");     
     	ModelSerializer.writeModel(net, trained_model, false);
+    	MultiLayerNetwork model = ModelSerializer.restoreMultiLayerNetwork("trained_model.zip");
+        INDArray labels = model.getLabels();
+        System.out.println("this is labels" + labels);
     	
     	ticketClassifier("Guidewire services SVC GUIDEWIRE CLAIMCENTER SVC GUIDEWIRE CONTACTMANAGER SVC GUIDEWIRE POLICYCENTER These services are showing as pipeline. They are live services and need to be updated to reflect that. Please check any other HSN's or services that relate to Guidewire");
     }
