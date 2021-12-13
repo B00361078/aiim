@@ -11,6 +11,7 @@ import com.aiim.app.model.Ticket;
 import com.aiim.app.resource.ViewNames;
 import com.aiim.app.util.Session;
 import javafx.fxml.LoadException;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.SubScene;
@@ -25,7 +26,7 @@ import javafx.stage.Stage;
  * Neil Campbell 07/05/2021, B00361078
  */
 
-public class DashboardController {
+public class DashboardController extends Task<Void> {
 	@FXML private TableView<Ticket.Builder> ticketTable;
 	@FXML private javafx.scene.control.TableColumn<Ticket, String> ticketIDCol;
 	@FXML private javafx.scene.control.TableColumn<Ticket, String> statusCol;
@@ -40,32 +41,44 @@ public class DashboardController {
 	private int permLevel;
 	private Connection con;
 	private PreparedStatement stmt;
+	private PreparedStatement stmt2;
+	private String assignedTeamName;
    
-    public void initialize() throws IOException, SQLException {
+    public void initialize() throws Exception  {
+    	//call();
+    	raiseNewBtn.setVisible(false);
+    	perms();
     	//ViewController.createInstance();
     	//subScene = viewController.getCurrentSubScene();
     	//System.out.println(subScene);
-    	//menuButton.setText(Session.getFullname());
+    	//String mystr = Session.getFullName();
+    	//menuButton.setText("neil");//Session.getFullName().toString());
     	ticketTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
     	ticketTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-    	//updateTable();
+    	updateTable();
     	//viewController.switchToView(ViewNames.CLIENTS);
+    	System.out.println(Session.getFullName() + Session.getTeamName());
+    }
+    private void perms () {
+    	if (Session.getPermissionLevel() == 1){
+    		raiseNewBtn.setVisible(true);
+    	}
     }
 	public void updateTable() throws SQLException {
 		
 	    	//ticketTable.getItems().clear();
 		//ticketTable.getItems().add(new Ticket.Builder().setPersonID().setFName(fName).setSName(sName));
 		con = DatabaseConnect.getConnection();
-		stmt = con.prepareStatement("USE [honsdb] SELECT* FROM tblTicket WHERE reporter = '" +Session.getUsername()+"'");
+		//stmt = con.prepareStatement("USE [honsdb] SELECT* FROM tblTicket WHERE reporter = '" +Session.getUsername()+"'");
+		stmt = con.prepareStatement("USE honsdb select b.ticketID, b.status, b.dateRaised, a.name from tblTicket as B join tblTeam as u on u.teamID = B.updatedTeam join tblTeam as a on a.teamID = B.updatedTeam WHERE B.reporter = '" +Session.getUsername()+"'");
     	ResultSet rs = stmt.executeQuery();
-    	//stmt.executeUpdate();
     	while(rs.next()){
     			
     		String ticketID = rs.getString(1);
-    		String status = rs.getString(9);
-    		String assignedTeam = rs.getString(7);
-    		Date date = rs.getDate(10);
-
+    		String status = rs.getString(2);
+    		Date date = rs.getDate(3);
+    		String assignedTeam = rs.getString(4);
+    		
 
     		ticketTable.getItems().add(new Ticket.Builder()
 		    		.setTicketID(ticketID)
@@ -73,46 +86,30 @@ public class DashboardController {
 		    		.setDate(date.toString())
 		    		.setAssignedTeam(assignedTeam));
 
-        }
-    	
-//		String ticketID = "ticketid";
-//	    String status = "status";
-//	    String date = "date";
-//	    String assigned = "assigned";
-	    
-//			    ticketTable.getItems().add(new Ticket.Builder()
-//			    		.setTicketID(ticketID)
-//			    		.setStatus(status)
-//			    		.setDate(date)
-//			    		.setAssignedTeam(assigned));
-			    
+    	}		    
 	    	}
-	    
-
-
-    
-    @FXML protected void logout(){
-    	try {
-    			Stage currentStage = (Stage) menuButton.getScene().getWindow();
-    			viewController.setCurrentStage(currentStage);
-    			viewController.switchToView(ViewNames.LOGIN);
-		
-    	} catch (IOException e1) {
-    		e1.printStackTrace();
-    	}
-
-    }
+	   
     
     @FXML protected void raiseIncidentView(ActionEvent event) {
    	
         try {
         		//viewController.setCurrentSubScene(subScene);
         	ViewController.createInstance().switchToView(ViewNames.TICKET);
+
 			
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
     }
+	@Override
+	protected Void call() throws Exception {
+		updateMessage("Sorting...");
+	    System.out.println("running");
+	    updateMessage("Sorting complete.");
+	    updateProgress(1, 1); // jumps progress from indeterminate to 100%
+		// TODO Auto-generated method stub
+		return null;
+	}
     
    
     

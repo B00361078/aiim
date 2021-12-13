@@ -38,7 +38,7 @@ public class HomeController {
     public void initialize() throws IOException, SQLException {
     	//viewController = ViewController.createInstance();
     	ViewController.createInstance().setCurrentSubScene(subScene);
-    	//menuButton.setText(Session.getFullname());
+    	menuButton.setText(Session.getFullName());
     	//updateTable();
     	ViewController.createInstance().switchToView(ViewNames.DASHBOARD);
     }
@@ -48,6 +48,7 @@ public class HomeController {
     			Stage currentStage = (Stage) menuButton.getScene().getWindow();
     			ViewController.createInstance().setCurrentStage(currentStage);
     			ViewController.createInstance().switchToView(ViewNames.LOGIN);
+    			Session.clearSession();
 		
     	} catch (IOException e1) {
     		e1.printStackTrace();

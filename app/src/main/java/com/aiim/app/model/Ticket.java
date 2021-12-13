@@ -64,4 +64,19 @@ public class Ticket {
             return ticket;
         }
     }
+
+	public Object getInProgressState() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public void setStatus(Object inProgressState) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public Object getClosedState() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

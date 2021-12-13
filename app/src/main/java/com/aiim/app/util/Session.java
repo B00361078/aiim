@@ -6,7 +6,7 @@ public class Session {
 	private static int permissionLevel;
 	private static String teamName;
 	private static String username;
-	private static String fullname;
+	private static String fullName;
 
 	private Session() {
 		if(session != null) {
@@ -51,13 +51,17 @@ public class Session {
 	public static String getTeamName() {
 		return teamName;
 	}
-	public static String getFullname() {
-		return fullname;
+	public static String getFullName() {
+		return fullName;
 	}
-	public static void setFullname(String fullname) {
-		Session.fullname = fullname;
+	public static void setFullName(String fullname) {
+		Session.fullName = fullname;
 	}
-	
-
-
+	public static void clearSession () {
+		setFullName(null);
+		setPermissionLevel(1);
+		setTeamName(null);
+		setUsername(null);
+		session = null;
+	}
 }

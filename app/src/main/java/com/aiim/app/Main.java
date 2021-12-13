@@ -37,9 +37,9 @@ public class Main extends Application {
 	
 	@Override
     public void start(Stage stage) throws Exception {
-		WordVector wv = new WordVector();
-		wv.generateVectors();
-		MyCnn2.cnn();
+		//WordVector wv = new WordVector();
+		//wv.generateVectors();
+		//MyCnn2.cnn();
 		this.stage = stage;
 		ViewController.createInstance();
 		//ViewController vc = new ViewController();
@@ -49,9 +49,9 @@ public class Main extends Application {
 		//viewController.switchToView(ViewNames.LOGIN);
 		ViewController.createInstance().switchToView(ViewNames.LOGIN);
 		strBundle = ResourceBundle.getBundle("com.aiim.app.resource.bundle");
-		//con = DatabaseConnect.getConnection();
-		//System.out.println("con is " + con);
-		//checkDBConnect();
+		con = DatabaseConnect.getConnection();
+		System.out.println("con is " + con);
+		checkDBConnect();
 		
 		//download();
 		//update();

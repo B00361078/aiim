@@ -62,6 +62,7 @@ public class LoginController {
 	private String teamName;
 	private String user;
 	private String fullname;
+	private String firstName;
         
     public void initialize() throws IOException {
     	//adminD = new AdminData();
@@ -72,62 +73,65 @@ public class LoginController {
     
     @FXML protected void dashView(ActionEvent event) throws IOException, SQLException, ClassNotFoundException, NoSuchAlgorithmException, DecoderException  {
     	Scene scene = passwordField.getScene();
-//    	String username = usernameField.getText();
-//    	String password = passwordField.getText();
-//    	if (username == null | password == null) {
-//    		new javafx.scene.control.Alert(Alert.AlertType.ERROR, strBundle.getString("e17")).showAndWait();
-//    	}
-//    	else {
-//    		con = DatabaseConnect.getConnection();
-//    		System.out.println("con is " + con);
-//        	stmt = con.prepareStatement("USE [honsdb] SELECT* FROM tblUser WHERE username = '" +username+"'");
-//        	ResultSet rs = stmt.executeQuery();
-//        	//stmt.executeUpdate();
-//        	while(rs.next()){
-//        		user = rs.getString(1);
-//        		fullname = rs.getString(4);
-//        		hashString = rs.getString(5);
-//        		saltString = rs.getString(8);
-//        		teamID = rs.getString(6);
-//				roleID = rs.getString(7);
-//            }
-//        	//con.close();
-//        	if (DigestUtils.sha1Hex(passwordField.getText()+saltString).equalsIgnoreCase(hashString)) {
-//        		System.out.println("match");
-//        		
-//        		session = Session.createSession();
-//        		Session.setUsername(user);
-//        		Session.setFullname(fullname);
-//        		
-//				
-//				stmt = con.prepareStatement("USE [honsdb] SELECT* FROM tblRole WHERE roleID = '" +roleID+"'");
-//	        	ResultSet rs1 = stmt.executeQuery();
-//	        	//stmt.executeUpdate();
-//	        	while(rs1.next()){
-//	        		permLevel = rs1.getInt("permissionLevel");
-//	            }
-//	        	
-//	        	stmt = con.prepareStatement("USE [honsdb] SELECT* FROM tblTeam WHERE teamID = '" +teamID+"'");
-//	        	ResultSet rs2 = stmt.executeQuery();
-//	        	//stmt.executeUpdate();
-//	        	while(rs2.next()){
-//	        		teamName = rs2.getString("name");
-//	            }
-//	        	
-//        		
-//        		
-//        		Session.setPermissionLevel(permLevel);
-//        		Session.setTeamName(teamName);
+    	String username = usernameField.getText();
+    	String password = passwordField.getText();
+    	if (username == null | password == null) {
+    		new javafx.scene.control.Alert(Alert.AlertType.ERROR, strBundle.getString("e17")).showAndWait();
+    	}
+    	else {
+    		con = DatabaseConnect.getConnection();
+    		System.out.println("con is " + con);
+        	stmt = con.prepareStatement("USE [honsdb] SELECT* FROM tblUser WHERE username = '" +username+"'");
+        	ResultSet rs = stmt.executeQuery();
+        	//stmt.executeUpdate();
+        	while(rs.next()){
+        		user = rs.getString(1);
+        		firstName = rs.getString(2);
+        		fullname = rs.getString(4);
+        		hashString = rs.getString(5);
+        		saltString = rs.getString(8);
+        		teamID = rs.getString(6);
+				roleID = rs.getString(7);
+            }
+        	//con.close();
+        	if (DigestUtils.sha1Hex(passwordField.getText()+saltString).equalsIgnoreCase(hashString)) {
+        		System.out.println("match");
+        		
+        		session = Session.createSession();
+        		Session.setUsername(user);
+        		Session.setFullName(fullname);
+        		
+        		System.out.println("printing session " + Session.getFullName());
+        		
+				
+				stmt = con.prepareStatement("USE [honsdb] SELECT* FROM tblRole WHERE roleID = '" +roleID+"'");
+	        	ResultSet rs1 = stmt.executeQuery();
+	        	//stmt.executeUpdate();
+	        	while(rs1.next()){
+	        		permLevel = rs1.getInt("permissionLevel");
+	            }
+	        	
+	        	stmt = con.prepareStatement("USE [honsdb] SELECT* FROM tblTeam WHERE teamID = '" +teamID+"'");
+	        	ResultSet rs2 = stmt.executeQuery();
+	        	//stmt.executeUpdate();
+	        	while(rs2.next()){
+	        		teamName = rs2.getString("name");
+	            }
+	        	
+        		
+        		
+        		Session.setPermissionLevel(permLevel);
+        		Session.setTeamName(teamName);
         		
         		ViewController.createInstance().setCurrentScene(scene);
         		ViewController.createInstance().switchToView(ViewNames.HOME);
-    			//}
-    		//else {
-    			//new Alert(Alert.AlertType.ERROR, strBundle.getString("e10")).showAndWait();
+    			}
+    		else {
+    			new Alert(Alert.AlertType.ERROR, strBundle.getString("e10")).showAndWait();
 
-        	//}
+        	}
 	
     	}
     }
-//}
+}
 
