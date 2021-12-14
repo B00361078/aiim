@@ -28,6 +28,6 @@
       <TextArea fx:id="details" layoutX="90.0" layoutY="137.0" prefHeight="149.0" prefWidth="373.0" />
       <Label layoutX="90.0" layoutY="120.0" text="Details of incident:" />
       <Button fx:id="cancelBtn" layoutX="90.0" layoutY="302.0" onAction="#cancel" mnemonicParsing="false" text="Cancel" />
-      <Button fx:id="raiseBtn" layoutX="172.0" layoutY="302.0" onAction="#raise" mnemonicParsing="false" text="Raise" />
+      <Button fx:id="raiseBtn" layoutX="172.0" layoutY="302.0" mnemonicParsing="false" text="Raise" />
    </children>
 </AnchorPane>

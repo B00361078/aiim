@@ -41,7 +41,7 @@ public class Main extends Application {
 		//wv.generateVectors();
 		//MyCnn2.cnn();
 		this.stage = stage;
-		ViewController.createInstance();
+		//ViewController.createInstance();
 		//ViewController vc = new ViewController();
 		//viewController.createViewController();
 		ViewController.createInstance().setCurrentStage(stage);

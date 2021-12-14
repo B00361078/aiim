@@ -29,6 +29,6 @@
         </TableColumn>
         </columns>
       </TableView>
-      <Button fx:id="settingsBtn" layoutX="63.0" layoutY="321.0" mnemonicParsing="false" prefHeight="61.0" prefWidth="143.0" text="Configure Settings" />
+      <Button fx:id="settingsBtn" layoutX="63.0" layoutY="321.0" mnemonicParsing="false" onAction="#settingsView" prefHeight="61.0" prefWidth="143.0" text="Configure Settings" />
    </children>
 </AnchorPane>

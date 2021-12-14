@@ -26,7 +26,7 @@ import javafx.stage.Stage;
  * Neil Campbell 07/05/2021, B00361078
  */
 
-public class DashboardController extends Task<Void> {
+public class DashboardController {
 	@FXML private TableView<Ticket.Builder> ticketTable;
 	@FXML private javafx.scene.control.TableColumn<Ticket, String> ticketIDCol;
 	@FXML private javafx.scene.control.TableColumn<Ticket, String> statusCol;
@@ -45,25 +45,15 @@ public class DashboardController extends Task<Void> {
 	private String assignedTeamName;
    
     public void initialize() throws Exception  {
-    	//call();
-    	raiseNewBtn.setVisible(false);
-    	perms();
-    	//ViewController.createInstance();
-    	//subScene = viewController.getCurrentSubScene();
-    	//System.out.println(subScene);
-    	//String mystr = Session.getFullName();
-    	//menuButton.setText("neil");//Session.getFullName().toString());
     	ticketTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
     	ticketTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
     	updateTable();
-    	//viewController.switchToView(ViewNames.CLIENTS);
-    	System.out.println(Session.getFullName() + Session.getTeamName());
     }
-    private void perms () {
-    	if (Session.getPermissionLevel() == 1){
-    		raiseNewBtn.setVisible(true);
-    	}
-    }
+//    private void perms () {
+//    	if (Session.getPermissionLevel() == 3){
+//    		raiseNewBtn.setVisible(true);
+//    	}
+//    }
 	public void updateTable() throws SQLException {
 		
 	    	//ticketTable.getItems().clear();
@@ -101,15 +91,14 @@ public class DashboardController extends Task<Void> {
 			e1.printStackTrace();
 		}
     }
-	@Override
-	protected Void call() throws Exception {
-		updateMessage("Sorting...");
-	    System.out.println("running");
-	    updateMessage("Sorting complete.");
-	    updateProgress(1, 1); // jumps progress from indeterminate to 100%
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @FXML protected void settingsView(ActionEvent event) {
+       	
+        try {
+        	ViewController.createInstance().switchToView(ViewNames.SETTINGS);		
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+    }
     
    
     

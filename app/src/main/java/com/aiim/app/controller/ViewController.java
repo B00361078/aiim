@@ -53,6 +53,9 @@ public class ViewController {
 	public void setCurrentStage(Stage stage) {
 		this.currentStage = stage;
 	}
+	public Stage getCurrentStage() {
+		return this.currentStage;
+	}
 	public void setCurrentScene(Scene scene) {
 		this.currentScene = scene;
 	}
@@ -98,7 +101,7 @@ public class ViewController {
 			  	initialiseSubScene();
 			break;
 		  case SETTINGS:
-			  	viewResource  = "/com/app/views/settings.fxml";
+			  	viewResource  = "/com/aiim/app/view/settings.fxml";
 			  	setRoot(viewResource);
 			  	initialiseSubScene();
 			break;
