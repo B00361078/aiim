@@ -31,6 +31,9 @@ import javafx.stage.Stage;
  */
 
 public class SettingController {
+	
+	//get value from session and set the radio button accordingly
+	// allow task to enable/disable in db
 
 	private int permLevel;
 	private Connection con;
@@ -121,7 +124,7 @@ public class SettingController {
 				
         private MyTask(String string) {
             this.mystr = string;
-			updateTitle(this.mystr + " Auto ticket assignment");
+			updateTitle(this.mystr + " Auto ticket assignment.");
         }
 
         @Override
@@ -132,7 +135,7 @@ public class SettingController {
       
         	//insert();
             TimeUnit.SECONDS.sleep(3);
-            updateMessage("Ticket raised successfully");
+            updateMessage(this.mystr + " Auto ticket assignment was successful.");
             updateProgress(1, 1);
             return mystr;
         }
