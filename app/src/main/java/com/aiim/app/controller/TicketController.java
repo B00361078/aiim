@@ -41,7 +41,7 @@ public class TicketController {
 	@FXML private Button raiseBtn;
 	
    
-	public void initialize() throws IOException, SQLException {
+	public void initialize() throws Exception, SQLException {
     	reporter.setText(Session.getFullName());
     	con = DatabaseConnect.getConnection();
     	VIEWPERMLEVEL = 5;
@@ -55,7 +55,13 @@ public class TicketController {
             task.setOnSucceeded(e -> task.getValue());
             Alert alert = createProgressAlert(ViewController.createInstance().getCurrentStage(), task);
             executeTask(task);
-            alert.show();
+            alert.showAndWait();
+            try {
+				ViewController.createInstance().switchToView(ViewNames.DASHBOARD);
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			});
     }
     
