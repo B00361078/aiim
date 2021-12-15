@@ -48,7 +48,7 @@ public class SettingController {
    
 	public void initialize() throws Exception {
 		con = DatabaseConnect.getConnection();
-		getMode();
+		setRadio(getMode().toString());
 		ToggleGroup group = new ToggleGroup();
 		radioOn.setToggleGroup(group);
 		radioOff.setToggleGroup(group);
@@ -72,6 +72,18 @@ public class SettingController {
             executeTask(task);
             alert.show();
 			});
+    }
+    public void setRadio(String mode) throws Exception {
+    	switch(mode) {
+    	case "ON":
+    		radioOn.setSelected(true);
+    		radioOff.setSelected(false);
+    		break;
+    	case "OFF":
+    		radioOn.setSelected(false);
+    		radioOff.setSelected(true);
+    		break;
+    	}
     }
 
     public void updateMode(String mode) throws Exception {
