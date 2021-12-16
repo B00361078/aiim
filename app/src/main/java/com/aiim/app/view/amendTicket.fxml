@@ -47,7 +47,7 @@
       <ButtonBar layoutX="27.0" layoutY="343.0" prefHeight="40.0" prefWidth="562.0">
         <buttons>
             <Button fx:id="backBtn1" mnemonicParsing="false" onAction="#back" text="Back to Dashboard" />
-          <Button fx:id="backBtn" mnemonicParsing="false" text="Add note" />
+          <Button fx:id="backBtn" mnemonicParsing="false" onAction="#addNote" text="Add note" />
             <Button fx:id="statusBtn" mnemonicParsing="false" prefHeight="25.0" prefWidth="140.0" onAction="#clickStatus" text="Status" />
             <Button fx:id="assignBtn" mnemonicParsing="false" onAction="#assignToMe" prefHeight="25.0" prefWidth="92.0" text="Assign To Me" />
         </buttons>

@@ -16,6 +16,8 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Cursor;
 import javafx.scene.control.Alert;
@@ -26,6 +28,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Labeled;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.TextInputDialog;
 import javafx.stage.Stage;
 
 /* The following class handles the dashboard interface by switching the current subScene. Part of MVC design Pattern as a controller.
@@ -291,6 +294,23 @@ public class AmendTicketController {
         );
 
         return alert;
+    }
+    
+    @FXML public void addNote() {
+    	TextInputDialog td = new TextInputDialog("enter any text");
+    	  
+        // setHeaderText
+        td.setHeaderText("enter your message");
+        td.showAndWait();
+        
+//        EventHandler<ActionEvent> event = new EventHandler<ActionEvent>() {
+//            public void handle(ActionEvent e)
+//            {
+//                // show the text input dialog
+//                td.showAndWait();
+//            }
+//        };
+        
     }
     
 }
