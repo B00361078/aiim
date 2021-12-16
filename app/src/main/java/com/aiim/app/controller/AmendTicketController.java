@@ -50,23 +50,25 @@ public class AmendTicketController {
 	private static DataSetIterator trainIter;
 	@FXML private Button raiseBtn;
 	@FXML private Button assignBtn;
+	@FXML private Button statusBtn;
 	private PreparedStatement sqlStatement;
 	private PreparedStatement sqlStatement2;
 	private String assignedTeamID;
 	private String teamName;
 	private PreparedStatement sqlStatement3;
+	private String ticketStatus;
+	private String mystr;
 	
    
 	public void initialize() throws Exception, SQLException {
 		assignBtn.setVisible(false);
 		con = DatabaseConnect.getConnection();
 		ticketNo.setText(Session.getCurrentTicket());
-		setDetails();
-		ObservableList<String> list = assignedTeam.getItems();
-		
+		setDetails();	
+		status(ticketStatus);
+		ObservableList<String> list = assignedTeam.getItems();	
     	//reporter.setText(Session.getFullName());
     	VIEWPERMLEVEL = 5;
-    	String st[] = { "Arnab", "Andrew", "Ankit", "None" };
     	checkHasPermission();
     	//reporter.setText(Session.getFullName());
     	details.setWrapText(true);
@@ -97,6 +99,41 @@ public class AmendTicketController {
     		
     	}
     }
+    private void status (String status) {
+    	if(status.contains("raised")) {
+    		statusBtn.setText("Move to In Progress");
+    	}
+    	else if (status.contains("inprogress")) {
+    		statusBtn.setText("Close Ticket");
+    	}
+    	else {
+    		statusBtn.setVisible(false);
+    	}
+    }
+    @FXML private void clickStatus () throws Exception {
+    	changeStatus(statusBtn.getText());
+    }
+    private void changeStatus (String command) throws Exception {
+    	switch (command) {
+    	case "Move to In Progress":
+    		java.util.Date date = new java.util.Date();
+    	    java.sql.Timestamp sqlDate = new java.sql.Timestamp(date.getTime());
+    	    con.setAutoCommit(false);	
+    	    sqlStatement = con.prepareStatement("USE [honsdb] UPDATE tblTicket SET status = ?, dateUpdated = ? WHERE ticketID = ?");	 	
+    	    sqlStatement.setString(1, "inprogress");
+    	    sqlStatement.setObject(2, sqlDate);
+    	    sqlStatement.setString(3, Session.getCurrentTicket());
+    	    if (sqlStatement.executeUpdate() == 1){
+    			con.commit();
+    			System.out.println("Status updated");
+    			status.setText("inprogress");
+    		}
+    		else {
+    			throw new Exception("Error");
+    		}
+    		break;
+    	}
+    }
     private void setDetails() throws Exception {
     	con.setAutoCommit(false);
     	sqlStatement = con.prepareStatement("SELECT reporter,assignee,status,dateRaised,assignedTeam,detail from tblTicket WHERE  ticketID = ?");
@@ -106,6 +143,7 @@ public class AmendTicketController {
     		reporter.setText(rs.getString(1));
     		setAssignee(rs.getString(2));
     		status.setText(rs.getString(3));
+    		ticketStatus = rs.getString(3).toString();
     		dateRaised.setText(rs.getDate(4).toString());
     		assignedTeamID = rs.getString(5);
     		details.setText(rs.getString(6));
