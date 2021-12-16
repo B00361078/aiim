@@ -8,6 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import com.aiim.app.database.DatabaseConnect;
 import com.aiim.app.model.Ticket;
+import com.aiim.app.model.Ticket.Builder;
 import com.aiim.app.resource.ViewNames;
 import com.aiim.app.util.Session;
 import javafx.fxml.LoadException;
@@ -19,6 +20,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SelectionMode;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.stage.Stage;
 
@@ -48,6 +50,23 @@ public class DashboardController {
     	ticketTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
     	ticketTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
     	updateTable();
+    	
+    	ticketTable.setRowFactory( tv -> {
+    	    TableRow<Ticket.Builder> row = new TableRow<>();
+    	    row.setOnMouseClicked(event -> {
+    	        if (event.getClickCount() == 2 && (! row.isEmpty()) ) {
+    	            String rowData = row.getItem().ticketID;
+    	            Session.setCurrentTicket(rowData);
+    	            try {
+						ViewController.createInstance().switchToView(ViewNames.AMENDTICKET);
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+    	        }
+    	    });
+    	    return row ;
+    	});
     }
 //    private void perms () {
 //    	if (Session.getPermissionLevel() == 3){
@@ -59,8 +78,24 @@ public class DashboardController {
 	    	//ticketTable.getItems().clear();
 		//ticketTable.getItems().add(new Ticket.Builder().setPersonID().setFName(fName).setSName(sName));
 		con = DatabaseConnect.getConnection();
+		switch(Session.getPermissionLevel()) {
+		case 1:
+			//agent
+			stmt = con.prepareStatement("USE honsdb select b.ticketID, b.status, b.dateRaised, a.name from tblTicket as B join tblTeam as u on u.teamID = B.updatedTeam join tblTeam as a on a.teamID = B.updatedTeam WHERE B.reporter = '" +Session.getUsername()+"'");
+			break;
+		case 2:
+			//owner
+			stmt = con.prepareStatement("USE honsdb select b.ticketID, b.status, b.dateRaised, a.name from tblTicket as B join tblTeam as u on u.teamID = B.updatedTeam join tblTeam as a on a.teamID = B.updatedTeam WHERE B.updatedTeam = 'Unassigned' OR B.updatedTeam = '" +Session.getTeamID()+"'");
+			break;
+		case 3:
+			//sysadmin
+			stmt = con.prepareStatement("USE honsdb select b.ticketID, b.status, b.dateRaised, a.name from tblTicket as B join tblTeam as u on u.teamID = B.updatedTeam join tblTeam as a on a.teamID = B.updatedTeam");
+			break;
+		}
+
 		//stmt = con.prepareStatement("USE [honsdb] SELECT* FROM tblTicket WHERE reporter = '" +Session.getUsername()+"'");
-		stmt = con.prepareStatement("USE honsdb select b.ticketID, b.status, b.dateRaised, a.name from tblTicket as B join tblTeam as u on u.teamID = B.updatedTeam join tblTeam as a on a.teamID = B.updatedTeam WHERE B.reporter = '" +Session.getUsername()+"'");
+		//stmt = con.prepareStatement("USE honsdb select b.ticketID, b.status, b.dateRaised, a.name from tblTicket as B join tblTeam as u on u.teamID = B.updatedTeam join tblTeam as a on a.teamID = B.updatedTeam WHERE B.reporter = '" +Session.getUsername()+"'");
+		//stmt = con.prepareStatement("USE honsdb select b.ticketID, b.status, b.dateRaised, a.name from tblTicket as B join tblTeam as u on u.teamID = B.updatedTeam join tblTeam as a on a.teamID = B.updatedTeam");
     	ResultSet rs = stmt.executeQuery();
     	while(rs.next()){
     			

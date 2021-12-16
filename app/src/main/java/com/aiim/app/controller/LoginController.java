@@ -100,6 +100,7 @@ public class LoginController {
         		session = Session.createSession();
         		Session.setUsername(user);
         		Session.setFullName(fullname);
+        		Session.setTeamID(teamID);
         		
         		System.out.println("printing session " + Session.getFullName());
         		
@@ -122,6 +123,7 @@ public class LoginController {
         		
         		Session.setPermissionLevel(permLevel);
         		Session.setTeamName(teamName);
+        		System.out.println(teamName);
         		
         		ViewController.createInstance().setCurrentScene(scene);
         		ViewController.createInstance().switchToView(ViewNames.HOME);

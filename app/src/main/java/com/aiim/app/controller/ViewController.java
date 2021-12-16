@@ -110,10 +110,10 @@ public class ViewController {
 			  	setRoot(viewResource);
 			  	initialiseScene();
 			break;
-		  case CHANGECLIENT:
-			  	viewResource  = "/com/app/views/changeclient.fxml";
+		  case AMENDTICKET:
+			  	viewResource  = "/com/aiim/app/view/amendTicket.fxml";
 			  	setRoot(viewResource);
-			  	initialiseStage();
+			  	initialiseSubScene();
 			break;
 		  default:
 			  currentStage.close();
