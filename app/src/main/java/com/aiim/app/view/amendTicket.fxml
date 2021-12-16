@@ -33,23 +33,23 @@
             <Label text="Assignee" GridPane.rowIndex="1" />
             <Label text="Assigned Team" GridPane.rowIndex="2" />
             <Label text="Status" GridPane.rowIndex="4" />
-            <ChoiceBox prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-            <ChoiceBox prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <ChoiceBox prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <ChoiceBox fx:id="assignedTeam" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
             <Label text="Date Raised" GridPane.rowIndex="5" />
-            <Label text="Date Raised" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+            <Label fx:id="dateRaised" text="Date Raised" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+            <Label fx:id="assignee" text="label2" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <Label fx:id="status" text="label3" GridPane.columnIndex="1" GridPane.rowIndex="4" />
          </children>
       </GridPane>
       <TextArea fx:id="details" layoutX="25.0" layoutY="222.0" prefHeight="96.0" prefWidth="277.0" />
       <Label layoutX="27.0" layoutY="205.0" text="Details of incident:" />
       <Label fx:id="reporter111" layoutX="10.0" layoutY="10.0" text="Details for ticket:" />
       <Label fx:id="ticketNo" layoutX="116.0" layoutY="10.0" text="label5" />
-      <ButtonBar layoutX="25.0" layoutY="343.0" prefHeight="40.0" prefWidth="420.0">
+      <ButtonBar layoutX="27.0" layoutY="343.0" prefHeight="40.0" prefWidth="425.0">
         <buttons>
-          <Button mnemonicParsing="false" text="Cancel" />
-            <Button fx:id="raiseBtn1" mnemonicParsing="false" text="Update" />
-            <Button fx:id="raiseBtn" mnemonicParsing="false" prefHeight="25.0" prefWidth="92.0" text="Assign To Me" />
-            <Button fx:id="cancelBtn" mnemonicParsing="false" onAction="#cancel" text="Add Note" />
+            <Button fx:id="backBtn1" mnemonicParsing="false" onAction="#back" text="Back to Dashboard" />
+          <Button fx:id="backBtn" mnemonicParsing="false" onAction="#back" text="Add note" />
+            <Button fx:id="backBtn2" mnemonicParsing="false" onAction="#back" text="Status" />
+            <Button fx:id="assignBtn" mnemonicParsing="false" onAction="#assignToMe" prefHeight="25.0" prefWidth="92.0" text="Assign To Me" />
         </buttons>
       </ButtonBar>
       <Label layoutX="317.0" layoutY="27.0" text="Notes" />

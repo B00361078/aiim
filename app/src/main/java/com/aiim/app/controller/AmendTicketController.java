@@ -12,13 +12,18 @@ import com.aiim.app.database.DatabaseConnect;
 import com.aiim.app.resource.ViewNames;
 import com.aiim.app.util.Session;
 import javafx.beans.binding.Bindings;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.Cursor;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.Labeled;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TextArea;
 import javafx.stage.Stage;
@@ -35,36 +40,56 @@ public class AmendTicketController {
 	@FXML private TextArea details;
 	@FXML private Label reporter;
 	@FXML private Label ticketNo;
+	@FXML private Label status;
+	@FXML private Label assignee;
+	@FXML private Label dateRaised;
+	@FXML private ChoiceBox assignedTeam;
 	private int VIEWPERMLEVEL;
 	private String prediction;
 	private String teamID;
 	private static DataSetIterator trainIter;
 	@FXML private Button raiseBtn;
+	@FXML private Button assignBtn;
+	private PreparedStatement sqlStatement;
+	private PreparedStatement sqlStatement2;
+	private String assignedTeamID;
+	private String teamName;
+	private PreparedStatement sqlStatement3;
 	
    
 	public void initialize() throws Exception, SQLException {
+		assignBtn.setVisible(false);
+		con = DatabaseConnect.getConnection();
 		ticketNo.setText(Session.getCurrentTicket());
+		setDetails();
+		ObservableList<String> list = assignedTeam.getItems();
+		
     	//reporter.setText(Session.getFullName());
-    	con = DatabaseConnect.getConnection();
     	VIEWPERMLEVEL = 5;
+    	String st[] = { "Arnab", "Andrew", "Ankit", "None" };
     	checkHasPermission();
-    	reporter.setText(Session.getFullName());
+    	//reporter.setText(Session.getFullName());
     	details.setWrapText(true);
-    	raiseBtn.setOnAction(ae -> {
-            ae.consume();
-            raiseBtn.setDisable(true);
-            MyTask task = new MyTask();
-            task.setOnSucceeded(e -> task.getValue());
-            Alert alert = createProgressAlert(ViewController.createInstance().getCurrentStage(), task);
-            executeTask(task);
-            alert.showAndWait();
-            try {
-				ViewController.createInstance().switchToView(ViewNames.DASHBOARD);
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-			});
+    	details.setEditable(false);
+    	assignedTeam.getSelectionModel().selectedIndexProperty().addListener(
+    	         (ObservableValue<? extends Number> ov, Number old_val, Number new_val) -> {
+    	            System.out.println(list.get((int) new_val));
+    	      });
+//    	raiseBtn.setOnAction(ae -> {
+//            ae.consume();
+//            raiseBtn.setDisable(true);
+//            MyTask task = new MyTask();
+//            task.setOnSucceeded(e -> task.getValue());
+//            Alert alert = createProgressAlert(ViewController.createInstance().getCurrentStage(), task);
+//            executeTask(task);
+//            alert.showAndWait();
+//            try {
+//				ViewController.createInstance().switchToView(ViewNames.DASHBOARD);
+//			} catch (IOException e1) {
+//				// TODO Auto-generated catch block
+//				e1.printStackTrace();
+//			}
+//			});
     }
     
     private void checkHasPermission() {
@@ -72,12 +97,69 @@ public class AmendTicketController {
     		
     	}
     }
+    private void setDetails() throws Exception {
+    	con.setAutoCommit(false);
+    	sqlStatement = con.prepareStatement("SELECT reporter,assignee,status,dateRaised,assignedTeam,detail from tblTicket WHERE  ticketID = ?");
+    	sqlStatement.setString(1, Session.getCurrentTicket());
+    	ResultSet rs = sqlStatement.executeQuery();
+    	while(rs.next()){
+    		reporter.setText(rs.getString(1));
+    		setAssignee(rs.getString(2));
+    		status.setText(rs.getString(3));
+    		dateRaised.setText(rs.getDate(4).toString());
+    		assignedTeamID = rs.getString(5);
+    		details.setText(rs.getString(6));
+        }
+    	sqlStatement2 = con.prepareStatement("SELECT name from tblTeam");
+    	ResultSet rs2 = sqlStatement2.executeQuery();
+    	while(rs2.next()){
+    		assignedTeam.getItems().add(rs2.getString(1));
+        }
+    	
+    	sqlStatement3 = con.prepareStatement("SELECT name from tblTeam WHERE teamID = ?");
+    	sqlStatement3.setString(1, assignedTeamID);
+    	
+    	ResultSet rs3 = sqlStatement3.executeQuery();
+    	while(rs3.next()){
+    		teamName = rs3.getString(1);
+        }
+ 
+    	assignedTeam.setValue(teamName);
+    }
+    
+    public void setAssignee(String sqlString) {
+    	if (sqlString == null) {
+    		assignee.setText("Unassigned");
+    		assignBtn.setVisible(true);
+    	}
+    	else {
+    		assignee.setText(sqlString);
+    	}
+    	
+    }
+    public void assignToMe() throws Exception { 
+    	java.util.Date date = new java.util.Date();
+	    java.sql.Timestamp sqlDate = new java.sql.Timestamp(date.getTime());
+	    con.setAutoCommit(false);	
+	    sqlStatement = con.prepareStatement("USE [honsdb] UPDATE tblTicket SET assignee = ?, dateUpdated = ? WHERE ticketID = ?");	 	
+	    sqlStatement.setString(1, Session.getUsername());
+	    sqlStatement.setObject(2, sqlDate);
+	    sqlStatement.setString(3, Session.getCurrentTicket());
+	    if (sqlStatement.executeUpdate() == 1){
+			con.commit();
+			System.out.println("Mode updated");
+		}
+		else {
+			throw new Exception("Error");
+		}
+    }
 
     public void insert() throws Exception {
     	PreparedStatement prepared_statement = null;
 	    java.util.Date date = new java.util.Date();
 	    java.sql.Timestamp sqlDate = new java.sql.Timestamp(date.getTime());
 	    con.setAutoCommit(false);
+	    
 	    stmt = con.prepareStatement("USE [honsdb] SELECT* FROM tblTeam WHERE name = '" +prediction+"'");
 	    ResultSet rs = stmt.executeQuery();
     	while(rs.next()){
@@ -108,7 +190,7 @@ public class AmendTicketController {
     	
     }
     
-    public void cancel() throws IOException {
+    public void back() throws IOException {
     	ViewController.createInstance().switchToView(ViewNames.HOME);
     }
 	private class MyTask extends Task {
