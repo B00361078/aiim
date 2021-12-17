@@ -6,6 +6,8 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Types;
+
 import com.aiim.app.database.DatabaseConnect;
 import com.aiim.app.model.Ticket;
 import com.aiim.app.model.Ticket.Builder;
@@ -81,7 +83,9 @@ public class DashboardController {
 			break;
 		case 2:
 			//owner
-			stmt = con.prepareStatement("USE honsdb select b.ticketID, b.status, b.dateRaised, a.name from tblTicket as B join tblTeam as u on u.teamID = B.updatedTeam join tblTeam as a on a.teamID = B.updatedTeam WHERE B.updatedTeam = 'Unassigned' OR B.updatedTeam = '" +Session.getTeamID()+"'");
+			stmt = con.prepareStatement("USE honsdb select b.ticketID, b.status, b.dateRaised, a.name from tblTicket as B join tblTeam as u on u.teamID = B.updatedTeam join tblTeam as a on a.teamID = B.updatedTeam WHERE B.updatedTeam = ? AND B.assignee = ? OR B.assignee IS NULL");
+			stmt.setString(1, Session.getTeamID());
+			stmt.setString(2, Session.getUsername());
 			break;
 		case 3:
 			//sysadmin

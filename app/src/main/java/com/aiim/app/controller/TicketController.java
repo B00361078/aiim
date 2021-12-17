@@ -85,7 +85,7 @@ public class TicketController {
 	    
 	    		prepared_statement.setString(1, details.getText());
 	    		prepared_statement.setString(2, Session.getUsername());
-	    		prepared_statement.setString(3, Session.getUsername());
+	    		prepared_statement.setString(3, null);
 	    		prepared_statement.setInt(4, 1);
 	    		prepared_statement.setString(5, teamID);
 	    		prepared_statement.setString(6, teamID);
