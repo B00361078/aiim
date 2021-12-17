@@ -19,17 +19,23 @@ import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.scene.Cursor;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.Labeled;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
+import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
+import javafx.util.Pair;
 
 /* The following class handles the dashboard interface by switching the current subScene. Part of MVC design Pattern as a controller.
  * Neil Campbell 14/12/2021, B00361078
@@ -297,19 +303,32 @@ public class AmendTicketController {
     }
     
     @FXML public void addNote() {
-    	TextInputDialog td = new TextInputDialog("enter any text");
-    	  
-        // setHeaderText
-        td.setHeaderText("enter your message");
-        td.showAndWait();
+    	
+    	Dialog<String> dialog = new Dialog<>();
+        dialog.setTitle("Add a note to " + Session.getCurrentTicket());
+        ButtonType loginButtonType = new ButtonType("Add note", ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().addAll(loginButtonType, ButtonType.CANCEL);
+        dialog.setResultConverter(ButtonType::getText);
+        GridPane gridPane = new GridPane();
         
-//        EventHandler<ActionEvent> event = new EventHandler<ActionEvent>() {
-//            public void handle(ActionEvent e)
-//            {
-//                // show the text input dialog
-//                td.showAndWait();
-//            }
-//        };
+        gridPane.setHgap(10);
+        gridPane.setVgap(10);
+        gridPane.setPadding(new Insets(20, 100, 10, 10));
+
+        TextArea noteDetail = new TextArea();
+        noteDetail.setPromptText("Add note details...");
+        noteDetail.setWrapText(true);
+
+        gridPane.add(noteDetail, 0, 0);
+
+        dialog.getDialogPane().setContent(gridPane);
+        String result = dialog.showAndWait().orElse(null);
+ 
+        if (result == "Add note") {
+        	System.out.println("adding note");
+        }
+        else 
+        	System.out.println("cancelling");
         
     }
     
