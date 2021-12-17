@@ -83,9 +83,9 @@ public class DashboardController {
 			break;
 		case 2:
 			//owner
-			stmt = con.prepareStatement("USE honsdb select b.ticketID, b.status, b.dateRaised, a.name from tblTicket as B join tblTeam as u on u.teamID = B.updatedTeam join tblTeam as a on a.teamID = B.updatedTeam WHERE B.updatedTeam = ? AND B.assignee = ? OR B.assignee IS NULL");
-			stmt.setString(1, Session.getTeamID());
-			stmt.setString(2, Session.getUsername());
+			stmt = con.prepareStatement("USE honsdb select b.ticketID, b.status, b.dateRaised, a.name from tblTicket as B join tblTeam as u on u.teamID = B.updatedTeam join tblTeam as a on a.teamID = B.updatedTeam WHERE (B.assignee IS NULL OR B.assignee = ?) AND B.updatedTeam = ?");
+			stmt.setString(1, Session.getUsername());
+			stmt.setString(2, Session.getTeamID());
 			break;
 		case 3:
 			//sysadmin
