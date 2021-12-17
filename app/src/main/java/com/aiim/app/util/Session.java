@@ -1,5 +1,9 @@
 package com.aiim.app.util;
 
+import org.nd4j.linalg.dataset.api.iterator.DataSetIterator;
+
+import com.aiim.app.cnn.MyIter;
+
 public class Session {
 	
 	private static volatile Session session = null;
@@ -9,6 +13,8 @@ public class Session {
 	private static String fullName;
 	private static String teamID;
 	private static String currentTicket;
+	private static DataSetIterator iter;
+	private static MyIter myIter;
 
 	private Session() {
 		if(session != null) {
@@ -39,6 +45,12 @@ public class Session {
 	
 	public static String getCurrentTicket() {
 		return currentTicket;
+	}
+	public static DataSetIterator getIter() {
+		return iter;
+	}
+	public static MyIter getMyIter() {
+		return myIter;
 	}
 
 	public static void setUsername(String username) {
@@ -81,6 +93,16 @@ public class Session {
 		setTeamID(null);
 		setCurrentTicket(null);
 		session = null;
+	}
+
+	public static void setIter(DataSetIterator trainIter) {
+		Session.iter = trainIter;// TODO Auto-generated method stub
+		
+	}
+
+	public static void setMyIter(MyIter iter2) {
+		Session.myIter = iter2;// TODO Auto-generated method stub
+		
 	}
 
 }

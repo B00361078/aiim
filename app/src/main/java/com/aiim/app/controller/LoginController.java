@@ -19,7 +19,9 @@ import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.nd4j.linalg.dataset.api.iterator.DataSetIterator;
 
+import com.aiim.app.cnn.MyIter;
 import com.aiim.app.database.DatabaseConnect;
 //import org.json.simple.parser.ParseException;
 //import com.app.model.AdminData;
@@ -63,12 +65,17 @@ public class LoginController {
 	private String user;
 	private String fullname;
 	private String firstName;
+	private DataSetIterator trainIter;
         
     public void initialize() throws IOException {
     	//adminD = new AdminData();
     	strBundle = ResourceBundle.getBundle("com.aiim.app.resource.bundle");
     	ViewController.createInstance();
     	validation = new Validation();
+    	MyIter iter = new MyIter();
+    	trainIter = iter.getDataSetIterator();
+    	Session.setMyIter(iter);
+    	Session.setIter(trainIter);
     }
     
     @FXML protected void dashView(ActionEvent event) throws IOException, SQLException, ClassNotFoundException, NoSuchAlgorithmException, DecoderException  {

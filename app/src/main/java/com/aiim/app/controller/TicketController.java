@@ -119,10 +119,10 @@ public class TicketController {
         protected String call() throws Exception {
         	String mystr = "hello";
             updateMessage("Raising ticket, please wait.");
-            System.out.println("my string");
-            MyIter iter = new MyIter();
-        	trainIter = iter.getDataSetIterator();
-        	prediction = iter.ticketClassifier(details.getText(), trainIter);
+            //MyIter iter = new MyIter();
+        	//trainIter = iter.getDataSetIterator();
+        	//Session.setIter(trainIter);
+        	prediction = Session.getMyIter().ticketClassifier(details.getText(), Session.getIter());
         	insert();
             TimeUnit.SECONDS.sleep(5);
             updateMessage("Ticket raised successfully");
