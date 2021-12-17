@@ -68,11 +68,7 @@ public class DashboardController {
     	    return row ;
     	});
     }
-//    private void perms () {
-//    	if (Session.getPermissionLevel() == 3){
-//    		raiseNewBtn.setVisible(true);
-//    	}
-//    }
+
 	public void updateTable() throws SQLException {
 		
 	    	//ticketTable.getItems().clear();
@@ -93,9 +89,7 @@ public class DashboardController {
 			break;
 		}
 
-		//stmt = con.prepareStatement("USE [honsdb] SELECT* FROM tblTicket WHERE reporter = '" +Session.getUsername()+"'");
-		//stmt = con.prepareStatement("USE honsdb select b.ticketID, b.status, b.dateRaised, a.name from tblTicket as B join tblTeam as u on u.teamID = B.updatedTeam join tblTeam as a on a.teamID = B.updatedTeam WHERE B.reporter = '" +Session.getUsername()+"'");
-		//stmt = con.prepareStatement("USE honsdb select b.ticketID, b.status, b.dateRaised, a.name from tblTicket as B join tblTeam as u on u.teamID = B.updatedTeam join tblTeam as a on a.teamID = B.updatedTeam");
+		
     	ResultSet rs = stmt.executeQuery();
     	while(rs.next()){
     			
