@@ -22,10 +22,12 @@ public class MyIter {
 	
 	public static String currentDirectory;
 	private static WordVectors wordVectors;
+	private DataSetIterator trainIter;
 	
-	public MyIter() {
+	public MyIter() throws FileNotFoundException {
 		currentDirectory = Paths.get("").toAbsolutePath().toString();
-		wordVectors = WordVectorSerializer.loadStaticModel(new File(currentDirectory + "/latestVectors5.txt")); 
+		wordVectors = WordVectorSerializer.loadStaticModel(new File(currentDirectory + "/word_vectors.txt")); 
+		
 	}
 	
 		public DataSetIterator getDataSetIterator( ) throws FileNotFoundException{
@@ -58,14 +60,17 @@ public class MyIter {
 				.maxSentenceLength(256)
 				.useNormalizedWordVectors(false)
 				.build();
-		}
+		}		
+
 		public String ticketClassifier(String verbatim, DataSetIterator trainIter) throws IOException {
-	    	ComputationGraph model = ModelSerializer.restoreComputationGraph(currentDirectory+"/trained_model_latest.zip");
+	    	ComputationGraph model = ModelSerializer.restoreComputationGraph(currentDirectory+"/cnn_model.zip");
 	    	//File file = new File(currentDirectory+"/myfile");
 	    	//INDArray features = readBinary(file);
-	    	MyIter iter = new MyIter();
+	    	//MyIter iter = new MyIter();
 	    
-	    	INDArray features = ((CnnSentenceDataSetIterator) iter.getDataSetIterator()).loadSingleSentence(verbatim);
+	    	INDArray features = ((CnnSentenceDataSetIterator) trainIter).loadSingleSentence(verbatim);
+	    	
+	    	System.out.println("features are : "+ features);
 			//CnnSentenceDataSetIterator = new CnnSentenceDataSetIterator();
 	    	
 

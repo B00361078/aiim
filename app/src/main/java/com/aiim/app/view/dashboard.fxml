@@ -6,10 +6,10 @@
 <?import javafx.scene.control.cell.PropertyValueFactory?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="476.0" prefWidth="765.0" style="-fx-background-color: #ffffff;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.aiim.app.controller.DashboardController">
+<AnchorPane prefHeight="513.0" prefWidth="816.0" style="-fx-background-color: #ffffff;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.aiim.app.controller.DashboardController">
    <children>
-      <Button fx:id="raiseNewBtn" layoutX="63.0" layoutY="238.0" mnemonicParsing="false" onAction="#raiseIncidentView" prefHeight="61.0" prefWidth="143.0" text="Raise New Incident" />
-      <TableView fx:id="ticketTable" layoutX="312.0" layoutY="71.0" prefHeight="347.0" prefWidth="374.0">
+      <Button fx:id="raiseNewBtn" layoutX="55.0" layoutY="69.0" mnemonicParsing="false" onAction="#raiseIncidentView" prefHeight="61.0" prefWidth="143.0" text="Raise New Incident" />
+      <TableView fx:id="ticketTable" layoutX="237.0" layoutY="69.0" prefHeight="412.0" prefWidth="548.0">
         <columns>
           <TableColumn fx:id="ticketIDCol" prefWidth="75.0" text="Ticket ID">
           <cellValueFactory><PropertyValueFactory property="ticketID" />
@@ -29,6 +29,6 @@
         </TableColumn>
         </columns>
       </TableView>
-      <Button fx:id="settingsBtn" layoutX="63.0" layoutY="321.0" mnemonicParsing="false" onAction="#settingsView" prefHeight="61.0" prefWidth="143.0" text="Configure Settings" />
+      <Button fx:id="settingsBtn" layoutX="55.0" layoutY="68.0" mnemonicParsing="false" onAction="#settingsView" prefHeight="61.0" prefWidth="143.0" text="Configure Settings" />
    </children>
 </AnchorPane>

@@ -39,6 +39,7 @@ public class TicketController {
 	private String teamID;
 	private static DataSetIterator trainIter;
 	@FXML private Button raiseBtn;
+	private PreparedStatement sqlStatement;
 	
    
 	public void initialize() throws Exception, SQLException {
@@ -69,6 +70,17 @@ public class TicketController {
     	if(Session.getPermissionLevel() >= VIEWPERMLEVEL) {
     		
     	}
+    }
+    public String getMode() throws Exception {
+	    con.setAutoCommit(false);	 
+	    sqlStatement = con.prepareStatement("USE [honsdb] SELECT mode FROM tblClassifier WHERE id = ?");
+	    sqlStatement.setInt(1, 1);
+	    ResultSet rs = sqlStatement.executeQuery();
+    	String mode = null;
+		while(rs.next()){
+    		mode = rs.getString(1);
+        }
+		return mode;
     }
 
     public void insert() throws Exception {
@@ -119,10 +131,12 @@ public class TicketController {
         protected String call() throws Exception {
         	String mystr = "hello";
             updateMessage("Raising ticket, please wait.");
-            //MyIter iter = new MyIter();
-        	//trainIter = iter.getDataSetIterator();
-        	//Session.setIter(trainIter);
-        	prediction = Session.getMyIter().ticketClassifier(details.getText(), Session.getIter());
+	            if (getMode().contains("ON")) {
+	            	prediction = Session.getMyIter().ticketClassifier(details.getText(), Session.getIter());
+	            }
+	            else {
+	        	prediction = "general";
+	            }
         	insert();
             TimeUnit.SECONDS.sleep(5);
             updateMessage("Ticket raised successfully");

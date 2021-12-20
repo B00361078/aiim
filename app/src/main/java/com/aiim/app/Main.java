@@ -17,14 +17,17 @@ import java.sql.Connection;
 import java.sql.Date;
 
 import org.deeplearning4j.iterator.CnnSentenceDataSetIterator;
+import org.nd4j.linalg.dataset.api.iterator.DataSetIterator;
 
 import com.aiim.app.cnn.CnnSentenceClassificationExample;
 import com.aiim.app.cnn.MyCnn;
 import com.aiim.app.cnn.MyCnn2;
+import com.aiim.app.cnn.MyIter;
 import com.aiim.app.cnn.WordVector;
 import com.aiim.app.controller.ViewController;
 import com.aiim.app.database.DatabaseConnect;
 import com.aiim.app.resource.ViewNames;
+import com.aiim.app.util.Session;
 
 public class Main extends Application {
 	
@@ -34,6 +37,7 @@ public class Main extends Application {
 	private ResourceBundle strBundle;
 	private Stage stage;
 	//strBundle = ResourceBundle.getBundle("com.aiim.app.resources.bundle");
+	private DataSetIterator trainIter;
 	
 	@Override
     public void start(Stage stage) throws Exception {
@@ -53,7 +57,7 @@ public class Main extends Application {
 		System.out.println("con is " + con);
 		checkDBConnect();
 		
-		//download();
+		//download();er
 		//update();
 		//upload();
 		//WordVector wv = new WordVector();
@@ -79,28 +83,29 @@ public class Main extends Application {
 	public void upload () throws Exception {
 
 		File file;
-	    file = new File("trained_model2.zip");// ...(file is initialised)...
+	    file = new File("cnn_model.zip");// ...(file is initialised)...
 	    byte[] fileContent = Files.readAllBytes(file.toPath());
 	    String filename = file.getName();
-	    String mode = "testmode";
+	    String mode = "ON";
 	    long filelength = file.length();
 	    long filelengthinkb = filelength/1024;
-	    PreparedStatement prepared_statement = null;
 	    java.util.Date date = new java.util.Date();
 	    Object param = new java.sql.Timestamp(date.getTime());
 	    // The JDBC driver knows what to do with a java.sql type:
 	    con.setAutoCommit(false);
-	    prepared_statement = con.prepareStatement("USE [honsdb] INSERT INTO tblClassifier (fileName,size,extension,fileContent,dateGenerated,mode) VALUES(?,?,?,?,?,?)");
 	    
-	    		prepared_statement.setString(1, filename);
-	    		prepared_statement.setLong(2, filelengthinkb);
-	    		prepared_statement.setString(3, filename.substring(filename.lastIndexOf(".")+1));
-	    		prepared_statement.setBytes(4, fileContent);
-	    		prepared_statement.setObject(5, param);
-	    		prepared_statement.setString(6, mode);
+	    PreparedStatement prepared_statement3 = con.prepareStatement("USE [honsdb] UPDATE tblClassifier SET fileName=?,size=?,modDate=?,fileContent=? WHERE id=?");
+		//prepared_statement3.setLong(1, filelengthinkb);
+		//prepared_statement3.setBytes(2, fileContent);
+		prepared_statement3.setString(1, filename);
+		prepared_statement3.setLong(2, filelengthinkb);
+		prepared_statement3.setObject(3, param);
+		prepared_statement3.setBytes(4, fileContent);
+		prepared_statement3.setInt(5, 1);
+	   
+	    
 	    		
-	    		
-	    		if (prepared_statement.executeUpdate() == 1)
+	    		if (prepared_statement3.executeUpdate() == 1)
 	    		{
 	    			con.commit();
 	    			System.out.println("Byte Array Stored Successfully in SQL Server");

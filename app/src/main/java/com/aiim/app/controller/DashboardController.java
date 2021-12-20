@@ -49,6 +49,9 @@ public class DashboardController {
 	private String assignedTeamName;
    
     public void initialize() throws Exception  {
+    	settingsBtn.setVisible(false);
+    	raiseNewBtn.setVisible(false);
+    	setDisplay(Session.getPermissionLevel());
     	ticketTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
     	ticketTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
     	updateTable();
@@ -111,6 +114,19 @@ public class DashboardController {
 
     	}		    
 	    	}
+	
+	public void setDisplay(int permLevel) {
+		switch(permLevel) {
+			case 1:
+				raiseNewBtn.setVisible(true);
+				break;
+			case 2:
+				break;
+			case 3:
+				settingsBtn.setVisible(true);
+				break;
+		}
+	}
 	   
     
     @FXML protected void raiseIncidentView(ActionEvent event) {

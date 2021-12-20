@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<AnchorPane prefHeight="397.0" prefWidth="609.0" stylesheets="@style/main.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.aiim.app.controller.AmendTicketController">
+<AnchorPane id="anchor" prefHeight="513.0" prefWidth="816.0" stylesheets="@style/main.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.aiim.app.controller.AmendTicketController">
    <children>
       <GridPane layoutX="27.0" layoutY="60.0" prefHeight="133.0" prefWidth="215.0">
         <columnConstraints>
@@ -41,20 +41,20 @@
             <Label fx:id="status" text="label3" GridPane.columnIndex="1" GridPane.rowIndex="4" />
          </children>
       </GridPane>
-      <TextArea fx:id="details" layoutX="25.0" layoutY="222.0" prefHeight="96.0" prefWidth="277.0" />
+      <TextArea fx:id="details" layoutX="25.0" layoutY="222.0" prefHeight="173.0" prefWidth="277.0" />
       <Label layoutX="27.0" layoutY="205.0" text="Details of incident:" />
       <Label fx:id="reporter111" layoutX="10.0" layoutY="10.0" text="Details for ticket:" />
       <Label fx:id="ticketNo" layoutX="116.0" layoutY="10.0" text="label5" />
-      <ButtonBar layoutX="27.0" layoutY="343.0" prefHeight="40.0" prefWidth="562.0">
+      <ButtonBar layoutX="27.0" layoutY="407.0" prefHeight="40.0" prefWidth="562.0">
         <buttons>
-            <Button fx:id="backBtn1" mnemonicParsing="false" onAction="#back" text="Back to Dashboard" />
+            <Button fx:id="backBtn" mnemonicParsing="false" onAction="#back" text="Back to Dashboard" />
           <Button fx:id="nteBtn" mnemonicParsing="false" onAction="#addNote" text="Add note" />
             <Button fx:id="statusBtn" mnemonicParsing="false" onAction="#clickStatus" prefHeight="25.0" prefWidth="140.0" text="Status" />
             <Button fx:id="assignBtn" mnemonicParsing="false" onAction="#assignToMe" prefHeight="25.0" prefWidth="92.0" text="Assign To Me" />
         </buttons>
       </ButtonBar>
       <Label layoutX="317.0" layoutY="27.0" text="Notes" />
-      <TableView fx:id="noteTable" layoutX="317.0" layoutY="50.0" prefHeight="267.0" prefWidth="393.0">
+      <TableView fx:id="noteTable" layoutX="317.0" layoutY="50.0" prefHeight="346.0" prefWidth="476.0">
         <columns>
           <TableColumn fx:id="noteCol" prefWidth="30.0" text="NoteID">
            <cellValueFactory><PropertyValueFactory property="noteID" />

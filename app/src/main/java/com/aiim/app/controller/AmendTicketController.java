@@ -6,6 +6,8 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 import org.nd4j.linalg.dataset.api.iterator.DataSetIterator;
 import com.aiim.app.cnn.MyIter;
@@ -15,6 +17,7 @@ import com.aiim.app.model.Ticket;
 import com.aiim.app.resource.ViewNames;
 import com.aiim.app.util.Session;
 import javafx.beans.binding.Bindings;
+import javafx.beans.property.ObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
@@ -50,7 +53,6 @@ import javafx.util.Pair;
 
 public class AmendTicketController {
 
-	private int permLevel;
 	private Connection con;
 	private PreparedStatement stmt;
 	@FXML private TextArea details;
@@ -64,11 +66,10 @@ public class AmendTicketController {
 	@FXML private javafx.scene.control.TableColumn<Note, String> authorCol;
 	@FXML private javafx.scene.control.TableColumn<Note, String> messageCol;
 	@FXML private ChoiceBox assignedTeam;
-	private int VIEWPERMLEVEL;
 	private String prediction;
 	private String teamID;
 	private static DataSetIterator trainIter;
-	@FXML private Button raiseBtn;
+	@FXML private Button backBtn;
 	@FXML private Button assignBtn;
 	@FXML private Button statusBtn;
 	@FXML private Button nteBtn;
@@ -80,13 +81,20 @@ public class AmendTicketController {
 	private PreparedStatement sqlStatement3;
 	private String ticketStatus;
 	private String message;
+	private ArrayList<String> teamList;
+	private String updatedTeamID;
 	
    
 	public void initialize() throws Exception, SQLException {
-		assignBtn.setVisible(false);
+		
 		con = DatabaseConnect.getConnection();
 		ticketNo.setText(Session.getCurrentTicket());
 		setDetails();
+		assignBtn.setVisible(false);
+		statusBtn.setVisible(false);
+		nteBtn.setVisible(false);
+		assignedTeam.setDisable(true);
+		setDisplay(Session.getPermissionLevel());
 		noteTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 		noteTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 		updateTable();
@@ -110,15 +118,74 @@ public class AmendTicketController {
 		status(ticketStatus);
 		ObservableList<String> list = assignedTeam.getItems();	
     	//reporter.setText(Session.getFullName());
-    	VIEWPERMLEVEL = 5;
-    	checkHasPermission();
     	//reporter.setText(Session.getFullName());
     	details.setWrapText(true);
     	details.setEditable(false);
-    	assignedTeam.getSelectionModel().selectedIndexProperty().addListener(
-    	         (ObservableValue<? extends Number> ov, Number old_val, Number new_val) -> {
-    	            System.out.println(list.get((int) new_val));
-    	      });
+    	assignedTeam.setOnAction((event) -> {
+		    	Alert alert = new Alert(AlertType.CONFIRMATION);
+	    		alert.setHeaderText("Are you sure you want to change the assigned team?");
+	    		alert.showAndWait();
+	    		if (alert.getResult() == ButtonType.OK) {
+	    			try {
+	    				sqlStatement = con.prepareStatement("USE [honsdb] SELECT teamID FROM tblTeam WHERE name = ?");
+						sqlStatement.setString(1, assignedTeam.getValue().toString());
+						ResultSet rs = sqlStatement.executeQuery();
+
+			        	while(rs.next()){
+			        		updatedTeamID = rs.getString(1);
+			        	}
+	    				
+						sqlStatement = con.prepareStatement("USE [honsdb] UPDATE tblTicket SET updatedTeam = ?, dateUpdated = ?, assignee = ? WHERE ticketID = ?");
+						sqlStatement.setString(1, updatedTeamID);
+		        	    sqlStatement.setObject(2, getDate());
+		        	    sqlStatement.setString(3, null);
+		        	    sqlStatement.setString(4, Session.getCurrentTicket());
+		        	    if (sqlStatement.executeUpdate() == 1){
+		        			con.commit();
+		        			System.out.println("team updated");
+		        			Alert alert2 = new Alert(AlertType.INFORMATION);
+		    	    		alert2.setHeaderText("Team updated successfully.");
+		    	    		alert2.showAndWait();
+		        		}
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}	 	
+	        	    
+
+	    		}
+		    	
+	
+
+		});
+//    	assignedTeam.getSelectionModel().selectedIndexProperty().addListener(
+//    	         (ObservableValue<? extends Number> ov, Number old_val, Number new_val) -> {
+//
+//    	            
+//    	            if(assignedTeam.getValue().toString().contains(teamName)) {
+//    	            	System.out.println("do nothing");
+//    	            }
+//    	            else {
+//    	            	Alert alert = new Alert(AlertType.CONFIRMATION);
+//        	    		alert.setHeaderText("Are you sure you want to change the assigned team?");
+//        	    		alert.showAndWait();
+//	        	    		if (alert.getResult() == ButtonType.OK) {
+//	        	    			System.out.println("OK");
+//	        	    		}
+//	        	    		else {
+//	        	    			assignedTeam.getItems().clear();
+//	        	    			for (String item : teamList) {
+//	        	    				assignedTeam.getItems().add(item);
+//	        	    			}
+//	        	    			assignedTeam.setValue(teamName);
+//	        	    			
+//	        	    		}
+//    	            }
+//    	         
+//    	            
+//    	            
+//    	    		
+//    	      });
 //    	raiseBtn.setOnAction(ae -> {
 //            ae.consume();
 //            raiseBtn.setDisable(true);
@@ -135,12 +202,17 @@ public class AmendTicketController {
 //			}
 //			});
     }
+	private void reload() throws SQLException {
+		assignedTeam.getItems().clear();
+		sqlStatement2 = con.prepareStatement("SELECT name from tblTeam");
+    	ResultSet rs2 = sqlStatement2.executeQuery();
+    	while(rs2.next()){
+    		assignedTeam.getItems().add(rs2.getString(1));
+        }
+		assignedTeam.setValue(teamName);
+	}
     
-    private void checkHasPermission() {
-    	if(Session.getPermissionLevel() >= VIEWPERMLEVEL) {
-    		
-    	}
-    }
+
     private void status (String status) {
     	if(status.contains("raised")) {
     		statusBtn.setText("Move to In Progress");
@@ -206,7 +278,7 @@ public class AmendTicketController {
     }
     private void setDetails() throws Exception {
     	con.setAutoCommit(false);
-    	sqlStatement = con.prepareStatement("SELECT reporter,assignee,status,dateRaised,assignedTeam,detail from tblTicket WHERE  ticketID = ?");
+    	sqlStatement = con.prepareStatement("SELECT reporter,assignee,status,dateRaised,updatedTeam,detail from tblTicket WHERE  ticketID = ?");
     	sqlStatement.setString(1, Session.getCurrentTicket());
     	ResultSet rs = sqlStatement.executeQuery();
     	while(rs.next()){
@@ -355,6 +427,11 @@ public class AmendTicketController {
 
         return alert;
     }
+    public Timestamp getDate() {
+    	java.util.Date date = new java.util.Date();
+	    java.sql.Timestamp sqlDate = new java.sql.Timestamp(date.getTime());
+	    return sqlDate;
+    }
     
     @FXML public void addNote() throws Exception {
     	
@@ -450,6 +527,19 @@ public class AmendTicketController {
         dialog.showAndWait();
  
     }
-    }	
+    }
+    public void setDisplay(int permLevel) {
+		switch(permLevel) {
+			case 1:
+				break;
+			case 2:
+				nteBtn.setVisible(true);
+				statusBtn.setVisible(true);
+				assignedTeam.setDisable(false);
+				break;
+			case 3:
+				break;
+		}
+	}
 }
     

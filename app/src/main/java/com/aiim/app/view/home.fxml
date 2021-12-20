@@ -38,7 +38,7 @@
                </font>
             </Label>
          </children></Pane>
-      <SubScene fx:id="subScene" height="513.0" layoutX="2.0" layoutY="83.0" width="816.0">
+      <SubScene fx:id="subScene" height="538.0" layoutY="81.0" width="820.0">
         <root>
           <Region />
         </root>

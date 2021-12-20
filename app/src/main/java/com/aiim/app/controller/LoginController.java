@@ -1,12 +1,19 @@
 package com.aiim.app.controller;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.ObjectOutputStream;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
+import java.sql.Blob;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -67,16 +74,107 @@ public class LoginController {
 	private String firstName;
 	private DataSetIterator trainIter;
         
-    public void initialize() throws IOException {
+    public void initialize() throws Exception {
     	//adminD = new AdminData();
     	strBundle = ResourceBundle.getBundle("com.aiim.app.resource.bundle");
     	ViewController.createInstance();
     	validation = new Validation();
+    	con = DatabaseConnect.getConnection();
+    	//getModel();
+    	//upload2();
     	MyIter iter = new MyIter();
     	trainIter = iter.getDataSetIterator();
     	Session.setMyIter(iter);
     	Session.setIter(trainIter);
+    	
     }
+    public void getModel() throws Exception {
+    	stmt = con.prepareStatement("USE [honsdb] SELECT filename,mode,fileContent FROM tblClassifier WHERE id = ?");
+    	stmt.setInt(1, 1);
+		ResultSet rs = stmt.executeQuery();
+		
+		while (rs.next()) {
+			String modelFileName = "temp3_" + rs.getString(1);
+			String mode = rs.getString(2);
+			Blob blob = rs.getBlob(3);
+			InputStream inputstr = blob.getBinaryStream();
+			Files.copy(inputstr, Paths.get(modelFileName));
+		}
+    }
+    public void upload () throws Exception {
+
+		File file;
+	    file = new File("cnn_model.zip");// ...(file is initialised)...
+	    byte[] fileContent = Files.readAllBytes(file.toPath());
+	    String filename = file.getName();
+	    String mode = "ON";
+	    long filelength = file.length();
+	    long filelengthinkb = filelength/1024;
+	    java.util.Date date = new java.util.Date();
+	    Object param = new java.sql.Timestamp(date.getTime());
+	    // The JDBC driver knows what to do with a java.sql type:
+	    con.setAutoCommit(false);
+	    
+	    PreparedStatement prepared_statement3 = con.prepareStatement("USE [honsdb] UPDATE tblClassifier SET fileName=?,size=?,modDate=?,fileContent=? WHERE id=?");
+		//prepared_statement3.setLong(1, filelengthinkb);
+		//prepared_statement3.setBytes(2, fileContent);
+		prepared_statement3.setString(1, filename);
+		prepared_statement3.setLong(2, filelengthinkb);
+		prepared_statement3.setObject(3, param);
+		prepared_statement3.setBytes(4, fileContent);
+		prepared_statement3.setInt(5, 1);
+	   
+	    
+	    		
+	    		if (prepared_statement3.executeUpdate() == 1)
+	    		{
+	    			con.commit();
+	    			System.out.println("Byte Array Stored Successfully in SQL Server");
+	    		}
+	    		else
+	    		{
+	    			throw new Exception("Problem occured during Save");
+	    		}
+	    
+	}
+    
+    public void upload2 () throws Exception {
+
+		File file;
+		//String currentDirectory = Paths.get("").toAbsolutePath().toString();
+		//file = new File(currentDirectory + "/src/main/java/com/aiim/app/cnn/rawtext5.txt");
+	    file = new File("word_vectors.txt");// ...(file is initialised)...nca
+	    byte[] fileContent = Files.readAllBytes(file.toPath());
+	    String filename = file.getName();
+	    String mode = "ON";
+	    long filelength = file.length();
+	    long filelengthinkb = filelength/1024;
+	    java.util.Date date = new java.util.Date();
+	    Object param = new java.sql.Timestamp(date.getTime());
+	    // The JDBC driver knows what to do with a java.sql type:
+	    con.setAutoCommit(false);
+	    
+	    PreparedStatement prepared_statement3 = con.prepareStatement("USE [honsdb] INSERT INTO tblClassifier (filename,mode,size,extension,modDate,fileContent) VALUES(?,?,?,?,?,?)");
+		prepared_statement3.setString(1, filename);
+		prepared_statement3.setString(2, mode);
+		prepared_statement3.setLong(3, filelengthinkb);
+		prepared_statement3.setString(4, "txt");
+		prepared_statement3.setObject(5, param);
+		prepared_statement3.setBytes(6, fileContent);
+	   
+	    
+	    		
+	    		if (prepared_statement3.executeUpdate() == 1)
+	    		{
+	    			con.commit();
+	    			System.out.println("Byte Array Stored Successfully in SQL Server");
+	    		}
+	    		else
+	    		{
+	    			throw new Exception("Problem occured during Save");
+	    		}
+	    
+	}
     
     @FXML protected void dashView(ActionEvent event) throws IOException, SQLException, ClassNotFoundException, NoSuchAlgorithmException, DecoderException  {
     	Scene scene = passwordField.getScene();
@@ -86,7 +184,7 @@ public class LoginController {
     		new javafx.scene.control.Alert(Alert.AlertType.ERROR, strBundle.getString("e17")).showAndWait();
     	}
     	else {
-    		con = DatabaseConnect.getConnection();
+    		
     		System.out.println("con is " + con);
         	stmt = con.prepareStatement("USE [honsdb] SELECT* FROM tblUser WHERE username = '" +username+"'");
         	ResultSet rs = stmt.executeQuery();
