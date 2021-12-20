@@ -2,6 +2,7 @@ package com.aiim.app.controller;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import static java.nio.file.StandardCopyOption.*;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -80,14 +81,29 @@ public class LoginController {
     	ViewController.createInstance();
     	validation = new Validation();
     	con = DatabaseConnect.getConnection();
+    	downloadFiles();
     	//getModel();
-    	//upload2();
+
     	MyIter iter = new MyIter();
     	trainIter = iter.getDataSetIterator();
     	Session.setMyIter(iter);
     	Session.setIter(trainIter);
     	
     }
+    public void downloadFiles() throws IOException, SQLException {
+    	String currentDirectory = Paths.get("").toAbsolutePath().toString();
+		PreparedStatement prepared_statement2 = con.prepareStatement("USE [honsdb] SELECT fileName,fileContent FROM tblClassifier");
+		ResultSet rs = prepared_statement2.executeQuery();
+		System.out.println(currentDirectory);
+		
+		while (rs.next()) {
+			String filename = rs.getString(1);
+			Blob blob = rs.getBlob(2);
+			InputStream inputstr = blob.getBinaryStream();
+			Files.copy(inputstr, Paths.get(currentDirectory+"/resources/"+filename), REPLACE_EXISTING);
+		}
+		
+	}
     public void getModel() throws Exception {
     	stmt = con.prepareStatement("USE [honsdb] SELECT filename,mode,fileContent FROM tblClassifier WHERE id = ?");
     	stmt.setInt(1, 1);
@@ -143,10 +159,10 @@ public class LoginController {
 		File file;
 		//String currentDirectory = Paths.get("").toAbsolutePath().toString();
 		//file = new File(currentDirectory + "/src/main/java/com/aiim/app/cnn/rawtext5.txt");
-	    file = new File("word_vectors.txt");// ...(file is initialised)...nca
+	    file = new File("security.txt");// ...(file is initialised)...nca
 	    byte[] fileContent = Files.readAllBytes(file.toPath());
 	    String filename = file.getName();
-	    String mode = "ON";
+	    String mode = "OFF";
 	    long filelength = file.length();
 	    long filelengthinkb = filelength/1024;
 	    java.util.Date date = new java.util.Date();

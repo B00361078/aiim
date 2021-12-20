@@ -1,6 +1,7 @@
 package com.aiim.app;
 	
 import javafx.application.Application;
+import org.apache.commons.io.FileUtils;
 import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 import java.sql.PreparedStatement;
@@ -56,6 +57,7 @@ public class Main extends Application {
 		con = DatabaseConnect.getConnection();
 		System.out.println("con is " + con);
 		checkDBConnect();
+		//downloadFiles();
 		
 		//download();er
 		//update();
@@ -67,6 +69,12 @@ public class Main extends Application {
 		//System.out.println(con);
 		
     }
+	@Override
+	public void stop() throws IOException{
+		String currentDirectory = Paths.get("").toAbsolutePath().toString();
+	    System.out.println("Stage is closing");
+	    FileUtils.cleanDirectory(new File(currentDirectory+"/resources")); 
+	}
 	
 	void checkDBConnect() {
 		if (con != null) {
@@ -117,23 +125,15 @@ public class Main extends Application {
 	    
 	}
 	//download file from db
-	public void download() throws IOException, SQLException {
-		PreparedStatement prepared_statement2 = con.prepareStatement("USE [honsdb] SELECT *FROM tblClassifier");
+	public void downloadFiles() throws IOException, SQLException {
+		PreparedStatement prepared_statement2 = con.prepareStatement("USE [honsdb] SELECT fileName,fileContent FROM tblClassifier");
 		ResultSet rs = prepared_statement2.executeQuery();
 		
 		while (rs.next()) {
-			int fileID = rs.getInt("id");
-			String filename2 = "temp_" + rs.getString("fileName");
-			long filesizeinkb2 = rs.getLong("size");
-			String ext = rs.getString("extension");
-			Blob blob = rs.getBlob("fileContent");
-			System.out.println(fileID);
-			System.out.println(filename2);
-			System.out.println(filesizeinkb2);
-			System.out.println(ext);
+			String filename = rs.getString(1);
+			Blob blob = rs.getBlob(2);
 			InputStream inputstr = blob.getBinaryStream();
-			Files.copy(inputstr, Paths.get(filename2));
-			
+			Files.copy(inputstr, Paths.get(filename));
 		}
 		
 	}

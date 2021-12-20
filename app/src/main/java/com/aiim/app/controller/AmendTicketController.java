@@ -202,15 +202,6 @@ public class AmendTicketController {
 //			}
 //			});
     }
-	private void reload() throws SQLException {
-		assignedTeam.getItems().clear();
-		sqlStatement2 = con.prepareStatement("SELECT name from tblTeam");
-    	ResultSet rs2 = sqlStatement2.executeQuery();
-    	while(rs2.next()){
-    		assignedTeam.getItems().add(rs2.getString(1));
-        }
-		assignedTeam.setValue(teamName);
-	}
     
 
     private void status (String status) {
@@ -274,6 +265,12 @@ public class AmendTicketController {
         		}
     		}
     		break;
+    		// check training mode on
+    		
+    		// check verbatim suitable for training
+    		//append text to file
+    		//model fit
+    		//update files in db
     	}
     }
     private void setDetails() throws Exception {

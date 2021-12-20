@@ -26,7 +26,7 @@ public class MyIter {
 	
 	public MyIter() throws FileNotFoundException {
 		currentDirectory = Paths.get("").toAbsolutePath().toString();
-		wordVectors = WordVectorSerializer.loadStaticModel(new File(currentDirectory + "/word_vectors.txt")); 
+		wordVectors = WordVectorSerializer.loadStaticModel(new File(currentDirectory + "/resources/word_vectors.txt")); 
 		
 	}
 	
@@ -40,7 +40,7 @@ public class MyIter {
 				outcomeLabels.add("telephony");
 				for (String label : outcomeLabels) {
 				
-				Scanner trainFile = new Scanner(new File(currentDirectory+ "/"+label+".txt"));
+				Scanner trainFile = new Scanner(new File(currentDirectory+ "/resources/"+label+".txt"));
 				System.out.println("trainfile is " +trainFile);
 				while (trainFile.hasNextLine()){
 				sentences.add(trainFile.nextLine());
@@ -63,7 +63,7 @@ public class MyIter {
 		}		
 
 		public String ticketClassifier(String verbatim, DataSetIterator trainIter) throws IOException {
-	    	ComputationGraph model = ModelSerializer.restoreComputationGraph(currentDirectory+"/cnn_model.zip");
+	    	ComputationGraph model = ModelSerializer.restoreComputationGraph(currentDirectory+"/resources/cnn_model.zip");
 	    	//File file = new File(currentDirectory+"/myfile");
 	    	//INDArray features = readBinary(file);
 	    	//MyIter iter = new MyIter();
