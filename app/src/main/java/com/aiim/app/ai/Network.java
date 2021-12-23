@@ -1,9 +1,10 @@
-package com.aiim.app.cnn;
+package com.aiim.app.ai;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.deeplearning4j.eval.Evaluation;
 import org.deeplearning4j.iterator.CnnSentenceDataSetIterator;
+import org.deeplearning4j.iterator.CnnSentenceDataSetIterator.Builder;
 import org.deeplearning4j.iterator.LabeledSentenceProvider;
 import org.deeplearning4j.iterator.provider.CollectionLabeledSentenceProvider;
 import org.deeplearning4j.iterator.provider.FileLabeledSentenceProvider;
@@ -37,9 +38,16 @@ import org.nd4j.linalg.indexing.INDArrayIndex;
 import org.nd4j.linalg.indexing.NDArrayIndex;
 import org.nd4j.linalg.lossfunctions.LossFunctions;
 
+import java.io.BufferedOutputStream;
+import java.io.DataOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.nio.file.Paths;
 import java.util.*;
 
@@ -50,7 +58,7 @@ import java.util.*;
  *
  * @author Alex Black
  */
-public class MyCnn {
+public class Network {
 
     /** Data URL for downloading */
 	public static String currentDirectory = Paths.get("").toAbsolutePath().toString();
@@ -73,7 +81,7 @@ public class MyCnn {
         int nEpochs = 1;                    //Number of epochs (full passes of training data) to train on
         int truncateReviewsToLength = 256;  //Truncate reviews with length (# words) greater than this
 
-        int cnnLayerFeatureMaps = 5000;      //Number of feature maps / channels / depth for each CNN layer
+        int cnnLayerFeatureMaps = 1000;      //Number of feature maps / channels / depth for each CNN layer
         PoolingType globalPoolingType = PoolingType.MAX;
         Random rng = new Random(12345); //For shuffling repeatability
 
@@ -130,10 +138,11 @@ public class MyCnn {
 
         //Load word vectors and get the DataSetIterators for training and testing
         System.out.println("Loading word vectors and creating DataSetIterators");
-        wordVectors = WordVectorSerializer.loadStaticModel(new File(currentDirectory + "/latestVectors.txt")); // need to add new vectors specific for it issues
+        wordVectors = WordVectorSerializer.loadStaticModel(new File(currentDirectory + "/latestVectors5.txt")); // need to add new vectors specific for it issues
         //WordVectors wordVectors = WordVectorSerializer.loadStaticModel(new File(WORD_VECTORS_PATH));
-        trainIter = getDataSetIterator(true, wordVectors, batchSize, truncateReviewsToLength, rng);
-        testIter = getDataSetIterator(false, wordVectors, batchSize, truncateReviewsToLength, rng);
+        //trainIter = ai.getDataSetIterator(true, wordVectors, batchSize, truncateReviewsToLength, rng);
+
+        //testIter = getDataSetIterator(false, wordVectors, batchSize, truncateReviewsToLength, rng);
 
         System.out.println("Starting training");
         for (int i = 0; i < nEpochs; i++) {
@@ -145,73 +154,33 @@ public class MyCnn {
 //
 //            System.out.println(evaluation.stats());
         }
+        System.out.println("done");
+//        String currentDirectory = Paths.get("").toAbsolutePath().toString();
+//        System.out.println(currentDirectory);
+//        ComputationGraph model = ModelSerializer.restoreComputationGraph(currentDirectory+"/trained_model.zip");
+//        System.out.println("here - " + model.getInputs());
+//        INDArray features2 = ((CnnSentenceDataSetIterator) trainIter).loadSingleSentence("guidewire");
+//        System.out.println("features2 is  " + features2);
+//        File file = new File(currentDirectory+"/myfile");
+//        saveBinary(features2, file);
+//        INDArray featuresfinal = readBinary(file);
+//        System.out.println("featuresfinal is  " + featuresfinal);
+        
+        
+        //INDArray arr = model.getInputs();
+        //System.out.println(myint);
+        //INDArray labels = model.getLabels();
+        //System.out.println("this is labels" + labels);
         System.out.println("saving model");
-        File trained_model = new File("trained_model.zip");     
+        File trained_model = new File("trained_model_latest.zip");     
     	ModelSerializer.writeModel(net, trained_model, false);
-    	MultiLayerNetwork model = ModelSerializer.restoreMultiLayerNetwork("trained_model.zip");
-        INDArray labels = model.getLabels();
-        System.out.println("this is labels" + labels);
-    	
-    	ticketClassifier("Guidewire services SVC GUIDEWIRE CLAIMCENTER SVC GUIDEWIRE CONTACTMANAGER SVC GUIDEWIRE POLICYCENTER These services are showing as pipeline. They are live services and need to be updated to reflect that. Please check any other HSN's or services that relate to Guidewire");
+ 
     }
 
-    // split this out, can either be train, test or update only - try loading with single sentence iterator
-    private static DataSetIterator getDataSetIterator(boolean isTraining, WordVectors wordVectors, int minibatchSize,
-                                                      int maxSentenceLength, Random rng ){
-        String path = FilenameUtils.concat(DATA_PATH, (isTraining ? "aclImdb/train/" : "aclImdb/test/"));
-        String secdir = FilenameUtils.concat(path, "securitydata");
-        String gwDir = FilenameUtils.concat(path, "gwdata");
-        String telephonyDir = FilenameUtils.concat(path, "telephonydata");
-        String financeDir = FilenameUtils.concat(path, "financedata");
-        
-        
+   
 
-        File fileSec = new File(secdir);
-        File fileGW = new File(gwDir);
-        File fileTel = new File(telephonyDir);
-        File fileFinance = new File(financeDir);
-
-        Map<String,List<File>> reviewFilesMap = new HashMap<>();
-        reviewFilesMap.put("security", Arrays.asList(fileSec.listFiles()));
-        reviewFilesMap.put("guidewire", Arrays.asList(fileGW.listFiles()));
-        reviewFilesMap.put("telephony", Arrays.asList(fileTel.listFiles()));
-        reviewFilesMap.put("finance", Arrays.asList(fileFinance.listFiles()));
-
-        LabeledSentenceProvider sentenceProvider = new FileLabeledSentenceProvider(reviewFilesMap, rng);
-
-        return new CnnSentenceDataSetIterator.Builder()
-            .sentenceProvider(sentenceProvider)
-            .wordVectors(wordVectors)
-            .minibatchSize(minibatchSize)
-            .maxSentenceLength(maxSentenceLength)
-            .useNormalizedWordVectors(false)
-            .build();
+    
     }
-
-    public static String ticketClassifier(String verbatim) {
-    	INDArray features = ((CnnSentenceDataSetIterator) trainIter).loadSingleSentence(verbatim);
-    	INDArray predictions = net.outputSingle(features);
-        List<String> labels = trainIter.getLabels();
-               
-
-        System.out.println("\n\nPredictions for my sentence is:");
-        for( int i=0; i<labels.size(); i++ ){
-            System.out.println("Prediction(" + labels.get(i) + ") = " + predictions.getDouble(i)); 
-        }
-                
-        int maxAt = 0;
-
-        for (int a = 0; a < predictions.length(); a++) {
-            maxAt = predictions.getDouble(a) > predictions.getDouble(maxAt) ? a : maxAt;
-        }
-        System.out.println("max is at " + maxAt);
-        String classification = labels.get(maxAt);
-
-        System.out.println(classification);
-    	//return the label classification here
-		return classification.toString();
-    	
-    }
-   }
+   //}
     
 

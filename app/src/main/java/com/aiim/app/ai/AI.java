@@ -1,4 +1,4 @@
-package com.aiim.app.cnn;
+package com.aiim.app.ai;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -17,30 +17,26 @@ import org.deeplearning4j.util.ModelSerializer;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.dataset.api.iterator.DataSetIterator;
 
+import com.aiim.app.util.Session;
 
-public class MyIter {
+
+public class AI {
 	
 	public static String currentDirectory;
 	private static WordVectors wordVectors;
-	private DataSetIterator trainIter;
 	
-	public MyIter() throws FileNotFoundException {
+	public AI() throws FileNotFoundException {
 		currentDirectory = Paths.get("").toAbsolutePath().toString();
-		wordVectors = WordVectorSerializer.loadStaticModel(new File(currentDirectory + "/resources/word_vectors.txt")); 
+		wordVectors = WordVectorSerializer.loadStaticModel(new File(currentDirectory + "/files/word_vectors.txt")); 
 		
 	}
 	
 		public DataSetIterator getDataSetIterator( ) throws FileNotFoundException{
-				List<String> outcomeLabels = new ArrayList<>();
 				List<String> sentences = new ArrayList<>();
 				List<String> sentenceLabels = new ArrayList<>();
-				outcomeLabels.add("finance");
-				outcomeLabels.add("guidewire");
-				outcomeLabels.add("security");
-				outcomeLabels.add("telephony");
-				for (String label : outcomeLabels) {
+				for (String label : Session.getPredictionLabels()) {
 				
-				Scanner trainFile = new Scanner(new File(currentDirectory+ "/resources/"+label+".txt"));
+				Scanner trainFile = new Scanner(new File(currentDirectory+ "/files/"+label+".txt"));
 				System.out.println("trainfile is " +trainFile);
 				while (trainFile.hasNextLine()){
 				sentences.add(trainFile.nextLine());
@@ -60,37 +56,34 @@ public class MyIter {
 				.maxSentenceLength(256)
 				.useNormalizedWordVectors(false)
 				.build();
-		}		
+		}
+		
+		public void retrain(ComputationGraph model, DataSetIterator iter) throws IOException {
+			model.fit(iter);
+			File retrained_model = new File("cnn_model.zip");     
+	    	ModelSerializer.writeModel(model, retrained_model, false);	
+		}
+		public void save() {
+			
+		}
+		
+		public ComputationGraph restoreModel() throws Exception {
+			ComputationGraph model = ModelSerializer.restoreComputationGraph(currentDirectory+"/files/cnn_model.zip");
+		return model;
+		}
 
-		public String ticketClassifier(String verbatim, DataSetIterator trainIter) throws IOException {
-	    	ComputationGraph model = ModelSerializer.restoreComputationGraph(currentDirectory+"/resources/cnn_model.zip");
-	    	//File file = new File(currentDirectory+"/myfile");
-	    	//INDArray features = readBinary(file);
-	    	//MyIter iter = new MyIter();
-	    
+		public String classify(ComputationGraph model,String verbatim, DataSetIterator trainIter) throws IOException {
 	    	INDArray features = ((CnnSentenceDataSetIterator) trainIter).loadSingleSentence(verbatim);
-	    	
-	    	System.out.println("features are : "+ features);
-			//CnnSentenceDataSetIterator = new CnnSentenceDataSetIterator();
-	    	
-
 	    	INDArray predictions = model.outputSingle(features);
 	        List<String> labels = trainIter.getLabels();
-
-	               
-
 	        System.out.println("\n\nPredictions for my sentence is:");
-	        for( int i=0; i<labels.size(); i++ ){
-	        	
-	            System.out.println("Prediction(" + labels.get(i) + ") = " + predictions.getDouble(i)); 
-	            //System.out.printf("Prediction: %f\n", predictions.getDouble(i));
-	        }
-	                
+		        for( int i=0; i<labels.size(); i++ ){
+		            System.out.println("Prediction(" + labels.get(i) + ") = " + predictions.getDouble(i)); 
+		        }   
 	        int maxAt = 0;
-
-	        for (int a = 0; a < predictions.length(); a++) {
-	            maxAt = predictions.getDouble(a) > predictions.getDouble(maxAt) ? a : maxAt;
-	        }
+		        for (int a = 0; a < predictions.length(); a++) {
+		            maxAt = predictions.getDouble(a) > predictions.getDouble(maxAt) ? a : maxAt;
+		        }
 	        System.out.println("max is at " + maxAt);
 	        String classification = labels.get(maxAt);
 

@@ -6,7 +6,6 @@ import java.util.ResourceBundle;
 
 public class DatabaseConnect {
 	
-	//private static volatile DatabaseConnect instance = null;
 	private static volatile Connection con = null;
 	private static String dbEndpoint;
 	private static String dbPort;
@@ -32,10 +31,8 @@ public class DatabaseConnect {
 						dbPass = strBundle.getString("dbPass");
 						Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
 						String connectionURL = "jdbc:sqlserver://"+dbEndpoint+":"+dbPort+";"+"user="+dbUser+";password="+dbPass;
-						//System.out.println(connectionURL);
 						con = DriverManager.getConnection(connectionURL); 
 						con.setAutoCommit(false);
-						
 						return con;
 					}
 					catch (Exception e) {
@@ -47,27 +44,4 @@ public class DatabaseConnect {
 		}
 		return con;
 	}
-	/**
-	public Connection getConnection() throws ClassNotFoundException {
-		Connection con = null;
-
-		try {
-			strBundle = ResourceBundle.getBundle("com.aiim.app.resource.jdbc");
-			dbEndpoint = strBundle.getString("dbEndpoint");
-			dbPort = strBundle.getString("dbPort");
-			dbUser = strBundle.getString("dbUser");
-			dbPass = strBundle.getString("dbPass");
-			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-			String connectionURL = "jdbc:sqlserver://"+dbEndpoint+":"+dbPort+";"+"user="+dbUser+";password="+dbPass;
-			//System.out.println(connectionURL);
-			con = DriverManager.getConnection(connectionURL); 
-			con.setAutoCommit(false);
-			return con;
-		}
-		catch (Exception e) {
-			// TODO: handle exception
-		}
-		return con;
-	}
-	*/
 }

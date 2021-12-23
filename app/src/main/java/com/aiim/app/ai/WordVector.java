@@ -1,4 +1,4 @@
-package com.aiim.app.cnn;
+package com.aiim.app.ai;
 
 import java.io.File;
 import java.io.FileNotFoundException;

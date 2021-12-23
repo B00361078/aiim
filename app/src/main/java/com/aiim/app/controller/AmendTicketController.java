@@ -6,24 +6,16 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Timestamp;
-import java.util.ArrayList;
+import java.util.ResourceBundle;
 import java.util.concurrent.TimeUnit;
-import org.nd4j.linalg.dataset.api.iterator.DataSetIterator;
-import com.aiim.app.cnn.MyIter;
+import com.aiim.app.ai.AI;
 import com.aiim.app.database.DatabaseConnect;
 import com.aiim.app.model.Note;
-import com.aiim.app.model.Ticket;
 import com.aiim.app.resource.ViewNames;
+import com.aiim.app.util.AppUtil;
 import com.aiim.app.util.Session;
 import javafx.beans.binding.Bindings;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.Cursor;
@@ -41,11 +33,8 @@ import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
-import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
-import javafx.util.Pair;
 
 /* The following class handles the dashboard interface by switching the current subScene. Part of MVC design Pattern as a controller.
  * Neil Campbell 14/12/2021, B00361078
@@ -54,7 +43,6 @@ import javafx.util.Pair;
 public class AmendTicketController {
 
 	private Connection con;
-	private PreparedStatement stmt;
 	@FXML private TextArea details;
 	@FXML private Label reporter;
 	@FXML private Label ticketNo;
@@ -66,28 +54,27 @@ public class AmendTicketController {
 	@FXML private javafx.scene.control.TableColumn<Note, String> authorCol;
 	@FXML private javafx.scene.control.TableColumn<Note, String> messageCol;
 	@FXML private ChoiceBox assignedTeam;
-	private String prediction;
-	private String teamID;
-	private static DataSetIterator trainIter;
 	@FXML private Button backBtn;
 	@FXML private Button assignBtn;
 	@FXML private Button statusBtn;
 	@FXML private Button nteBtn;
 	@FXML private TableView<Note.Builder> noteTable;
 	private PreparedStatement sqlStatement;
-	private PreparedStatement sqlStatement2;
 	private String assignedTeamID;
 	private String teamName;
-	private PreparedStatement sqlStatement3;
 	private String ticketStatus;
 	private String message;
-	private ArrayList<String> teamList;
 	private String updatedTeamID;
+	private PreparedStatement sqlStatment;
+	private ResultSet rs;
+	private ResourceBundle strBundle;
+	private AppUtil appUtil;
 	
-   
 	public void initialize() throws Exception, SQLException {
 		
 		con = DatabaseConnect.getConnection();
+		strBundle = ResourceBundle.getBundle("com.aiim.app.resource.bundle");
+		appUtil = new AppUtil();
 		ticketNo.setText(Session.getCurrentTicket());
 		setDetails();
 		assignBtn.setVisible(false);
@@ -116,7 +103,7 @@ public class AmendTicketController {
     	    return row ;
     	});
 		status(ticketStatus);
-		ObservableList<String> list = assignedTeam.getItems();	
+		assignedTeam.getItems();	
     	//reporter.setText(Session.getFullName());
     	//reporter.setText(Session.getFullName());
     	details.setWrapText(true);
@@ -137,7 +124,7 @@ public class AmendTicketController {
 	    				
 						sqlStatement = con.prepareStatement("USE [honsdb] UPDATE tblTicket SET updatedTeam = ?, dateUpdated = ?, assignee = ? WHERE ticketID = ?");
 						sqlStatement.setString(1, updatedTeamID);
-		        	    sqlStatement.setObject(2, getDate());
+		        	    sqlStatement.setObject(2, appUtil.getDate());
 		        	    sqlStatement.setString(3, null);
 		        	    sqlStatement.setString(4, Session.getCurrentTicket());
 		        	    if (sqlStatement.executeUpdate() == 1){
@@ -151,56 +138,8 @@ public class AmendTicketController {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}	 	
-	        	    
-
 	    		}
-		    	
-	
-
 		});
-//    	assignedTeam.getSelectionModel().selectedIndexProperty().addListener(
-//    	         (ObservableValue<? extends Number> ov, Number old_val, Number new_val) -> {
-//
-//    	            
-//    	            if(assignedTeam.getValue().toString().contains(teamName)) {
-//    	            	System.out.println("do nothing");
-//    	            }
-//    	            else {
-//    	            	Alert alert = new Alert(AlertType.CONFIRMATION);
-//        	    		alert.setHeaderText("Are you sure you want to change the assigned team?");
-//        	    		alert.showAndWait();
-//	        	    		if (alert.getResult() == ButtonType.OK) {
-//	        	    			System.out.println("OK");
-//	        	    		}
-//	        	    		else {
-//	        	    			assignedTeam.getItems().clear();
-//	        	    			for (String item : teamList) {
-//	        	    				assignedTeam.getItems().add(item);
-//	        	    			}
-//	        	    			assignedTeam.setValue(teamName);
-//	        	    			
-//	        	    		}
-//    	            }
-//    	         
-//    	            
-//    	            
-//    	    		
-//    	      });
-//    	raiseBtn.setOnAction(ae -> {
-//            ae.consume();
-//            raiseBtn.setDisable(true);
-//            MyTask task = new MyTask();
-//            task.setOnSucceeded(e -> task.getValue());
-//            Alert alert = createProgressAlert(ViewController.createInstance().getCurrentStage(), task);
-//            executeTask(task);
-//            alert.showAndWait();
-//            try {
-//				ViewController.createInstance().switchToView(ViewNames.DASHBOARD);
-//			} catch (IOException e1) {
-//				// TODO Auto-generated catch block
-//				e1.printStackTrace();
-//			}
-//			});
     }
     
 
@@ -264,6 +203,8 @@ public class AmendTicketController {
         			throw new Exception("Error");
         		}
     		}
+    		//DataSetIterator iter = Session.getMyIter().getUpdatedDataSetIterator(details.getText(), assignedTeam.getValue().toString());
+    		//Session.getMyIter().retrain(iter);
     		break;
     		// check training mode on
     		
@@ -275,9 +216,9 @@ public class AmendTicketController {
     }
     private void setDetails() throws Exception {
     	con.setAutoCommit(false);
-    	sqlStatement = con.prepareStatement("SELECT reporter,assignee,status,dateRaised,updatedTeam,detail from tblTicket WHERE  ticketID = ?");
+    	sqlStatement = con.prepareStatement(strBundle.getString("sqlSelect7"));
     	sqlStatement.setString(1, Session.getCurrentTicket());
-    	ResultSet rs = sqlStatement.executeQuery();
+    	rs = sqlStatement.executeQuery();
     	while(rs.next()){
     		reporter.setText(rs.getString(1));
     		setAssignee(rs.getString(2));
@@ -287,18 +228,18 @@ public class AmendTicketController {
     		assignedTeamID = rs.getString(5);
     		details.setText(rs.getString(6));
         }
-    	sqlStatement2 = con.prepareStatement("SELECT name from tblTeam");
-    	ResultSet rs2 = sqlStatement2.executeQuery();
-    	while(rs2.next()){
-    		assignedTeam.getItems().add(rs2.getString(1));
+    	sqlStatement = con.prepareStatement("SELECT name from tblTeam");
+    	rs = sqlStatement.executeQuery();
+    	while(rs.next()){
+    		assignedTeam.getItems().add(rs.getString(1));
         }
     	
-    	sqlStatement3 = con.prepareStatement("SELECT name from tblTeam WHERE teamID = ?");
-    	sqlStatement3.setString(1, assignedTeamID);
+    	sqlStatement = con.prepareStatement("SELECT name from tblTeam WHERE teamID = ?");
+    	sqlStatement.setString(1, assignedTeamID);
     	
-    	ResultSet rs3 = sqlStatement3.executeQuery();
-    	while(rs3.next()){
-    		teamName = rs3.getString(1);
+    	rs = sqlStatement.executeQuery();
+    	while(rs.next()){
+    		teamName = rs.getString(1);
         }
  
     	assignedTeam.setValue(teamName);
@@ -339,16 +280,16 @@ public class AmendTicketController {
 	    con.setAutoCommit(false);
 	    
 	   
-	    stmt = con.prepareStatement("USE [honsdb] INSERT INTO tblNote (author,ticketRef,message,dateCreated) VALUES(?,?,?,?)");
+	    sqlStatment = con.prepareStatement("USE [honsdb] INSERT INTO tblNote (author,ticketRef,message,dateCreated) VALUES(?,?,?,?)");
 	    
-	    stmt.setString(1, Session.getUsername());
-	    stmt.setString(2, Session.getCurrentTicket());
-	    stmt.setString(3, message);
-	    stmt.setObject(4, sqlDate);
+	    sqlStatment.setString(1, Session.getUsername());
+	    sqlStatment.setString(2, Session.getCurrentTicket());
+	    sqlStatment.setString(3, message);
+	    sqlStatment.setObject(4, sqlDate);
 	    		
 	    		
 	    		
-	    		if (stmt.executeUpdate() == 1)
+	    		if (sqlStatment.executeUpdate() == 1)
 	    		{
 	    			con.commit();
 	    			System.out.println("Note added");
@@ -374,9 +315,8 @@ public class AmendTicketController {
         	String mystr = "hello";
             updateMessage("Raising ticket, please wait.");
             System.out.println("my string");
-            MyIter iter = new MyIter();
-        	trainIter = iter.getDataSetIterator();
-        	prediction = iter.ticketClassifier(details.getText(), trainIter);
+            new AI();
+        	//prediction = ai.classify(details.getText(), trainIter);
         	insert();
             TimeUnit.SECONDS.sleep(5);
             updateMessage("Ticket raised successfully");
@@ -424,11 +364,6 @@ public class AmendTicketController {
 
         return alert;
     }
-    public Timestamp getDate() {
-    	java.util.Date date = new java.util.Date();
-	    java.sql.Timestamp sqlDate = new java.sql.Timestamp(date.getTime());
-	    return sqlDate;
-    }
     
     @FXML public void addNote() throws Exception {
     	
@@ -466,11 +401,10 @@ public class AmendTicketController {
     
     public void updateTable() throws SQLException {
 
-	con = DatabaseConnect.getConnection();
-	stmt = con.prepareStatement("USE honsdb select noteID,author,message FROM tblNote WHERE ticketRef = ?");
-	stmt.setString(1, Session.getCurrentTicket());
+	sqlStatement = con.prepareStatement("USE honsdb select noteID,author,message FROM tblNote WHERE ticketRef = ?");
+	sqlStatement.setString(1, Session.getCurrentTicket());
 	
-	ResultSet rs = stmt.executeQuery();
+	rs = sqlStatement.executeQuery();
 	while(rs.next()){
 			
 		String noteID = rs.getString(1);
@@ -484,10 +418,10 @@ public class AmendTicketController {
 	}
    }
     public void viewNote(String noteID) throws SQLException {
-    	stmt = con.prepareStatement("USE honsdb select author,ticketRef,message,dateCreated FROM tblNote WHERE noteID = ?");
-    	stmt.setString(1, noteID);
+    	sqlStatement = con.prepareStatement("USE honsdb select author,ticketRef,message,dateCreated FROM tblNote WHERE noteID = ?");
+    	sqlStatement.setString(1, noteID);
     	
-    	ResultSet rs = stmt.executeQuery();
+    	rs = sqlStatement.executeQuery();
     	while(rs.next()){
     			
     		String author = rs.getString(1);

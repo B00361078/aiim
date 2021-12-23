@@ -7,9 +7,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.concurrent.TimeUnit;
 import org.nd4j.linalg.dataset.api.iterator.DataSetIterator;
-import com.aiim.app.cnn.MyIter;
+import com.aiim.app.ai.AI;
 import com.aiim.app.database.DatabaseConnect;
 import com.aiim.app.resource.ViewNames;
+import com.aiim.app.util.AppUtil;
 import com.aiim.app.util.Session;
 import javafx.beans.binding.Bindings;
 import javafx.concurrent.Task;
@@ -29,24 +30,24 @@ import javafx.stage.Stage;
 
 public class TicketController {
 
-	private int permLevel;
 	private Connection con;
 	private PreparedStatement stmt;
 	@FXML private TextArea details;
 	@FXML private Label reporter;
-	private int VIEWPERMLEVEL;
 	private String prediction;
 	private String teamID;
 	private static DataSetIterator trainIter;
 	@FXML private Button raiseBtn;
 	private PreparedStatement sqlStatement;
+	private AI ai;
+	private AppUtil appUtil;
 	
    
 	public void initialize() throws Exception, SQLException {
+		ai = new AI();
+		appUtil = new AppUtil();
     	reporter.setText(Session.getFullName());
     	con = DatabaseConnect.getConnection();
-    	VIEWPERMLEVEL = 5;
-    	checkHasPermission();
     	reporter.setText(Session.getFullName());
     	details.setWrapText(true);
     	raiseBtn.setOnAction(ae -> {
@@ -64,23 +65,6 @@ public class TicketController {
 				e1.printStackTrace();
 			}
 			});
-    }
-    
-    private void checkHasPermission() {
-    	if(Session.getPermissionLevel() >= VIEWPERMLEVEL) {
-    		
-    	}
-    }
-    public String getMode() throws Exception {
-	    con.setAutoCommit(false);	 
-	    sqlStatement = con.prepareStatement("USE [honsdb] SELECT mode FROM tblClassifier WHERE id = ?");
-	    sqlStatement.setInt(1, 1);
-	    ResultSet rs = sqlStatement.executeQuery();
-    	String mode = null;
-		while(rs.next()){
-    		mode = rs.getString(1);
-        }
-		return mode;
     }
 
     public void insert() throws Exception {
@@ -123,7 +107,7 @@ public class TicketController {
     }
 	private class MyTask extends Task {
 
-        private MyTask() {
+		private MyTask() {
             updateTitle("Raise New Ticket");
         }
 
@@ -131,8 +115,8 @@ public class TicketController {
         protected String call() throws Exception {
         	String mystr = "hello";
             updateMessage("Raising ticket, please wait.");
-	            if (getMode().contains("ON")) {
-	            	prediction = Session.getMyIter().ticketClassifier(details.getText(), Session.getIter());
+	            if (appUtil.getAIMode().contains("ON")) {
+	            	prediction = ai.classify(ai.restoreModel(), details.getText(), Session.getIter());
 	            }
 	            else {
 	        	prediction = "general";

@@ -1,6 +1,12 @@
 .button {
-    -fx-background-color: #3638ad;
     -fx-text-fill: white;
+    -fx-font-family: "Arial Narrow";
+    -fx-font-weight: bold;
+    -fx-background-color: #0800ff;
+    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 );
+}
+.button:hover {
+    -fx-background-color: #06036b;
 }
 .toggle-button {
 	-fx-background-color: #3638ad;
@@ -11,10 +17,6 @@
 .label {
     -fx-font-size: 12px;
     -fx-text-fill: #4123a6;
-}
-
-.button:hover {
-    -fx-background-color: #030340;
 }
 .button:pressed {
     -fx-background-color: #1c1cb0;

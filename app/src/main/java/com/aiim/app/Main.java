@@ -20,11 +20,9 @@ import java.sql.Date;
 import org.deeplearning4j.iterator.CnnSentenceDataSetIterator;
 import org.nd4j.linalg.dataset.api.iterator.DataSetIterator;
 
-import com.aiim.app.cnn.CnnSentenceClassificationExample;
-import com.aiim.app.cnn.MyCnn;
-import com.aiim.app.cnn.MyCnn2;
-import com.aiim.app.cnn.MyIter;
-import com.aiim.app.cnn.WordVector;
+import com.aiim.app.ai.AI;
+import com.aiim.app.ai.Network;
+import com.aiim.app.ai.WordVector;
 import com.aiim.app.controller.ViewController;
 import com.aiim.app.database.DatabaseConnect;
 import com.aiim.app.resource.ViewNames;
@@ -34,7 +32,6 @@ public class Main extends Application {
 	
 	private ViewController viewController;
 	private Connection con;
-	private CnnSentenceClassificationExample cnn;
 	private ResourceBundle strBundle;
 	private Stage stage;
 	//strBundle = ResourceBundle.getBundle("com.aiim.app.resources.bundle");
@@ -73,7 +70,7 @@ public class Main extends Application {
 	public void stop() throws IOException{
 		String currentDirectory = Paths.get("").toAbsolutePath().toString();
 	    System.out.println("Stage is closing");
-	    FileUtils.cleanDirectory(new File(currentDirectory+"/resources")); 
+	    FileUtils.cleanDirectory(new File(currentDirectory+"/files")); 
 	}
 	
 	void checkDBConnect() {

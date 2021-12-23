@@ -6,25 +6,19 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Types;
-
+import java.util.ResourceBundle;
 import com.aiim.app.database.DatabaseConnect;
 import com.aiim.app.model.Ticket;
-import com.aiim.app.model.Ticket.Builder;
 import com.aiim.app.resource.ViewNames;
 import com.aiim.app.util.Session;
-import javafx.fxml.LoadException;
-import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.SubScene;
 import javafx.scene.control.Button;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
-import javafx.stage.Stage;
 
 /* The following class handles the dashboard interface by switching the current subScene. Part of MVC design Pattern as a controller.
  * Neil Campbell 07/05/2021, B00361078
@@ -41,14 +35,14 @@ public class DashboardController {
 	@FXML private Button raiseNewBtn;
 	@FXML private Button settingsBtn;
 	@FXML private Button logout;
-    private ViewController viewController;
-	private int permLevel;
 	private Connection con;
-	private PreparedStatement stmt;
-	private PreparedStatement stmt2;
-	private String assignedTeamName;
+	private ResultSet rs;
+	private PreparedStatement sqlStatement;
+	private ResourceBundle strBundle;
    
     public void initialize() throws Exception  {
+    	con = DatabaseConnect.getConnection();
+    	strBundle = ResourceBundle.getBundle("com.aiim.app.resource.bundle");
     	settingsBtn.setVisible(false);
     	raiseNewBtn.setVisible(false);
     	setDisplay(Session.getPermissionLevel());
@@ -75,29 +69,26 @@ public class DashboardController {
     }
 
 	public void updateTable() throws SQLException {
-		
-	    	//ticketTable.getItems().clear();
-		//ticketTable.getItems().add(new Ticket.Builder().setPersonID().setFName(fName).setSName(sName));
-		con = DatabaseConnect.getConnection();
+
 		switch(Session.getPermissionLevel()) {
 		case 1:
 			//agent
-			stmt = con.prepareStatement("USE honsdb select b.ticketID, b.status, b.dateRaised, a.name from tblTicket as B join tblTeam as u on u.teamID = B.updatedTeam join tblTeam as a on a.teamID = B.updatedTeam WHERE B.reporter = '" +Session.getUsername()+"'");
+			sqlStatement = con.prepareStatement(strBundle.getString("sqlSelect4"));
+			sqlStatement.setString(1, Session.getUsername());
 			break;
 		case 2:
 			//owner
-			stmt = con.prepareStatement("USE honsdb select b.ticketID, b.status, b.dateRaised, a.name from tblTicket as B join tblTeam as u on u.teamID = B.updatedTeam join tblTeam as a on a.teamID = B.updatedTeam WHERE (B.assignee IS NULL OR B.assignee = ?) AND B.updatedTeam = ?");
-			stmt.setString(1, Session.getUsername());
-			stmt.setString(2, Session.getTeamID());
+			sqlStatement = con.prepareStatement(strBundle.getString("sqlSelect5"));
+			sqlStatement.setString(1, Session.getUsername());
+			sqlStatement.setString(2, Session.getTeamID());
 			break;
 		case 3:
 			//sysadmin
-			stmt = con.prepareStatement("USE honsdb select b.ticketID, b.status, b.dateRaised, a.name from tblTicket as B join tblTeam as u on u.teamID = B.updatedTeam join tblTeam as a on a.teamID = B.updatedTeam");
+			sqlStatement = con.prepareStatement(strBundle.getString("sqlSelect6"));
 			break;
 		}
 
-		
-    	ResultSet rs = stmt.executeQuery();
+    	rs = sqlStatement.executeQuery();
     	while(rs.next()){
     			
     		String ticketID = rs.getString(1);
@@ -105,15 +96,13 @@ public class DashboardController {
     		Date date = rs.getDate(3);
     		String assignedTeam = rs.getString(4);
     		
-
     		ticketTable.getItems().add(new Ticket.Builder()
 		    		.setTicketID(ticketID)
 		    		.setStatus(status)
 		    		.setDate(date.toString())
 		    		.setAssignedTeam(assignedTeam));
-
     	}		    
-	    	}
+	}
 	
 	public void setDisplay(int permLevel) {
 		switch(permLevel) {
@@ -128,20 +117,15 @@ public class DashboardController {
 		}
 	}
 	   
-    
     @FXML protected void raiseIncidentView(ActionEvent event) {
-   	
         try {
-        		//viewController.setCurrentSubScene(subScene);
         	ViewController.createInstance().switchToView(ViewNames.TICKET);
-
-			
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
     }
+    
     @FXML protected void settingsView(ActionEvent event) {
-       	
         try {
         	ViewController.createInstance().switchToView(ViewNames.SETTINGS);		
 		} catch (IOException e1) {

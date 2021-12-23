@@ -22,9 +22,7 @@ public class ViewController {
 	private Stage currentStage;
 	private Scene mainScene;
 	private Scene currentScene;
-	private SubScene currentSubScene;
-	private int PERMLEVEL;
-	
+	private SubScene currentSubScene;	
 	
 	private ViewController() {
 		if(vc != null) {
@@ -118,17 +116,5 @@ public class ViewController {
 		  default:
 			  currentStage.close();
 			}
-	}
-
-	public int getViewPerm(ViewNames view) {
-		switch(view) {
-		case TICKET:
-			PERMLEVEL = 5;;
-		break;
-		default:
-			break;
-		}
-		// TODO Auto-generated method stub
-		return PERMLEVEL;
 	}
 }
