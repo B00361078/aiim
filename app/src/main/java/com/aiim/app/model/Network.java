@@ -110,9 +110,13 @@ public class Network {
 	}
     
     public String classify(ComputationGraph model,String verbatim, DataSetIterator trainIter) throws IOException {
+
+
     	INDArray features = ((CnnSentenceDataSetIterator) trainIter).loadSingleSentence(verbatim);
+    	
     	INDArray predictions = model.outputSingle(features);
         List<String> labels = trainIter.getLabels();
+        System.out.println("got here3");
         System.out.println("\n\nPredictions for my sentence is:");
 	        for( int i=0; i<labels.size(); i++ ){
 	            System.out.println("Prediction(" + labels.get(i) + ") = " + predictions.getDouble(i)); 

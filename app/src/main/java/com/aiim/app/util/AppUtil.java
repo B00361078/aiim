@@ -79,18 +79,7 @@ public class AppUtil {
         );
 
         return alert;
-    }
-	public void executeTask(Task<?> task) {
-        Thread thread = new Thread(task, "thread");
-        thread.setDaemon(true);
-        thread.start();
-    }
-	public void stopThread(Task<?> task) {
-        Thread thread = new Thread(task, "thread");
-        thread.setDaemon(true);
-        thread.start();
-    }
-	
+    }	
 	public void downloadFiles() throws IOException, SQLException {
     	currentDirectory = Paths.get("").toAbsolutePath().toString();
 		sqlStatement = con.prepareStatement(strBundle.getString("sqlSelect2"));

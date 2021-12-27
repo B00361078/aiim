@@ -82,17 +82,17 @@ public class TicketController {
     public void cancel() throws IOException {
     	ViewController.createInstance().switchToView(ViewNames.HOME);
     }
+    
     public void setRaiseAction() {
     	raiseBtn.setOnAction(ae -> {
             ae.consume();
             raiseBtn.setDisable(true);
-            MyTask task = new MyTask();
+            ThreadTask task = new ThreadTask();
             task.setOnSucceeded(e -> task.getValue());
-            Alert alert = appUtil.createProgressAlert(ViewController.createInstance().getCurrentStage(), task);
+            Alert alert = appUtil.createProgressAlert(ViewController.createInstance().getCurrentStage(), task);          
             Thread thread = new Thread(task, "thread");
             thread.setDaemon(true);
             thread.start();
-            //executeTask(task);
             alert.showAndWait();
             try {
 				ViewController.createInstance().switchToView(ViewNames.DASHBOARD);
@@ -105,30 +105,23 @@ public class TicketController {
 			});
     	
     }
-    public void executeTask(Task<?> task) {
-        Thread thread = new Thread(task, "thread");
-        thread.setDaemon(true);
-        thread.start();
-    }
-	public void stopThread(Task<?> task) {
-        Thread thread = new Thread(task, "thread");
-        thread.setDaemon(true);
-        thread.start();
-    }
-	private class MyTask extends Task {
+	private class ThreadTask extends Task {
 
-		private MyTask() {
+		private ThreadTask() {
             updateTitle("Raise New Ticket");
         }
 
         @Override
         protected String call() throws Exception {
+        	
             updateMessage("Raising ticket, please wait.");
             appUtil.setLabels();
             appUtil.downloadFiles();
             DataSetIter dataSetIter = new DataSetIter();
 	            if (appUtil.getAIMode().contains("ON")) {
+	            	while (!Thread.interrupted()) {
 	            	prediction = network.classify(network.restoreModel(currentDirectory + "/files/cnn_model.zip"), details.getText(), dataSetIter.getDataSetIterator());
+	            	}
 	            }
 	            else {
 	        	prediction = "general";

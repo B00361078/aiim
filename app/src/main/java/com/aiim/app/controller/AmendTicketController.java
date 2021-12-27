@@ -12,9 +12,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
-
 import org.deeplearning4j.nn.graph.ComputationGraph;
-
 import com.aiim.app.database.DatabaseConnect;
 import com.aiim.app.model.DataSetIter;
 import com.aiim.app.model.Network;
@@ -323,7 +321,6 @@ public class AmendTicketController {
 	    sqlStatement.setString(3, Session.getCurrentTicket());
 	    if (sqlStatement.executeUpdate() == 1){
 			con.commit();
-			
 		}
 		else {
 			throw new Exception("Error");
