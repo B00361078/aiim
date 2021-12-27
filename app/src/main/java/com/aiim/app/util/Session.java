@@ -1,7 +1,6 @@
 package com.aiim.app.util;
 
 import java.util.ArrayList;
-import org.nd4j.linalg.dataset.api.iterator.DataSetIterator;
 
 public class Session {
 	
@@ -12,7 +11,6 @@ public class Session {
 	private static String fullName;
 	private static String teamID;
 	private static String currentTicket;
-	private static DataSetIterator dataIter;
 	private static ArrayList<String> predictionLabels;
 
 	private Session() {
@@ -44,9 +42,6 @@ public class Session {
 	
 	public static String getCurrentTicket() {
 		return currentTicket;
-	}
-	public static DataSetIterator getDataIter() {
-		return dataIter;
 	}
 
 	public static void setUsername(String username) {
@@ -81,17 +76,6 @@ public class Session {
 	public static void setCurrentTicket(String currentTicket) {
 		Session.currentTicket = currentTicket;
 	}
-	public static void setDataIter(DataSetIterator trainIter) {
-		Session.dataIter = trainIter;
-	}
-	public static void clearSession () {
-		setFullName(null);
-		setPermissionLevel(1);
-		setTeamName(null);
-		setUsername(null);
-		setTeamID(null);
-		setCurrentTicket(null);
-	}
 
 	public static ArrayList<String> getPredictionLabels() {
 		return predictionLabels;
@@ -100,5 +84,14 @@ public class Session {
 	public static void setPredictionLabels(ArrayList<String> predictionLabels) {
 		Session.predictionLabels = predictionLabels;
 	}
-
+	public static void clearSession () {
+		setFullName(null);
+		setPermissionLevel(1);
+		setTeamName(null);
+		setUsername(null);
+		setTeamID(null);
+		setCurrentTicket(null);
+		setPredictionLabels(null);
+		session = null;
+	}
 }

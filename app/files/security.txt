@@ -1,0 +1,27 @@
+Data request for CISO by HP Data request for CISO byHP
+Third Party teamsite access for the CISO Remediation-batch 2 Third Party teamsite access for the CISO Remediation Programme site
+Incident Ciso Desktop Agent looking to be configured
+Raised for AD CISO issue
+red database Model Incident: Sharepoint Team Site  TeamSite not accessible after CISO changes Team Site not entirely sure if this is related to the CISO changes over the weekend
+Please block the following URL(s) as approved/ requested by Aviva CISO: Please block the following URL(s) as approved/ requested by Aviva CISO: 
+UNABLE TO ADD TeamSite not accessible after CISO changes
+I am attempting to download a software installer from the internet. Please assign this ticket to CISO
+Aviva Investors system owner deletions 16.03.15 Have attached the last major batch of AI deletes from this re-certification. We only have about 11 lines of access that we are still awaiting clarity on - so if these are to be removed we will send these through shortly. If you can do the necessary and confirm once completed, would be most appreciated. Any issues, please shout CISO
+Team Site Recertification – Action Required - Unable to recertify Model Incident: Sharepoint Team Site User is still unable to recertify the site. error message attached, can you take another look at this please
+Sharepoint team site - unable to edit permissions TeamSite not accessible after CISO changes
+representing the non-production gold env agreed by CISO
+This laptop is needed by CISO for security testing and requires to be rebuilt with base and core apps only and delivered. This will not be a personal laptop but used just for testing. Passing to local support to collect and rebuild laptop. Please rebuild existing laptop, this is not in use.
+Authentication Failure Major Alert please raise with CISO
+safeguard - Authenticate customer
+Sophos - Authenticate customer
+Iexpenses - unable to authenticate session Iexpenses - unable to authenticate session Remoted on via OCS and deleted cookies. All now well
+unlock - Authenticate Customer unlock
+password reset - Authenticate customer
+Vulnrability Scanner unable to authenticate to AI servers Vulnerability Scanner unable to authenticate to AI servers Q1 Complaince Audit unable to complete.
+WINDOWS 7 Authentication Incident logged.  Windows Authentication error Additional Info.The user receives a Windows Authentication message when trying to use a Virtual Machine. A rebuild may be required Affected Users
+Outlook authentication issues Customer unable to log in to outlook. Just looping round prompting for password Remoted in and it started working again
+VIA ACCOUNT - Authenticate Customer - Reset Password
+Unix authentication was NOT successful the vulnerability scans produced the below results.
+P2P Password Reset Authenticated customer Reset password
+Not accepting password - Authenticate Customer - Reset Password
+Unable to authenticate my credentials with Avivaworld. Ihave tried both Avivagroup and via able to access external websites, but any activity that requires my authentication

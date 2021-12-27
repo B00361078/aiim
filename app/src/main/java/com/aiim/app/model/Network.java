@@ -17,6 +17,8 @@ import org.nd4j.linalg.activations.Activation;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.dataset.api.iterator.DataSetIterator;
 import org.nd4j.linalg.lossfunctions.LossFunctions;
+
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.*;
@@ -94,14 +96,17 @@ public class Network {
     }
     public ComputationGraph retrain(ComputationGraph model, DataSetIterator iter) throws IOException {
 		model.fit(iter);
-		return model;
-//		File retrained_model = new File("cnn_model.zip");     
-//    	ModelSerializer.writeModel(model, retrained_model, false);	
+		return model;	
 	}
     
     public ComputationGraph restoreModel(String path) throws Exception {
 		ComputationGraph model = ModelSerializer.restoreComputationGraph(path);
 	return model;
+	}
+    
+    public void saveModel(ComputationGraph model, String path) throws Exception {
+    	File modelFile = new File(path);     
+    	ModelSerializer.writeModel(model, modelFile, false);
 	}
     
     public String classify(ComputationGraph model,String verbatim, DataSetIterator trainIter) throws IOException {

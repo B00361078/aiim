@@ -8,6 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 import com.aiim.app.database.DatabaseConnect;
+import com.aiim.app.model.DataSetIter;
 import com.aiim.app.model.Network;
 import com.aiim.app.resource.ViewNames;
 import com.aiim.app.util.AppUtil;
@@ -88,16 +89,31 @@ public class TicketController {
             MyTask task = new MyTask();
             task.setOnSucceeded(e -> task.getValue());
             Alert alert = appUtil.createProgressAlert(ViewController.createInstance().getCurrentStage(), task);
-            appUtil.executeTask(task);
+            Thread thread = new Thread(task, "thread");
+            thread.setDaemon(true);
+            thread.start();
+            //executeTask(task);
             alert.showAndWait();
             try {
 				ViewController.createInstance().switchToView(ViewNames.DASHBOARD);
+				//stop the thread
+				thread.interrupt();
 			} catch (IOException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 			});
     	
+    }
+    public void executeTask(Task<?> task) {
+        Thread thread = new Thread(task, "thread");
+        thread.setDaemon(true);
+        thread.start();
+    }
+	public void stopThread(Task<?> task) {
+        Thread thread = new Thread(task, "thread");
+        thread.setDaemon(true);
+        thread.start();
     }
 	private class MyTask extends Task {
 
@@ -108,14 +124,17 @@ public class TicketController {
         @Override
         protected String call() throws Exception {
             updateMessage("Raising ticket, please wait.");
+            appUtil.setLabels();
+            appUtil.downloadFiles();
+            DataSetIter dataSetIter = new DataSetIter();
 	            if (appUtil.getAIMode().contains("ON")) {
-	            	prediction = network.classify(network.restoreModel(currentDirectory + "/files/cnn_model.zip"), details.getText(), Session.getDataIter());
+	            	prediction = network.classify(network.restoreModel(currentDirectory + "/files/cnn_model.zip"), details.getText(), dataSetIter.getDataSetIterator());
 	            }
 	            else {
 	        	prediction = "general";
 	            }
         	insertTicket();
-            updateMessage("Ticket raised successfully");
+            updateMessage("Ticket raised successfully, raised to team - " + prediction);
             updateProgress(1, 1);
             return prediction;
         }

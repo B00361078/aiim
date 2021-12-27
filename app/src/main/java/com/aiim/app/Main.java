@@ -2,6 +2,7 @@ package com.aiim.app;
 	
 import javafx.application.Application;
 import org.apache.commons.io.FileUtils;
+import org.deeplearning4j.nn.graph.ComputationGraph;
 import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 import java.sql.PreparedStatement;
@@ -10,7 +11,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -21,6 +24,7 @@ import org.nd4j.linalg.dataset.api.iterator.DataSetIterator;
 import com.aiim.app.controller.ViewController;
 import com.aiim.app.database.DatabaseConnect;
 import com.aiim.app.model.DataSetIter;
+import com.aiim.app.model.Network;
 import com.aiim.app.resource.ViewNames;
 import com.aiim.app.util.Session;
 
@@ -44,11 +48,22 @@ public class Main extends Application {
 		con = DatabaseConnect.getConnection();
 		System.out.println("con is " + con);
 		checkDBConnect();
-		setLabels();
-		downloadFiles();
-		DataSetIter iter = new DataSetIter();
-    	trainIter = iter.getDataSetIterator();
-    	Session.setDataIter(trainIter);	
+		//setLabels();
+		//downloadFiles();
+		//DataSetIter iter = new DataSetIter();
+    	//trainIter = iter.getDataSetIterator();
+    	//Session.setDataIter(trainIter);	
+    	//String filename = "guidewire.txt";
+//		FileWriter fw = new FileWriter(currentDirectory+"/files/guidewire.txt", true);
+//	    BufferedWriter bw = new BufferedWriter(fw);
+//	    bw.newLine();
+//	    bw.write("1 of 5 Guidewire servers out of memory. 1 of 5 Guidewire servers out of memory.");
+//	    bw.close();
+    	//trainIter = iter.getDataSetIterator();
+//    	Session.setDataIter(trainIter);
+//    	Network net = new Network();
+//    	ComputationGraph mod = net.restoreModel(currentDirectory + "/files/cnn_model.zip");
+//    	net.retrain(mod, Session.getDataIter());
     }
 	@Override
 	public void stop() throws IOException{

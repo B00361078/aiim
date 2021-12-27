@@ -1,28 +1,36 @@
 package com.aiim.app.model;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.Scanner;
-
-import org.datavec.api.util.ClassPathResource;
 import org.deeplearning4j.models.embeddings.loader.WordVectorSerializer;
 import org.deeplearning4j.models.word2vec.Word2Vec;
 import org.deeplearning4j.text.sentenceiterator.BasicLineIterator;
-import org.deeplearning4j.text.sentenceiterator.SentenceIterator;
 import org.deeplearning4j.text.tokenization.tokenizer.preprocessor.CommonPreprocessor;
 import org.deeplearning4j.text.tokenization.tokenizerfactory.DefaultTokenizerFactory;
-import org.deeplearning4j.text.tokenization.tokenizerfactory.TokenizerFactory;
 
 public class WordVector {
 	
-	//String filePath = new ClassPathResource("raw_sentences.txt").getFile().getAbsolutePath();
 	private File VECTOR_FILE;
 	private String PATH;
+	private int WINDOW_SIZE;
+	private int LAYER_SIZE;
+	private int MIN_FREQUENCY;
+	private int ITERATIONS;
+	private int SEED;
+	private DefaultTokenizerFactory tokenizer;
+	private BasicLineIterator sentenceIter;
+	
+	public WordVector() {
+		WINDOW_SIZE = 5;
+		LAYER_SIZE = 200;
+		MIN_FREQUENCY = 1;
+		ITERATIONS = 100;
+		SEED = 42;
+		tokenizer = new DefaultTokenizerFactory();
+	}
 	
 	public Word2Vec buildVectors(String rawTextFilePath, String stopWordsPath) throws IOException {
 	VECTOR_FILE = new File(rawTextFilePath);
@@ -30,16 +38,11 @@ public class WordVector {
 	//System.out.println(filePath);
 
     // Strip white space before and after for each line
-    SentenceIterator iter = new BasicLineIterator(PATH);
+     sentenceIter = new BasicLineIterator(PATH);
     // Split on white spaces in the line to get words
-    TokenizerFactory t = new DefaultTokenizerFactory();
+    //TokenizerFactory t = new DefaultTokenizerFactory();
     
-    t.setTokenPreProcessor(new CommonPreprocessor());
-    System.out.println("printing out sentences");
-    while (iter.hasNext()) {
-    	System.out.println(iter.nextSentence());
-    }
-   
+    tokenizer.setTokenPreProcessor(new CommonPreprocessor()); 
     
     Scanner s = new Scanner(new File(stopWordsPath));
     ArrayList<String> list = new ArrayList<String>();
@@ -48,16 +51,14 @@ public class WordVector {
     }
     s.close();
     
-    
-
     Word2Vec vec = new Word2Vec.Builder().stopWords(list)
-            .minWordFrequency(1)
-            .iterations(100)
-            .layerSize(200)
-            .seed(42)
-            .windowSize(5)
-            .iterate(iter)
-            .tokenizerFactory(t)
+            .minWordFrequency(MIN_FREQUENCY)
+            .iterations(ITERATIONS)
+            .layerSize(LAYER_SIZE)
+            .seed(SEED)
+            .windowSize(WINDOW_SIZE)
+            .iterate(sentenceIter)
+            .tokenizerFactory(tokenizer)
             .build();
     vec.fit();
     return vec;
@@ -69,8 +70,8 @@ public class WordVector {
 	    return listOfWords;
 	}
 	
-	public void saveVectorToFile(Word2Vec vec) {
-		WordVectorSerializer.writeWord2VecModel(vec, "latestVectors5.txt");
+	public void saveVectorToFile(Word2Vec vec, String filePath) {
+		WordVectorSerializer.writeWord2VecModel(vec, filePath);
 	}
 
 }

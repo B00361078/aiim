@@ -1,13 +1,19 @@
 package com.aiim.app.util;
 
+import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
+
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.sql.Blob;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 import com.aiim.app.database.DatabaseConnect;
 
@@ -26,7 +32,9 @@ public class AppUtil {
 	private Connection con;
 	private String statement;
 	private ResultSet rs;
-	private PreparedStatement sqlStatement;	
+	private PreparedStatement sqlStatement;
+	private String currentDirectory;
+	private ArrayList<String> list;	
 	
 	public AppUtil() {
 		strBundle = ResourceBundle.getBundle("com.aiim.app.resource.bundle");
@@ -76,6 +84,36 @@ public class AppUtil {
         Thread thread = new Thread(task, "thread");
         thread.setDaemon(true);
         thread.start();
+    }
+	public void stopThread(Task<?> task) {
+        Thread thread = new Thread(task, "thread");
+        thread.setDaemon(true);
+        thread.start();
+    }
+	
+	public void downloadFiles() throws IOException, SQLException {
+    	currentDirectory = Paths.get("").toAbsolutePath().toString();
+		sqlStatement = con.prepareStatement(strBundle.getString("sqlSelect2"));
+		rs = sqlStatement.executeQuery();
+			while (rs.next()) {
+				String filename = rs.getString(1);
+				Blob content = rs.getBlob(2);
+				InputStream inputstr = content.getBinaryStream();
+				Files.copy(inputstr, Paths.get(currentDirectory+"/files/"+filename), REPLACE_EXISTING);
+			}
+	}
+    
+    public void setLabels() throws SQLException {
+    	list = new ArrayList<String> ();
+    	sqlStatement = con.prepareStatement(strBundle.getString("sqlSelect3"));
+		rs = sqlStatement.executeQuery();
+			while (rs.next()) {
+				String label = rs.getString(1);
+				list.add(label);
+			}
+		//remove general label to leave only prediction labels
+		list.remove("general");
+		Session.setPredictionLabels(list);
     }
 	
 	public void uploadFile(String fileName, String mode) throws Exception {

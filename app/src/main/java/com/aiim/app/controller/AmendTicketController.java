@@ -1,13 +1,23 @@
 package com.aiim.app.controller;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
+
+import org.deeplearning4j.nn.graph.ComputationGraph;
+
 import com.aiim.app.database.DatabaseConnect;
+import com.aiim.app.model.DataSetIter;
+import com.aiim.app.model.Network;
 import com.aiim.app.model.Note;
 import com.aiim.app.resource.ViewNames;
 import com.aiim.app.util.AppUtil;
@@ -61,9 +71,10 @@ public class AmendTicketController {
 	private ResultSet rs;
 	private ResourceBundle strBundle;
 	private AppUtil appUtil;
+	private String currentDirectory;
 	
 	public void initialize() throws Exception, SQLException {
-		
+		currentDirectory = Paths.get("").toAbsolutePath().toString();
 		con = DatabaseConnect.getConnection();
 		strBundle = ResourceBundle.getBundle("com.aiim.app.resource.bundle");
 		appUtil = new AppUtil();
@@ -189,6 +200,8 @@ public class AmendTicketController {
         			statusBtn.setVisible(false);
         			nteBtn.setVisible(false);
         			assignedTeam.setDisable(true);
+        			retrain();
+        			
         		}
         		else {
         			throw new Exception("Error");
@@ -205,6 +218,62 @@ public class AmendTicketController {
     		//update files in db
     	}
     }
+    private void retrain() throws Exception {
+    	//check is train mode on
+    	// download latest model files
+    	appUtil.setLabels();
+    	appUtil.downloadFiles();
+    	
+    	
+    	String filename = assignedTeam.getValue() + ".txt";
+		FileWriter fw = new FileWriter(currentDirectory+"/files/"+filename, true);
+	    BufferedWriter bw = new BufferedWriter(fw);
+	    bw.newLine();
+	    bw.write(details.getText());
+	    bw.close();
+	    DataSetIter dataSetIter = new DataSetIter();
+	    Network network = new Network();
+	    ComputationGraph currentModel = network.restoreModel(currentDirectory + "/files/cnn_model.zip");
+	    try {
+	    	network.retrain(currentModel, dataSetIter.getDataSetIterator());
+	    	network.saveModel(currentModel, currentDirectory + "/files/cnn_model.zip");
+	    	updateFile(filename);
+	    	updateFile("cnn_model.zip");
+	    	//update file in db with extra line
+	    }
+	    catch (Exception e) {
+	    	e.printStackTrace();
+	    	System.out.println("unabke to retrain, will not update files");
+	    }
+	    	
+    }
+    public void updateFile(String filename) throws SQLException, IOException {
+		File file;
+	    file = new File(currentDirectory+"/files/"+filename);// ...(file is initialised)...
+	    byte[] fileContent = Files.readAllBytes(file.toPath());
+	    String mode = "testmode";
+	    long filelength = file.length();
+	    long filelengthinkb = filelength/1024;
+	    con.setAutoCommit(false);
+		sqlStatement = con.prepareStatement("USE [honsdb] UPDATE tblClassifier SET size=?, modDate=?, fileContent=? WHERE fileName=?");
+		sqlStatement.setLong(1, filelengthinkb);
+		sqlStatement.setObject(2, appUtil.getDate());
+		sqlStatement.setBytes(3, fileContent);
+		sqlStatement.setString(4, filename);
+		
+		if (sqlStatement.executeUpdate() == 1)
+		{
+			con.commit();
+			System.out.println("Updated successfully");
+		}
+		else
+		{
+			System.out.println("Problem occured during update");
+		}
+	}
+	    
+	 
+    
     private void setDetails() throws Exception {
     	con.setAutoCommit(false);
     	sqlStatement = con.prepareStatement(strBundle.getString("sqlSelect7"));
