@@ -1,22 +1,14 @@
 package com.aiim.app.controller;
 
-import static java.nio.file.StandardCopyOption.*;
 import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.security.NoSuchAlgorithmException;
-import java.sql.Blob;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.ResourceBundle;
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.digest.DigestUtils;
-import org.nd4j.linalg.dataset.api.iterator.DataSetIterator;
-import com.aiim.app.ai.AI;
 import com.aiim.app.database.DatabaseConnect;
 import com.aiim.app.resource.ViewNames;
 import com.aiim.app.util.Session;
@@ -47,47 +39,13 @@ public class LoginController {
 	private String teamName;
 	private String user;
 	private String fullname;
-	private DataSetIterator trainIter;
-	private ArrayList<String> list;
 	private PreparedStatement sqlStatement;
-	private String currentDirectory;
 	private ResultSet rs;
         
     public void initialize() throws Exception {
-    	list = new ArrayList<String> ();
     	strBundle = ResourceBundle.getBundle("com.aiim.app.resource.bundle");
     	ViewController.createInstance();
-    	con = DatabaseConnect.getConnection();
-    	setLabels();
-    	downloadFiles();
-    	AI iter = new AI();
-    	trainIter = iter.getDataSetIterator();
-    	Session.setMyIter(iter);
-    	Session.setIter(trainIter);
-    	
-    }
-    public void downloadFiles() throws IOException, SQLException {
-    	currentDirectory = Paths.get("").toAbsolutePath().toString();
-		sqlStatement = con.prepareStatement(strBundle.getString("sqlSelect2"));
-		rs = sqlStatement.executeQuery();
-			while (rs.next()) {
-				String filename = rs.getString(1);
-				Blob content = rs.getBlob(2);
-				InputStream inputstr = content.getBinaryStream();
-				Files.copy(inputstr, Paths.get(currentDirectory+"/files/"+filename), REPLACE_EXISTING);
-			}
-	}
-    
-    public void setLabels() throws SQLException {
-    	sqlStatement = con.prepareStatement(strBundle.getString("sqlSelect3"));
-		rs = sqlStatement.executeQuery();
-			while (rs.next()) {
-				String label = rs.getString(1);
-				list.add(label);
-			}
-		//remove general label to leave only prediction labels
-		list.remove("general");
-		Session.setPredictionLabels(list);
+    	con = DatabaseConnect.getConnection();	
     }
     
     @FXML protected void dashView(ActionEvent event) throws IOException, SQLException, ClassNotFoundException, NoSuchAlgorithmException, DecoderException  {

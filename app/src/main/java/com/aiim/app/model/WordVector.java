@@ -1,4 +1,4 @@
-package com.aiim.app.ai;
+package com.aiim.app.model;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -21,18 +21,16 @@ import org.deeplearning4j.text.tokenization.tokenizerfactory.TokenizerFactory;
 public class WordVector {
 	
 	//String filePath = new ClassPathResource("raw_sentences.txt").getFile().getAbsolutePath();
+	private File VECTOR_FILE;
+	private String PATH;
 	
-	public void generateVectors() throws IOException {
-	String currentDirectory = Paths.get("").toAbsolutePath().toString();
-	//String filePath = new ClassPathResource(currentDirectory + "/src/main/java/com/aiim/app/cnn/rawdata.txt").getFile().getAbsolutePath();
-	//System.out.println(filePath);
-	//String currentDirectory = Paths.get("").toAbsolutePath().toString();
-	File f = new File(currentDirectory + "/src/main/java/com/aiim/app/cnn/rawtext5.txt");
-	String filePath = f.getPath();
+	public Word2Vec buildVectors(String rawTextFilePath, String stopWordsPath) throws IOException {
+	VECTOR_FILE = new File(rawTextFilePath);
+	PATH = VECTOR_FILE.getPath();
 	//System.out.println(filePath);
 
     // Strip white space before and after for each line
-    SentenceIterator iter = new BasicLineIterator(filePath);
+    SentenceIterator iter = new BasicLineIterator(PATH);
     // Split on white spaces in the line to get words
     TokenizerFactory t = new DefaultTokenizerFactory();
     
@@ -43,7 +41,7 @@ public class WordVector {
     }
    
     
-    Scanner s = new Scanner(new File(currentDirectory + "/src/main/java/com/aiim/app/cnn/english_stop_words.txt"));
+    Scanner s = new Scanner(new File(stopWordsPath));
     ArrayList<String> list = new ArrayList<String>();
     while (s.hasNextLine()){
         list.add(s.nextLine());
@@ -62,19 +60,17 @@ public class WordVector {
             .tokenizerFactory(t)
             .build();
     vec.fit();
-
-
-
-    // Write word vectors to file
-    WordVectorSerializer.writeWord2VecModel(vec, "latestVectors5.txt");
-    
-    String word = "guidewire";
-    String word2 = "security";
-    // Prints out the closest 10 words to "day". An example on what to do with these Word Vectors.
-    Collection<String> lst = vec.wordsNearest(word, 20);
-    Collection<String> lstone = vec.wordsNearest(word2, 20);
-    System.out.println("10 Words closest to " +word + ": " +lst);
-    System.out.println("10 Words closest to " +word2 + ": " +lstone);
+    return vec;
+	}
+	
+	public Collection<String> viewSimilarWords (Word2Vec vec, String target, int numWords) {
+		Collection<String> listOfWords = vec.wordsNearest(target, numWords);
+	    System.out.println(numWords + "closest to " +target + ": " +listOfWords);
+	    return listOfWords;
+	}
+	
+	public void saveVectorToFile(Word2Vec vec) {
+		WordVectorSerializer.writeWord2VecModel(vec, "latestVectors5.txt");
 	}
 
 }

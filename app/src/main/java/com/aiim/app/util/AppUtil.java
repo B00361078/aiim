@@ -73,9 +73,9 @@ public class AppUtil {
         return alert;
     }
 	public void executeTask(Task<?> task) {
-        Thread dbThread = new Thread(task, "dbThread");
-        dbThread.setDaemon(true);
-        dbThread.start();
+        Thread thread = new Thread(task, "thread");
+        thread.setDaemon(true);
+        thread.start();
     }
 	
 	public void uploadFile(String fileName, String mode) throws Exception {

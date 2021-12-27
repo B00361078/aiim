@@ -1,10 +1,7 @@
 package com.aiim.app.util;
 
 import java.util.ArrayList;
-
 import org.nd4j.linalg.dataset.api.iterator.DataSetIterator;
-
-import com.aiim.app.ai.AI;
 
 public class Session {
 	
@@ -15,8 +12,7 @@ public class Session {
 	private static String fullName;
 	private static String teamID;
 	private static String currentTicket;
-	private static DataSetIterator iter;
-	private static AI myIter;
+	private static DataSetIterator dataIter;
 	private static ArrayList<String> predictionLabels;
 
 	private Session() {
@@ -49,11 +45,8 @@ public class Session {
 	public static String getCurrentTicket() {
 		return currentTicket;
 	}
-	public static DataSetIterator getIter() {
-		return iter;
-	}
-	public static AI getMyIter() {
-		return myIter;
+	public static DataSetIterator getDataIter() {
+		return dataIter;
 	}
 
 	public static void setUsername(String username) {
@@ -88,6 +81,9 @@ public class Session {
 	public static void setCurrentTicket(String currentTicket) {
 		Session.currentTicket = currentTicket;
 	}
+	public static void setDataIter(DataSetIterator trainIter) {
+		Session.dataIter = trainIter;
+	}
 	public static void clearSession () {
 		setFullName(null);
 		setPermissionLevel(1);
@@ -95,18 +91,6 @@ public class Session {
 		setUsername(null);
 		setTeamID(null);
 		setCurrentTicket(null);
-		setPredictionLabels(null);
-		session = null;
-	}
-
-	public static void setIter(DataSetIterator trainIter) {
-		Session.iter = trainIter;// TODO Auto-generated method stub
-		
-	}
-
-	public static void setMyIter(AI iter2) {
-		Session.myIter = iter2;// TODO Auto-generated method stub
-		
 	}
 
 	public static ArrayList<String> getPredictionLabels() {

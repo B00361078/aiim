@@ -7,18 +7,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
-import java.util.concurrent.TimeUnit;
-import com.aiim.app.ai.AI;
 import com.aiim.app.database.DatabaseConnect;
 import com.aiim.app.model.Note;
 import com.aiim.app.resource.ViewNames;
 import com.aiim.app.util.AppUtil;
 import com.aiim.app.util.Session;
-import javafx.beans.binding.Bindings;
-import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
-import javafx.scene.Cursor;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
@@ -28,13 +23,11 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.Labeled;
-import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.GridPane;
-import javafx.stage.Stage;
 
 /* The following class handles the dashboard interface by switching the current subScene. Part of MVC design Pattern as a controller.
  * Neil Campbell 14/12/2021, B00361078
@@ -65,7 +58,6 @@ public class AmendTicketController {
 	private String ticketStatus;
 	private String message;
 	private String updatedTeamID;
-	private PreparedStatement sqlStatment;
 	private ResultSet rs;
 	private ResourceBundle strBundle;
 	private AppUtil appUtil;
@@ -82,9 +74,17 @@ public class AmendTicketController {
 		nteBtn.setVisible(false);
 		assignedTeam.setDisable(true);
 		setDisplay(Session.getPermissionLevel());
+		updateTable();
+		setNoteTable();
+		setAssignedAction();
+		status(ticketStatus);
+		assignedTeam.getItems();	
+    	details.setWrapText(true);
+    	details.setEditable(false);
+    }
+	public void setNoteTable() {
 		noteTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 		noteTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-		updateTable();
 		noteTable.setRowFactory( tv -> {
     	    TableRow<Note.Builder> row = new TableRow<>();
     	    row.setOnMouseClicked(event -> {
@@ -95,28 +95,22 @@ public class AmendTicketController {
 					} catch (SQLException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
-					}
-
-    	           
+					}  
     	        }
     	    });
     	    return row ;
     	});
-		status(ticketStatus);
-		assignedTeam.getItems();	
-    	//reporter.setText(Session.getFullName());
-    	//reporter.setText(Session.getFullName());
-    	details.setWrapText(true);
-    	details.setEditable(false);
-    	assignedTeam.setOnAction((event) -> {
-		    	Alert alert = new Alert(AlertType.CONFIRMATION);
-	    		alert.setHeaderText("Are you sure you want to change the assigned team?");
-	    		alert.showAndWait();
-	    		if (alert.getResult() == ButtonType.OK) {
-	    			try {
-	    				sqlStatement = con.prepareStatement("USE [honsdb] SELECT teamID FROM tblTeam WHERE name = ?");
-						sqlStatement.setString(1, assignedTeam.getValue().toString());
-						ResultSet rs = sqlStatement.executeQuery();
+	}
+	public void setAssignedAction() {
+		assignedTeam.setOnAction((event) -> {
+	    	Alert alert = new Alert(AlertType.CONFIRMATION);
+    		alert.setHeaderText("Are you sure you want to change the assigned team?");
+    		alert.showAndWait();
+    		if (alert.getResult() == ButtonType.OK) {
+    			try {
+    				sqlStatement = con.prepareStatement("USE [honsdb] SELECT teamID FROM tblTeam WHERE name = ?");
+					sqlStatement.setString(1, assignedTeam.getValue().toString());
+					rs = sqlStatement.executeQuery();
 
 			        	while(rs.next()){
 			        		updatedTeamID = rs.getString(1);
@@ -140,7 +134,8 @@ public class AmendTicketController {
 					}	 	
 	    		}
 		});
-    }
+		
+	}
     
 
     private void status (String status) {
@@ -162,12 +157,10 @@ public class AmendTicketController {
     private void changeStatus (String command) throws Exception {
     	switch (command) {
     	case "Move to In Progress":
-    		java.util.Date date = new java.util.Date();
-    	    java.sql.Timestamp sqlDate = new java.sql.Timestamp(date.getTime());
     	    con.setAutoCommit(false);	
     	    sqlStatement = con.prepareStatement("USE [honsdb] UPDATE tblTicket SET status = ?, dateUpdated = ? WHERE ticketID = ?");	 	
     	    sqlStatement.setString(1, "inprogress");
-    	    sqlStatement.setObject(2, sqlDate);
+    	    sqlStatement.setObject(2, appUtil.getDate());
     	    sqlStatement.setString(3, Session.getCurrentTicket());
     	    if (sqlStatement.executeUpdate() == 1){
     			con.commit();
@@ -184,12 +177,10 @@ public class AmendTicketController {
     		alert.setHeaderText("Are you sure you want to close this ticket?");
     		alert.showAndWait();
     		if (alert.getResult() == ButtonType.OK) {
-    			java.util.Date date1 = new java.util.Date();
-        	    java.sql.Timestamp sqlDate1 = new java.sql.Timestamp(date1.getTime());
         	    con.setAutoCommit(false);	
         	    sqlStatement = con.prepareStatement("USE [honsdb] UPDATE tblTicket SET status = ?, dateUpdated = ? WHERE ticketID = ?");	 	
         	    sqlStatement.setString(1, "closed");
-        	    sqlStatement.setObject(2, sqlDate1);
+        	    sqlStatement.setObject(2, appUtil.getDate());
         	    sqlStatement.setString(3, Session.getCurrentTicket());
         	    if (sqlStatement.executeUpdate() == 1){
         			con.commit();
@@ -256,12 +247,10 @@ public class AmendTicketController {
     	
     }
     public void assignToMe() throws Exception { 
-    	java.util.Date date = new java.util.Date();
-	    java.sql.Timestamp sqlDate = new java.sql.Timestamp(date.getTime());
 	    con.setAutoCommit(false);	
 	    sqlStatement = con.prepareStatement("USE [honsdb] UPDATE tblTicket SET assignee = ?, dateUpdated = ? WHERE ticketID = ?");	 	
 	    sqlStatement.setString(1, Session.getUsername());
-	    sqlStatement.setObject(2, sqlDate);
+	    sqlStatement.setObject(2, appUtil.getDate());
 	    sqlStatement.setString(3, Session.getCurrentTicket());
 	    if (sqlStatement.executeUpdate() == 1){
 			con.commit();
@@ -275,21 +264,19 @@ public class AmendTicketController {
     }
 
     public void insert() throws Exception {
-	    java.util.Date date = new java.util.Date();
-	    java.sql.Timestamp sqlDate = new java.sql.Timestamp(date.getTime());
 	    con.setAutoCommit(false);
 	    
 	   
-	    sqlStatment = con.prepareStatement("USE [honsdb] INSERT INTO tblNote (author,ticketRef,message,dateCreated) VALUES(?,?,?,?)");
+	    sqlStatement = con.prepareStatement("USE [honsdb] INSERT INTO tblNote (author,ticketRef,message,dateCreated) VALUES(?,?,?,?)");
 	    
-	    sqlStatment.setString(1, Session.getUsername());
-	    sqlStatment.setString(2, Session.getCurrentTicket());
-	    sqlStatment.setString(3, message);
-	    sqlStatment.setObject(4, sqlDate);
+	    sqlStatement.setString(1, Session.getUsername());
+	    sqlStatement.setString(2, Session.getCurrentTicket());
+	    sqlStatement.setString(3, message);
+	    sqlStatement.setObject(4, appUtil.getDate());
 	    		
 	    		
 	    		
-	    		if (sqlStatment.executeUpdate() == 1)
+	    		if (sqlStatement.executeUpdate() == 1)
 	    		{
 	    			con.commit();
 	    			System.out.println("Note added");
@@ -304,66 +291,9 @@ public class AmendTicketController {
     public void back() throws IOException {
     	ViewController.createInstance().switchToView(ViewNames.HOME);
     }
-	private class MyTask extends Task {
+	
 
-        private MyTask() {
-            updateTitle("Raise New Ticket");
-        }
-
-        @Override
-        protected String call() throws Exception {
-        	String mystr = "hello";
-            updateMessage("Raising ticket, please wait.");
-            System.out.println("my string");
-            new AI();
-        	//prediction = ai.classify(details.getText(), trainIter);
-        	insert();
-            TimeUnit.SECONDS.sleep(5);
-            updateMessage("Ticket raised successfully");
-            updateProgress(1, 1);
-            return mystr;
-        }
-
-        @Override
-        protected void running() {
-            System.out.println("Raising ticket task is running...");
-        }
-
-        @Override
-        protected void succeeded() {
-            System.out.println("Raising ticket task is successful.");
-        }
-        
-    }
-    private void executeTask(Task<?> task) {
-        Thread dbThread = new Thread(task, "dbThread");
-        dbThread.setDaemon(true);
-        dbThread.start();
-    }
-
-    // creates the Alert and necessary controls to observe the task
-    private Alert createProgressAlert(Stage owner, Task<?> task) {
-        Alert alert = new Alert(Alert.AlertType.NONE);
-        alert.initOwner(owner);
-        alert.titleProperty().bind(task.titleProperty());
-        alert.contentTextProperty().bind(task.messageProperty());
-
-        ProgressIndicator pIndicator = new ProgressIndicator();
-        pIndicator.progressProperty().bind(task.progressProperty());
-        alert.setGraphic(pIndicator);
-
-        alert.getDialogPane().getButtonTypes().add(ButtonType.OK);
-        alert.getDialogPane().lookupButton(ButtonType.OK)
-                .disableProperty().bind(task.runningProperty());       
-
-        alert.getDialogPane().cursorProperty().bind(
-		Bindings.when(task.runningProperty())
-                    .then(Cursor.WAIT)
-                    .otherwise(Cursor.DEFAULT)
-        );
-
-        return alert;
-    }
+    
     
     @FXML public void addNote() throws Exception {
     	

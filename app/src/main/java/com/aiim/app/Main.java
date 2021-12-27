@@ -7,7 +7,9 @@ import javafx.stage.Stage;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
+import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -15,63 +17,67 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.sql.Blob;
 import java.sql.Connection;
-import java.sql.Date;
-
-import org.deeplearning4j.iterator.CnnSentenceDataSetIterator;
 import org.nd4j.linalg.dataset.api.iterator.DataSetIterator;
-
-import com.aiim.app.ai.AI;
-import com.aiim.app.ai.Network;
-import com.aiim.app.ai.WordVector;
 import com.aiim.app.controller.ViewController;
 import com.aiim.app.database.DatabaseConnect;
+import com.aiim.app.model.DataSetIter;
 import com.aiim.app.resource.ViewNames;
 import com.aiim.app.util.Session;
 
 public class Main extends Application {
 	
-	private ViewController viewController;
 	private Connection con;
 	private ResourceBundle strBundle;
 	private Stage stage;
-	//strBundle = ResourceBundle.getBundle("com.aiim.app.resources.bundle");
 	private DataSetIterator trainIter;
+	private String currentDirectory;
+	private PreparedStatement sqlStatement;
+	private ResultSet rs;
+	private ArrayList<String> list;
 	
 	@Override
     public void start(Stage stage) throws Exception {
-		//WordVector wv = new WordVector();
-		//wv.generateVectors();
-		//MyCnn2.cnn();
 		this.stage = stage;
-		//ViewController.createInstance();
-		//ViewController vc = new ViewController();
-		//viewController.createViewController();
 		ViewController.createInstance().setCurrentStage(stage);
-		//viewController.setCurrentStage(stage);
-		//viewController.switchToView(ViewNames.LOGIN);
 		ViewController.createInstance().switchToView(ViewNames.LOGIN);
 		strBundle = ResourceBundle.getBundle("com.aiim.app.resource.bundle");
 		con = DatabaseConnect.getConnection();
 		System.out.println("con is " + con);
 		checkDBConnect();
-		//downloadFiles();
-		
-		//download();er
-		//update();
-		//upload();
-		//WordVector wv = new WordVector();
-		//wv.generateVectors();
-		//MyCnn2.cnn();
-		//CnnSentenceClassificationExample.cnn();
-		//System.out.println(con);
-		
+		setLabels();
+		downloadFiles();
+		DataSetIter iter = new DataSetIter();
+    	trainIter = iter.getDataSetIterator();
+    	Session.setDataIter(trainIter);	
     }
 	@Override
 	public void stop() throws IOException{
-		String currentDirectory = Paths.get("").toAbsolutePath().toString();
-	    System.out.println("Stage is closing");
 	    FileUtils.cleanDirectory(new File(currentDirectory+"/files")); 
 	}
+	public void downloadFiles() throws IOException, SQLException {
+    	currentDirectory = Paths.get("").toAbsolutePath().toString();
+		sqlStatement = con.prepareStatement(strBundle.getString("sqlSelect2"));
+		rs = sqlStatement.executeQuery();
+			while (rs.next()) {
+				String filename = rs.getString(1);
+				Blob content = rs.getBlob(2);
+				InputStream inputstr = content.getBinaryStream();
+				Files.copy(inputstr, Paths.get(currentDirectory+"/files/"+filename), REPLACE_EXISTING);
+			}
+	}
+    
+    public void setLabels() throws SQLException {
+    	list = new ArrayList<String> ();
+    	sqlStatement = con.prepareStatement(strBundle.getString("sqlSelect3"));
+		rs = sqlStatement.executeQuery();
+			while (rs.next()) {
+				String label = rs.getString(1);
+				list.add(label);
+			}
+		//remove general label to leave only prediction labels
+		list.remove("general");
+		Session.setPredictionLabels(list);
+    }
 	
 	void checkDBConnect() {
 		if (con != null) {
@@ -121,19 +127,7 @@ public class Main extends Application {
 	    		}
 	    
 	}
-	//download file from db
-	public void downloadFiles() throws IOException, SQLException {
-		PreparedStatement prepared_statement2 = con.prepareStatement("USE [honsdb] SELECT fileName,fileContent FROM tblClassifier");
-		ResultSet rs = prepared_statement2.executeQuery();
-		
-		while (rs.next()) {
-			String filename = rs.getString(1);
-			Blob blob = rs.getBlob(2);
-			InputStream inputstr = blob.getBinaryStream();
-			Files.copy(inputstr, Paths.get(filename));
-		}
-		
-	}
+
 	//update to db
 	public void update() throws SQLException, IOException {
 		File file;
