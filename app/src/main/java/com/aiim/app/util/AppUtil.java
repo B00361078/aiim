@@ -102,6 +102,7 @@ public class AppUtil {
 			}
 		//remove general label to leave only prediction labels
 		list.remove("general");
+		list.sort(String::compareToIgnoreCase);
 		Session.setPredictionLabels(list);
     }
 	

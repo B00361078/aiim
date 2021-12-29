@@ -7,6 +7,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
+
+import org.nd4j.linalg.api.ndarray.INDArray;
+
 import com.aiim.app.database.DatabaseConnect;
 import com.aiim.app.model.DataSetIter;
 import com.aiim.app.model.Network;
@@ -118,10 +121,10 @@ public class TicketController {
             appUtil.setLabels();
             appUtil.downloadFiles();
             DataSetIter dataSetIter = new DataSetIter();
-	            if (appUtil.getAIMode().contains("ON")) {
-	            	while (!Thread.interrupted()) {
-	            	prediction = network.classify(network.restoreModel(currentDirectory + "/files/cnn_model.zip"), details.getText(), dataSetIter.getDataSetIterator());
-	            	}
+	        INDArray features = network.getFeatures(details.getText(), dataSetIter.getDataSetIterator());
+	        System.out.println("the features are  - " + features);
+				if (appUtil.getAIMode().contains("ON") && (!(features == null))) {
+	            	prediction = network.classify(features, network.restoreModel(currentDirectory + "/files/cnn_model.zip"));
 	            }
 	            else {
 	        	prediction = "general";

@@ -16,7 +16,10 @@ import org.deeplearning4j.util.ModelSerializer;
 import org.nd4j.linalg.activations.Activation;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.dataset.api.iterator.DataSetIterator;
+import org.nd4j.linalg.exception.ND4JIllegalStateException;
 import org.nd4j.linalg.lossfunctions.LossFunctions;
+
+import com.aiim.app.util.Session;
 
 import java.io.File;
 import java.io.IOException;
@@ -109,14 +112,22 @@ public class Network {
     	ModelSerializer.writeModel(model, modelFile, false);
 	}
     
-    public String classify(ComputationGraph model,String verbatim, DataSetIterator trainIter) throws IOException {
-
-
-    	INDArray features = ((CnnSentenceDataSetIterator) trainIter).loadSingleSentence(verbatim);
+    public INDArray getFeatures (String verbatim, DataSetIterator trainIter) {
+    	INDArray features = null;
+    	System.out.println("train labels - " + trainIter.getLabels());
+    	try {
+    		features = ((CnnSentenceDataSetIterator) trainIter).loadSingleSentence(verbatim);
+    	}
+    	catch (ND4JIllegalStateException e) {
+    		e.printStackTrace();
+    	}
+		return features;
+    }
+    
+    public String classify(INDArray features,ComputationGraph model) throws IOException {
     	
     	INDArray predictions = model.outputSingle(features);
-        List<String> labels = trainIter.getLabels();
-        System.out.println("got here3");
+        List<String> labels = Session.getPredictionLabels();
         System.out.println("\n\nPredictions for my sentence is:");
 	        for( int i=0; i<labels.size(); i++ ){
 	            System.out.println("Prediction(" + labels.get(i) + ") = " + predictions.getDouble(i)); 
