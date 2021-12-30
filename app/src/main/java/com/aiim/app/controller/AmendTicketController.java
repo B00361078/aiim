@@ -501,33 +501,29 @@ public class AmendTicketController {
         protected String call() throws Exception {
         	
             updateMessage("Closing ticket, please wait.");
-            
-            
             con.setAutoCommit(false);	
     	    sqlStatement = con.prepareStatement("USE [honsdb] UPDATE tblTicket SET status = ?, dateUpdated = ? WHERE ticketID = ?");	 	
     	    sqlStatement.setString(1, "closed");
     	    sqlStatement.setObject(2, appUtil.getDate());
     	    sqlStatement.setString(3, Session.getCurrentTicket());
-    	    if (sqlStatement.executeUpdate() == 1){
-    			con.commit();
-    			System.out.println("Status updated");		
-    		}
-    		else {
-    			throw new Exception("Error");
-    		}
+	    	    if (sqlStatement.executeUpdate() == 1){
+	    			con.commit();
+	    			System.out.println("Status updated");		
+	    		}
+	    		else {
+	    			throw new Exception("Error");
+	    		}
     	    appUtil.setLabels();
             appUtil.downloadFiles();
     	    DataSetIter dataSetIter = new DataSetIter();
     	    ComputationGraph currentModel = network.restoreModel(currentDirectory + "/files/cnn_model.zip");
     	    INDArray features = network.getFeatures(details.getText(), dataSetIter.getDataSetIterator());
-
-
-    	    if ((features  != null) && (appUtil.getMode("trainMode").contains("ON"))) {
-    	    	retrain(currentModel, dataSetIter);
-    	    }
-    	    else {
-    	    	System.out.println("Will not retrain");
-    	    }
+	    	    if ((features  != null) && (appUtil.getMode("trainMode").contains("ON"))) {
+	    	    	retrain(currentModel, dataSetIter);
+	    	    }
+	    	    else {
+	    	    	System.out.println("Will not retrain");
+	    	    }
             updateMessage("Ticket closed successfully");
             updateProgress(1, 1);
             return null;
