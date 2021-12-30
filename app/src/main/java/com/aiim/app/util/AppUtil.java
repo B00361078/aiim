@@ -1,7 +1,6 @@
 package com.aiim.app.util;
 
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -30,7 +29,6 @@ public class AppUtil {
 	private ResourceBundle strBundle;
 	private PreparedStatement sqlStatment;
 	private Connection con;
-	private String statement;
 	private ResultSet rs;
 	private PreparedStatement sqlStatement;
 	private String currentDirectory;
@@ -40,14 +38,20 @@ public class AppUtil {
 		strBundle = ResourceBundle.getBundle("com.aiim.app.resource.bundle");
 		con = DatabaseConnect.getConnection();
 	}
-	public String getAIMode() throws Exception {
+	public String getMode(String param) throws Exception {
 		String mode = null;
-		statement = strBundle.getString("sqlSelect1");
-		sqlStatment = con.prepareStatement(statement);
+		switch(param) {
+			case "assignMode":
+				sqlStatment = con.prepareStatement(strBundle.getString("sqlSelect1"));
+				break;
+			case "trainMode":
+				sqlStatment = con.prepareStatement(strBundle.getString("sqlSelect9"));
+				break;
+		}
 		sqlStatment.setInt(1, 1);
 		rs = sqlStatment.executeQuery();
 			while(rs.next()){
-	    		mode = rs.getString(1);
+				mode = rs.getString(1);
 	        }
 		return mode;
 	}

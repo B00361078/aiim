@@ -26,8 +26,10 @@ public class SettingController {
 	private PreparedStatement sqlStatement;
 	private Connection con;
 	@FXML private Button backBtn;
-	@FXML private RadioButton radioOn;
-	@FXML private RadioButton radioOff;
+	@FXML private RadioButton assignOn;
+	@FXML private RadioButton assignOff;
+	@FXML private RadioButton trainOn;
+	@FXML private RadioButton trainOff;
 	private AppUtil appUtil;
 	private Alert alert;
 	private ResourceBundle strBundle;
@@ -36,47 +38,71 @@ public class SettingController {
 		strBundle = ResourceBundle.getBundle("com.aiim.app.resource.bundle");
 		appUtil = new AppUtil();
 		con = DatabaseConnect.getConnection();
-		ToggleGroup radios = new ToggleGroup();
-		setRadio(appUtil.getAIMode());
-		radioOn.setToggleGroup(radios);
-		radioOff.setToggleGroup(radios);
-    	setAction(radioOn, "Are you sure you want to enable DataSetIter mode?", "ON", "Enabled");
-    	setAction(radioOff, "Are you sure you want to disable DataSetIter mode?", "OFF", "Disabled");
+		ToggleGroup assignRadios = new ToggleGroup();
+		ToggleGroup trainRadios = new ToggleGroup();
+		setRadio("assignMode", appUtil.getMode("assignMode"));
+		setRadio("trainMode", appUtil.getMode("trainMode"));
+		assignOn.setToggleGroup(assignRadios);
+		assignOff.setToggleGroup(assignRadios);
+		trainOn.setToggleGroup(trainRadios);
+		trainOff.setToggleGroup(trainRadios);
+    	setAction(assignOn, "Are you sure you want to enable Auto-assign mode?", "ON", "Enabled", "Auto-assign");
+    	setAction(assignOff, "Are you sure you want to disable Auto-assign mode?", "OFF", "Disabled", "Auto-assign");
+    	setAction(trainOn, "Are you sure you want to enable Auto-train mode?", "ON", "Enabled", "Auto-train");
+    	setAction(trainOff, "Are you sure you want to disable Auto-train mode?", "OFF", "Disabled", "Auto-train");
     }
     
-    public void setAction (RadioButton button, String message, String mode, String req) {
+    public void setAction (RadioButton button, String message, String mode, String req, String modeName) {
     	button.setOnAction(event -> {
             alert = new Alert(AlertType.CONFIRMATION);
             alert.setHeaderText(message);
             alert.showAndWait();
             	if (alert.getResult() == ButtonType.OK) {
             		try {
-						updateMode(mode);
+						updateMode(mode, modeName);
 						alert = new Alert(AlertType.INFORMATION);
-	            		alert.setHeaderText("DataSetIter mode now " + req);
+	            		alert.setHeaderText(modeName +" mode now " + req);
+	            		alert.show();
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
             	}
             });
     }
-    public void setRadio(String mode) throws Exception {
+    public void setRadio(String mode, String modeVal) throws Exception {
     	switch(mode) {
-    	case "ON":
-    		radioOn.setSelected(true);
-    		radioOff.setSelected(false);
+    	case "assignMode":
+    		if (modeVal.contains("ON")) {
+    			assignOn.setSelected(true);
+    		}
+    		else {
+    			assignOn.setSelected(false);
+    			assignOff.setSelected(true);
+    		}
     		break;
-    	case "OFF":
-    		radioOn.setSelected(false);
-    		radioOff.setSelected(true);
+    	case "trainMode":
+    		if (modeVal.contains("ON")) {
+    			trainOn.setSelected(true);
+    		}
+    		else {
+    			trainOn.setSelected(false);	
+    			trainOff.setSelected(true);
+    		}
     		break;
     	}
     }
 
-    public void updateMode(String mode) throws Exception {
-	    con.setAutoCommit(false);	 
-	    sqlStatement = con.prepareStatement(strBundle.getString("sqlUpdate1"));
-	    sqlStatement.setString(1, mode);
+    public void updateMode(String modeVal, String mode) throws Exception {
+	    con.setAutoCommit(false);
+	    switch(mode) {
+		    case "Auto-assign":
+		    	sqlStatement = con.prepareStatement(strBundle.getString("sqlUpdate1"));
+		    	break;
+		    case "Auto-train":
+		    	sqlStatement = con.prepareStatement(strBundle.getString("sqlUpdate2"));
+		    	break;
+	    }
+	    sqlStatement.setString(1, modeVal);
 	    sqlStatement.setObject(2, appUtil.getDate());
 	    sqlStatement.setInt(3, 1);
     		if (sqlStatement.executeUpdate() == 1){

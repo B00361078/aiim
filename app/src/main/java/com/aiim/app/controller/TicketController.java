@@ -123,7 +123,7 @@ public class TicketController {
             DataSetIter dataSetIter = new DataSetIter();
 	        INDArray features = network.getFeatures(details.getText(), dataSetIter.getDataSetIterator());
 	        System.out.println("the features are  - " + features);
-				if (appUtil.getAIMode().contains("ON") && (!(features == null))) {
+				if (appUtil.getMode("assignMode").contains("ON") && (!(features == null))) {
 	            	prediction = network.classify(features, network.restoreModel(currentDirectory + "/files/cnn_model.zip"));
 	            }
 	            else {

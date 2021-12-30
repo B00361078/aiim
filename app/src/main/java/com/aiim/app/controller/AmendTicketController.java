@@ -13,6 +13,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 import org.deeplearning4j.nn.graph.ComputationGraph;
+import org.nd4j.linalg.api.ndarray.INDArray;
+
 import com.aiim.app.database.DatabaseConnect;
 import com.aiim.app.model.DataSetIter;
 import com.aiim.app.model.Network;
@@ -232,19 +234,26 @@ public class AmendTicketController {
 	    DataSetIter dataSetIter = new DataSetIter();
 	    Network network = new Network();
 	    ComputationGraph currentModel = network.restoreModel(currentDirectory + "/files/cnn_model.zip");
-	    try {
+	    INDArray features = network.getFeatures(details.getText(), dataSetIter.getDataSetIterator());
+	    if ((features  != null) && (appUtil.getMode("trainMode").contains("ON"))) {
+	    //try {
 	    	network.retrain(currentModel, dataSetIter.getDataSetIterator());
 	    	network.saveModel(currentModel, currentDirectory + "/files/cnn_model.zip");
 	    	updateFile(filename);
 	    	updateFile("cnn_model.zip");
 	    	//update file in db with extra line
+	    //}
+//	    catch (Exception e) {
+//	    	e.printStackTrace();
+//	    	System.out.println("unabke to retrain, will not update files");
+//	    }
 	    }
-	    catch (Exception e) {
-	    	e.printStackTrace();
-	    	System.out.println("unabke to retrain, will not update files");
+	    else {
+	    	System.out.println("Will not update files");
+	    	}
 	    }
 	    	
-    }
+    
     public void updateFile(String filename) throws SQLException, IOException {
 		File file;
 	    file = new File(currentDirectory+"/files/"+filename);// ...(file is initialised)...

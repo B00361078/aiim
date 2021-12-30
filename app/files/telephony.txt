@@ -1,0 +1,26 @@
+GI Claims Recovery :Cisco Finesse Supervisor Agent remote monitoring is not working:1 Application :
+Cisco Finesse access request Hi Team, Please could you set up Cisco Finess access for the following new starter
+My colleague needs access to Finesse but it seems she only has Finesse 1 installed on her profile and not Finesse 4. please can you clone my access so she can access finesse on her laptop or any desktop she is sat at?
+Are Vodafone able to advise why there is any possible reason why  Cisco Finesse in particular to run slowly - please be advised that this is also under investigation, the customer has asked us to reach out to you specifically as Cisco Finesse appears to be most adversely affected by this software. 
+Yes User reporting 5 home users have been logged out of Finesse and can no longer log on. Finesse will not load. 
+Cisco Finesse Supervisor Agent remote monitoring is not working
+Cisco desktop Cisco desktop will not open.
+CISCO AGENT  [PRD](CISCO AGENT) CISCO AGENT [PRD](CISCO AGENT) not opening
+cisco any connect cisco issue home worker
+reinstall cisco agent reinstall cisco agent
+Cisco Cisco Agent desktop keeps crashing
+Cant open cisco agaent desktop Cant open cisco agent desktop
+Cisco anyconnect user cannot log onto anyconnect
+User needs to be setup on Cisco VPN system User needs to be setup on Cisco VPN system
+members of staff are faced with a Cisco Screen which will not allow them to click on the 'login button'. When each agent moves to another PC they are able to login fine. 
+Hardphone configuration issue Model Incident notifies phone is being used by another agent Exact Error Message
+User is unable to log out of their hardphone User is unable to log out of their hardphone
+wires pulled out back of hardphone - waiting for phone to reconfigure , never reconfigured. When wires were inserted it didn't click, so likely that these are to become loose again.
+User approached local support as her hardphone has been sitting on `Ethernet Disconnected` since the weekend. I rebooted the hardphone and ensured that the cables were secure but the problem persists 
+Hardphone not working the screen is completely dead, all 6 buttons flash every 2 to 3 seconds.
+all calls going through to voicemail
+User contacted to report that when using headset and pressing "green button" to activate, headset is completely unresponsive and button enables loud speaker of hardphone itself. -Phone was working fine with headset all last week -issue developed for first time this week Please can you advise on this matter?
+Headset not picking up calls through the the headset - forced to use the handset
+ Needs extension number changing
+Believe the issue to be with the hardphone as the PC looses connection, soon as the phone is called the PC then picks up the network again
+Not able to use it as there is no dialing tone.  All cables have been checked on the phone and no issues there. 

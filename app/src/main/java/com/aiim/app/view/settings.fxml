@@ -23,8 +23,8 @@
         </rowConstraints>
          <children>
             <Label text="Auto assignment:" />
-            <RadioButton fx:id="radioOn" mnemonicParsing="false" text="Enable" GridPane.columnIndex="1" />
-            <RadioButton fx:id="radioOff" mnemonicParsing="false" text="Disable" GridPane.columnIndex="2" />
+            <RadioButton fx:id="assignOn" mnemonicParsing="false" text="Enable" GridPane.columnIndex="1" />
+            <RadioButton fx:id="assignOff" mnemonicParsing="false" text="Disable" GridPane.columnIndex="2" />
          </children>
       </GridPane>
       <Button fx:id="backBtn" layoutX="58.0" layoutY="331.0" mnemonicParsing="false" onAction="#back" text="Back to dashboard" />
@@ -40,8 +40,8 @@
          </rowConstraints>
          <children>
             <Label text="Auto training:" />
-            <RadioButton fx:id="radioOn1" mnemonicParsing="false" text="Enable" GridPane.columnIndex="1" />
-            <RadioButton fx:id="radioOff1" mnemonicParsing="false" text="Disable" GridPane.columnIndex="2" />
+            <RadioButton fx:id="trainOn" mnemonicParsing="false" text="Enable" GridPane.columnIndex="1" />
+            <RadioButton fx:id="trainOff" mnemonicParsing="false" text="Disable" GridPane.columnIndex="2" />
          </children>
       </GridPane>
    </children>
