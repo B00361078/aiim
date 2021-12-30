@@ -38,7 +38,7 @@ public class DataSetIter {
 					trainFile.close();
 				}
 				LabeledSentenceProvider sentenceProvider = new CollectionLabeledSentenceProvider(sentences, sentenceLabels);
-				
+				System.out.println("done");
 				return new CnnSentenceDataSetIterator.Builder()
 				.sentenceProvider(sentenceProvider)
 				.wordVectors(wordVectors)

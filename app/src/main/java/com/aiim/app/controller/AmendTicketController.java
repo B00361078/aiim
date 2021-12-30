@@ -14,6 +14,7 @@ import java.sql.SQLException;
 import java.util.ResourceBundle;
 import org.deeplearning4j.nn.graph.ComputationGraph;
 import org.nd4j.linalg.api.ndarray.INDArray;
+import org.nd4j.linalg.dataset.api.iterator.DataSetIterator;
 
 import com.aiim.app.database.DatabaseConnect;
 import com.aiim.app.model.DataSetIter;
@@ -22,6 +23,7 @@ import com.aiim.app.model.Note;
 import com.aiim.app.resource.ViewNames;
 import com.aiim.app.util.AppUtil;
 import com.aiim.app.util.Session;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.control.Alert;
@@ -72,10 +74,13 @@ public class AmendTicketController {
 	private ResourceBundle strBundle;
 	private AppUtil appUtil;
 	private String currentDirectory;
+	private Network network;
 	
 	public void initialize() throws Exception, SQLException {
+		network = new Network();
 		currentDirectory = Paths.get("").toAbsolutePath().toString();
 		con = DatabaseConnect.getConnection();
+		setRaiseAction();
 		strBundle = ResourceBundle.getBundle("com.aiim.app.resource.bundle");
 		appUtil = new AppUtil();
 		ticketNo.setText(Session.getCurrentTicket());
@@ -147,7 +152,55 @@ public class AmendTicketController {
 		});
 		
 	}
-    
+	public void setRaiseAction() {
+    	statusBtn.setOnAction(ae -> {
+            if (statusBtn.getText() == "Close Ticket") {
+            	statusBtn.setDisable(true);
+            	ae.consume();
+            	
+            	
+            ThreadTask task = new ThreadTask();
+            task.setOnSucceeded(e -> task.getValue());
+            Alert alert = appUtil.createProgressAlert(ViewController.createInstance().getCurrentStage(), task);          
+            Thread thread = new Thread(task, "thread");
+            thread.setDaemon(true);
+            thread.start();
+            alert.showAndWait();
+	            try {
+					ViewController.createInstance().switchToView(ViewNames.DASHBOARD);
+					//stop the thread
+					thread.interrupt();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+            else if (statusBtn.getText() == "Move to In Progress") {
+            	try {
+					con.setAutoCommit(false);
+					sqlStatement = con.prepareStatement("USE [honsdb] UPDATE tblTicket SET status = ?, dateUpdated = ? WHERE ticketID = ?");	 	
+	        	    sqlStatement.setString(1, "inprogress");
+	        	    sqlStatement.setObject(2, appUtil.getDate());
+	        	    sqlStatement.setString(3, Session.getCurrentTicket());
+	        	    if (sqlStatement.executeUpdate() == 1){
+	        			con.commit();
+	        			System.out.println("Status updated");
+	        			status.setText("inprogress");
+	        			statusBtn.setText("Close Ticket");
+	        		}
+	        		else {
+	        			throw new Exception("Error");
+	        		}
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}	
+            	
+            }
+    	});
+    	
+    	
+    }
 
     private void status (String status) {
     	if(status.contains("raised")) {
@@ -162,9 +215,9 @@ public class AmendTicketController {
 			assignedTeam.setDisable(true);
     	}
     }
-    @FXML private void clickStatus () throws Exception {
-    	changeStatus(statusBtn.getText());
-    }
+//    @FXML private void clickStatus () throws Exception {
+//    	changeStatus(statusBtn.getText());
+//    }
     private void changeStatus (String command) throws Exception {
     	switch (command) {
     	case "Move to In Progress":
@@ -184,45 +237,22 @@ public class AmendTicketController {
     		}
     		break;
     	case "Close Ticket":
-    		Alert alert = new Alert(AlertType.CONFIRMATION);
-    		alert.setHeaderText("Are you sure you want to close this ticket?");
-    		alert.showAndWait();
-    		if (alert.getResult() == ButtonType.OK) {
-        	    con.setAutoCommit(false);	
-        	    sqlStatement = con.prepareStatement("USE [honsdb] UPDATE tblTicket SET status = ?, dateUpdated = ? WHERE ticketID = ?");	 	
-        	    sqlStatement.setString(1, "closed");
-        	    sqlStatement.setObject(2, appUtil.getDate());
-        	    sqlStatement.setString(3, Session.getCurrentTicket());
-        	    if (sqlStatement.executeUpdate() == 1){
-        			con.commit();
-        			System.out.println("Status updated");
-        			status.setText("closed");
-        			statusBtn.setVisible(false);
-        			nteBtn.setVisible(false);
-        			assignedTeam.setDisable(true);
-        			retrain();
-        			
-        		}
-        		else {
-        			throw new Exception("Error");
-        		}
+    		ThreadTask task = new ThreadTask();
+    		task.setOnSucceeded(e -> task.getValue());
+            Alert alert = appUtil.createProgressAlert(ViewController.createInstance().getCurrentStage(), task);          
+            Thread thread = new Thread(task, "thread");
+            thread.setDaemon(true);
+            thread.start();
+            alert.showAndWait();
+            thread.interrupt();
+            ViewController.createInstance().switchToView(ViewNames.DASHBOARD);
     		}
-    		//DataSetIterator iter = Session.getMyIter().getUpdatedDataSetIterator(details.getText(), assignedTeam.getValue().toString());
-    		//Session.getMyIter().retrain(iter);
-    		break;
-    		// check training mode on
-    		
-    		// check verbatim suitable for training
-    		//append text to file
-    		//model fit
-    		//update files in db
-    	}
     }
-    private void retrain() throws Exception {
+    private void retrain(ComputationGraph currentModel, DataSetIter dataSetIter) throws Exception {
     	//check is train mode on
     	// download latest model files
-    	appUtil.setLabels();
-    	appUtil.downloadFiles();
+    	//appUtil.setLabels();
+    	//appUtil.downloadFiles();
     	
     	
     	String filename = assignedTeam.getValue() + ".txt";
@@ -231,27 +261,11 @@ public class AmendTicketController {
 	    bw.newLine();
 	    bw.write(details.getText());
 	    bw.close();
-	    DataSetIter dataSetIter = new DataSetIter();
-	    Network network = new Network();
-	    ComputationGraph currentModel = network.restoreModel(currentDirectory + "/files/cnn_model.zip");
-	    INDArray features = network.getFeatures(details.getText(), dataSetIter.getDataSetIterator());
-	    if ((features  != null) && (appUtil.getMode("trainMode").contains("ON"))) {
-	    //try {
-	    	network.retrain(currentModel, dataSetIter.getDataSetIterator());
-	    	network.saveModel(currentModel, currentDirectory + "/files/cnn_model.zip");
-	    	updateFile(filename);
-	    	updateFile("cnn_model.zip");
-	    	//update file in db with extra line
-	    //}
-//	    catch (Exception e) {
-//	    	e.printStackTrace();
-//	    	System.out.println("unabke to retrain, will not update files");
-//	    }
-	    }
-	    else {
-	    	System.out.println("Will not update files");
-	    	}
-	    }
+	    network.retrain(currentModel, dataSetIter.getDataSetIterator());
+    	network.saveModel(currentModel, currentDirectory + "/files/cnn_model.zip");
+    	updateFile(filename);
+    	updateFile("cnn_model.zip");
+    }
 	    	
     
     public void updateFile(String filename) throws SQLException, IOException {
@@ -477,5 +491,47 @@ public class AmendTicketController {
 				break;
 		}
 	}
+    private class ThreadTask extends Task {
+
+		private ThreadTask() {
+            updateTitle("Close Ticket");
+        }
+
+        @Override
+        protected String call() throws Exception {
+        	
+            updateMessage("Closing ticket, please wait.");
+            
+            
+            con.setAutoCommit(false);	
+    	    sqlStatement = con.prepareStatement("USE [honsdb] UPDATE tblTicket SET status = ?, dateUpdated = ? WHERE ticketID = ?");	 	
+    	    sqlStatement.setString(1, "closed");
+    	    sqlStatement.setObject(2, appUtil.getDate());
+    	    sqlStatement.setString(3, Session.getCurrentTicket());
+    	    if (sqlStatement.executeUpdate() == 1){
+    			con.commit();
+    			System.out.println("Status updated");		
+    		}
+    		else {
+    			throw new Exception("Error");
+    		}
+    	    appUtil.setLabels();
+            appUtil.downloadFiles();
+    	    DataSetIter dataSetIter = new DataSetIter();
+    	    ComputationGraph currentModel = network.restoreModel(currentDirectory + "/files/cnn_model.zip");
+    	    INDArray features = network.getFeatures(details.getText(), dataSetIter.getDataSetIterator());
+
+
+    	    if ((features  != null) && (appUtil.getMode("trainMode").contains("ON"))) {
+    	    	retrain(currentModel, dataSetIter);
+    	    }
+    	    else {
+    	    	System.out.println("Will not retrain");
+    	    }
+            updateMessage("Ticket closed successfully");
+            updateProgress(1, 1);
+            return null;
+        }
+    }
 }
     
