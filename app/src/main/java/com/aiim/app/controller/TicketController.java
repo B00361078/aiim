@@ -67,7 +67,7 @@ public class TicketController {
     	sqlStatement.setString(1, details.getText());
     	sqlStatement.setString(2, Session.getUsername());
     	sqlStatement.setString(3, null);
-    	sqlStatement.setInt(4, 1);
+    	sqlStatement.setInt(4, isAutoAssigned(prediction));
     	sqlStatement.setString(5, teamID);
     	sqlStatement.setString(6, teamID);
     	sqlStatement.setString(7, "raised");
@@ -85,6 +85,17 @@ public class TicketController {
     public void cancel() throws IOException {
     	ViewController.createInstance().switchToView(ViewNames.HOME);
     }
+    
+    public int isAutoAssigned(String prediction) {
+    	if (prediction.contains("general")) {
+    		return 0;
+    	}
+    	else {
+    		return 1;
+    	}
+    }
+    
+    
     
     public void setRaiseAction() {
     	raiseBtn.setOnAction(ae -> {
