@@ -9,16 +9,25 @@ import java.sql.SQLException;
 import java.util.ResourceBundle;
 import com.aiim.app.database.DatabaseConnect;
 import com.aiim.app.model.Ticket;
+import com.aiim.app.model.Ticket.Builder;
 import com.aiim.app.resource.ViewNames;
 import com.aiim.app.util.Session;
+
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
+import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.Alert.AlertType;
 
 /* The following class handles the dashboard interface by switching the current subScene. Part of MVC design Pattern as a controller.
  * Neil Campbell 07/05/2021, B00361078
@@ -35,10 +44,15 @@ public class DashboardController {
 	@FXML private Button raiseNewBtn;
 	@FXML private Button settingsBtn;
 	@FXML private Button logout;
+	@FXML private RadioButton radioAll;
+	@FXML private RadioButton radioRaised;
+	@FXML private RadioButton radioProg;
+	@FXML private RadioButton radioClosed;
 	private Connection con;
 	private ResultSet rs;
 	private PreparedStatement sqlStatement;
 	private ResourceBundle strBundle;
+	private ObservableList<Ticket.Builder> list;
    
     public void initialize() throws Exception  {
     	con = DatabaseConnect.getConnection();
@@ -49,6 +63,15 @@ public class DashboardController {
     	ticketTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
     	ticketTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
     	updateTable();
+    	ToggleGroup radios = new ToggleGroup();
+    	radioAll.setToggleGroup(radios);
+		radioRaised.setToggleGroup(radios);
+		radioProg.setToggleGroup(radios);
+		radioClosed.setToggleGroup(radios);
+		setAction(radioAll);
+		setAction(radioRaised);
+		setAction(radioProg);
+		setAction(radioClosed);
     	
     	ticketTable.setRowFactory( tv -> {
     	    TableRow<Ticket.Builder> row = new TableRow<>();
@@ -67,6 +90,52 @@ public class DashboardController {
     	    return row ;
     	});
     }
+    
+    public void setAction (RadioButton button) {
+    	button.setOnAction(event -> {
+    		try {
+    			ticketTable.getItems().clear();
+				updateTable();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+    		list = ticketTable.getItems();
+    		switch(button.getText()) {
+    			case "All":
+    				break;
+    			case "Raised":
+    				setTable("raised");
+    				break;
+    			case "In Progress":
+    				setTable("inprogress");
+    				break;
+    			case "Closed":
+    				setTable("closed");
+    				break;
+    		}
+    	});
+    }
+
+	private void setTable(String filter) {
+		ObservableList<Ticket.Builder> newlist = FXCollections.observableArrayList();
+		for (Builder item : list) {
+			if (item.status.contains(filter)) {
+				
+				String ticketID = item.ticketID;
+	    		String status = item.status;
+	    		String date = item.date;
+	    		String assignedTeam = item.assignedTeam;
+	    		
+	    		newlist.add(new Ticket.Builder().setTicketID(ticketID)
+			    		.setStatus(status)
+			    		.setDate(date)
+			    		.setAssignedTeam(assignedTeam));
+			}
+		}
+		ticketTable.getItems().clear();
+		ticketTable.getItems().addAll(newlist);
+	}
+
 
 	public void updateTable() throws SQLException {
 
