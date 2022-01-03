@@ -44,5 +44,7 @@
             <RadioButton fx:id="trainOff" mnemonicParsing="false" text="Disable" GridPane.columnIndex="2" />
          </children>
       </GridPane>
+      <Label layoutX="457.0" layoutY="116.0" text="Current AI accuracy:" />
+      <Label fx:id="percentage" layoutX="480.0" layoutY="135.0" text="percentage" />
    </children>
 </AnchorPane>
