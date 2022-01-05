@@ -214,8 +214,8 @@ public class AmendTicketController {
     		statusBtn.setText("Close Ticket");
     	}
     	else {
-    		statusBtn.setVisible(false);
-    		nteBtn.setVisible(false);
+    		statusBtn.setDisable(true);
+    		nteBtn.setDisable(true);
 			assignedTeam.setDisable(true);
     	}
     }
@@ -304,7 +304,7 @@ public class AmendTicketController {
     public void setAssignee(String sqlString) {
     	if (sqlString == null) {
     		assignee.setText("Unassigned");
-    		assignBtn.setVisible(true);
+    		assignBtn.setDisable(false);
     	}
     	else {
     		assignee.setText(sqlString);

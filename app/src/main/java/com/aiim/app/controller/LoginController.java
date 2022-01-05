@@ -1,16 +1,26 @@
 package com.aiim.app.controller;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
+import java.util.Scanner;
+
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.nd4j.linalg.api.ndarray.INDArray;
+
 import com.aiim.app.database.DatabaseConnect;
+import com.aiim.app.model.DataSetIter;
+import com.aiim.app.model.Network;
 import com.aiim.app.resource.ViewNames;
+import com.aiim.app.util.AppUtil;
 import com.aiim.app.util.Session;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -41,6 +51,8 @@ public class LoginController {
 	private String fullname;
 	private PreparedStatement sqlStatement;
 	private ResultSet rs;
+	private AppUtil appUtil;
+	private String currentDirectory;
         
     public void initialize() throws Exception {
     	strBundle = ResourceBundle.getBundle("com.aiim.app.resource.bundle");
@@ -85,6 +97,7 @@ public class LoginController {
         		
         		ViewController.createInstance().setCurrentScene(scene);
         		ViewController.createInstance().switchToView(ViewNames.HOME);
+        		checkSentences();
     			}
     		else {
     			new Alert(Alert.AlertType.ERROR, strBundle.getString("e10")).showAndWait();
@@ -93,5 +106,31 @@ public class LoginController {
 	
     	}
     }
+
+	private void checkSentences() throws SQLException, FileNotFoundException {
+		Network net = new Network();
+		DataSetIter dataSetIter = new DataSetIter();
+		appUtil = new AppUtil();// TODO Auto-generated method stub
+		appUtil.setLabels();
+		currentDirectory = Paths.get("").toAbsolutePath().toString();
+		for (String label : Session.getPredictionLabels()) {
+			System.out.println(label);
+			Scanner trainFile = new Scanner(new File(currentDirectory+ "/files/"+label+".txt"));
+			System.out.println("trainfile is " +trainFile);
+				while (trainFile.hasNextLine()){
+					INDArray feat = net.getFeatures(trainFile.nextLine(), dataSetIter.getDataSetIterator() );
+					if (feat != null) {
+						System.out.println("line is good");
+					}
+					else 
+						System.out.println("line is bad");
+				}
+				//add to another file
+			trainFile.close();
+		}
+		
+		
+	}
+    
 }
 
