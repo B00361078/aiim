@@ -21,7 +21,7 @@
             <Insets bottom="10.0" left="25.0" right="25.0" />
          </padding>
         <stylesheets>
-          <URL value="@style/style.css" />
+          <URL value="@style/main.css" />
         </stylesheets>
          <children>
           

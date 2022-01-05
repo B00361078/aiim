@@ -80,14 +80,14 @@ public class AmendTicketController {
 		network = new Network();
 		currentDirectory = Paths.get("").toAbsolutePath().toString();
 		con = DatabaseConnect.getConnection();
-		setRaiseAction();
+		setChangeAction();
 		strBundle = ResourceBundle.getBundle("com.aiim.app.resource.bundle");
 		appUtil = new AppUtil();
 		ticketNo.setText(Session.getCurrentTicket());
 		setDetails();
-		assignBtn.setVisible(false);
-		statusBtn.setVisible(false);
-		nteBtn.setVisible(false);
+		assignBtn.setDisable(true);
+		statusBtn.setDisable(true);
+		nteBtn.setDisable(true);
 		assignedTeam.setDisable(true);
 		setDisplay(Session.getPermissionLevel());
 		updateTable();
@@ -152,7 +152,7 @@ public class AmendTicketController {
 		});
 		
 	}
-	public void setRaiseAction() {
+	public void setChangeAction() {
     	statusBtn.setOnAction(ae -> {
             if (statusBtn.getText() == "Close Ticket") {
             	statusBtn.setDisable(true);
@@ -176,16 +176,19 @@ public class AmendTicketController {
 				}
 			}
             else if (statusBtn.getText() == "Move to In Progress") {
+            	Alert alert = new Alert(AlertType.CONFIRMATION);
+        		alert.setHeaderText("Are you sure you want to move to in progress?");
+        		alert.showAndWait();
+        		if (alert.getResult() == ButtonType.OK) {
             	try {
 					con.setAutoCommit(false);
 					sqlStatement = con.prepareStatement("USE [honsdb] UPDATE tblTicket SET status = ?, dateUpdated = ? WHERE ticketID = ?");	 	
-	        	    sqlStatement.setString(1, "inprogress");
+	        	    sqlStatement.setString(1, "In Progress");
 	        	    sqlStatement.setObject(2, appUtil.getDate());
 	        	    sqlStatement.setString(3, Session.getCurrentTicket());
 	        	    if (sqlStatement.executeUpdate() == 1){
 	        			con.commit();
-	        			System.out.println("Status updated");
-	        			status.setText("inprogress");
+	        			status.setText("In Progress");
 	        			statusBtn.setText("Close Ticket");
 	        		}
 	        		else {
@@ -197,16 +200,17 @@ public class AmendTicketController {
 				}	
             	
             }
-    	});
+        }
+	});
     	
     	
     }
 
     private void status (String status) {
-    	if(status.contains("raised")) {
+    	if(status.contains("Raised")) {
     		statusBtn.setText("Move to In Progress");
     	}
-    	else if (status.contains("inprogress")) {
+    	else if (status.contains("In Progresss")) {
     		statusBtn.setText("Close Ticket");
     	}
     	else {
@@ -218,36 +222,7 @@ public class AmendTicketController {
 //    @FXML private void clickStatus () throws Exception {
 //    	changeStatus(statusBtn.getText());
 //    }
-    private void changeStatus (String command) throws Exception {
-    	switch (command) {
-    	case "Move to In Progress":
-    	    con.setAutoCommit(false);	
-    	    sqlStatement = con.prepareStatement("USE [honsdb] UPDATE tblTicket SET status = ?, dateUpdated = ? WHERE ticketID = ?");	 	
-    	    sqlStatement.setString(1, "inprogress");
-    	    sqlStatement.setObject(2, appUtil.getDate());
-    	    sqlStatement.setString(3, Session.getCurrentTicket());
-    	    if (sqlStatement.executeUpdate() == 1){
-    			con.commit();
-    			System.out.println("Status updated");
-    			status.setText("inprogress");
-    			statusBtn.setText("Close Ticket");
-    		}
-    		else {
-    			throw new Exception("Error");
-    		}
-    		break;
-    	case "Close Ticket":
-    		ThreadTask task = new ThreadTask();
-    		task.setOnSucceeded(e -> task.getValue());
-            Alert alert = appUtil.createProgressAlert(ViewController.createInstance().getCurrentStage(), task);          
-            Thread thread = new Thread(task, "thread");
-            thread.setDaemon(true);
-            thread.start();
-            alert.showAndWait();
-            thread.interrupt();
-            ViewController.createInstance().switchToView(ViewNames.DASHBOARD);
-    		}
-    }
+   
     private void retrain(ComputationGraph currentModel, DataSetIter dataSetIter) throws Exception {
     	//check is train mode on
     	// download latest model files
@@ -349,7 +324,8 @@ public class AmendTicketController {
 			throw new Exception("Error");
 		}
 	    assignee.setText(Session.getUsername());
-		assignBtn.setVisible(false);
+		assignBtn.setDisable(true);
+		setDisplay(Session.getPermissionLevel());
     }
 
     public void insert() throws Exception {
@@ -483,9 +459,13 @@ public class AmendTicketController {
 			case 1:
 				break;
 			case 2:
-				nteBtn.setVisible(true);
-				statusBtn.setVisible(true);
-				assignedTeam.setDisable(false);
+				if (assignee.getText().contains("Unassigned"))
+					assignBtn.setDisable(false);
+				else {
+					nteBtn.setDisable(false);
+					statusBtn.setDisable(false);
+					assignedTeam.setDisable(false);
+				}
 				break;
 			case 3:
 				break;
@@ -503,7 +483,7 @@ public class AmendTicketController {
             updateMessage("Closing ticket, please wait.");
             con.setAutoCommit(false);	
     	    sqlStatement = con.prepareStatement("USE [honsdb] UPDATE tblTicket SET status = ?, dateUpdated = ? WHERE ticketID = ?");	 	
-    	    sqlStatement.setString(1, "closed");
+    	    sqlStatement.setString(1, "Closed");
     	    sqlStatement.setObject(2, appUtil.getDate());
     	    sqlStatement.setString(3, Session.getCurrentTicket());
 	    	    if (sqlStatement.executeUpdate() == 1){

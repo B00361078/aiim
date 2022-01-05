@@ -29,6 +29,7 @@ public class DataSetIter {
 				List<String> sentences = new ArrayList<>();
 				List<String> sentenceLabels = new ArrayList<>();
 				for (String label : Session.getPredictionLabels()) {
+					System.out.println(label);
 					Scanner trainFile = new Scanner(new File(currentDirectory+ "/files/"+label+".txt"));
 					System.out.println("trainfile is " +trainFile);
 						while (trainFile.hasNextLine()){

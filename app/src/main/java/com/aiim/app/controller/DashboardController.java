@@ -6,6 +6,7 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 import com.aiim.app.database.DatabaseConnect;
 import com.aiim.app.model.Ticket;
@@ -53,6 +54,8 @@ public class DashboardController {
 	private PreparedStatement sqlStatement;
 	private ResourceBundle strBundle;
 	private ObservableList<Ticket.Builder> list;
+	private ArrayList<RadioButton> radioBtns;
+	private ToggleGroup radioGrp;
    
     public void initialize() throws Exception  {
     	con = DatabaseConnect.getConnection();
@@ -63,15 +66,14 @@ public class DashboardController {
     	ticketTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
     	ticketTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
     	updateTable();
-    	ToggleGroup radios = new ToggleGroup();
-    	radioAll.setToggleGroup(radios);
-		radioRaised.setToggleGroup(radios);
-		radioProg.setToggleGroup(radios);
-		radioClosed.setToggleGroup(radios);
-		setAction(radioAll);
-		setAction(radioRaised);
-		setAction(radioProg);
-		setAction(radioClosed);
+    	radioBtns = new ArrayList<RadioButton>();
+    	radioBtns.add(radioClosed);
+    	radioBtns.add(radioAll);
+    	radioBtns.add(radioRaised);
+    	radioBtns.add(radioProg);
+    	radioGrp = new ToggleGroup();
+    	setRadios();
+    	radioAll.setSelected(true);
     	
     	ticketTable.setRowFactory( tv -> {
     	    TableRow<Ticket.Builder> row = new TableRow<>();
@@ -90,6 +92,12 @@ public class DashboardController {
     	    return row ;
     	});
     }
+    public void setRadios() {
+		for (RadioButton btn : radioBtns) {
+			btn.setToggleGroup(radioGrp);
+			setAction(btn);
+		}
+    }
     
     public void setAction (RadioButton button) {
     	button.setOnAction(event -> {
@@ -104,13 +112,13 @@ public class DashboardController {
     			case "All":
     				break;
     			case "Raised":
-    				setTable("raised");
+    				setTable("Raised");
     				break;
     			case "In Progress":
-    				setTable("inprogress");
+    				setTable("In Progress");
     				break;
     			case "Closed":
-    				setTable("closed");
+    				setTable("Closed");
     				break;
     		}
     	});

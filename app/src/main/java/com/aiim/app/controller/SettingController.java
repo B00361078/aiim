@@ -5,6 +5,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 import com.aiim.app.database.DatabaseConnect;
 import com.aiim.app.resource.ViewNames;
@@ -41,6 +42,8 @@ public class SettingController {
 	private int totalClosed;
 	private int totalAssignedCorrect;
 	private float accuracy;
+	private ArrayList<RadioButton> radioBtns;
+	private ToggleGroup radioGrp;
    
 	public void initialize() throws Exception {
 		strBundle = ResourceBundle.getBundle("com.aiim.app.resource.bundle");

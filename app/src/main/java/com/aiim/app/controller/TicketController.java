@@ -70,7 +70,7 @@ public class TicketController {
     	sqlStatement.setInt(4, isAutoAssigned(prediction));
     	sqlStatement.setString(5, teamID);
     	sqlStatement.setString(6, teamID);
-    	sqlStatement.setString(7, "raised");
+    	sqlStatement.setString(7, "Raised");
     	sqlStatement.setObject(8, appUtil.getDate());
     	sqlStatement.setObject(9, appUtil.getDate());
     		if (sqlStatement.executeUpdate() == 1) {
@@ -87,7 +87,7 @@ public class TicketController {
     }
     
     public int isAutoAssigned(String prediction) {
-    	if (prediction.contains("general")) {
+    	if (prediction.contains("General")) {
     		return 0;
     	}
     	else {
@@ -137,7 +137,7 @@ public class TicketController {
 	            	prediction = network.classify(features, network.restoreModel(currentDirectory + "/files/cnn_model.zip"));
 	            }
 	            else {
-	        	prediction = "general";
+	        	prediction = "General";
 	            }
         	insertTicket();
             updateMessage("Ticket raised successfully, raised to team - " + prediction);
