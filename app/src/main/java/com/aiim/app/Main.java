@@ -33,8 +33,7 @@ public class Main extends Application {
 	
 	@Override
 	public void stop() throws IOException{
-	    FileUtils.cleanDirectory(new File(currentDirectory+"/files")); 
-	    
+	    FileUtils.cleanDirectory(new File(currentDirectory+"/files"));
 	}
 	
 	public void checkDBConnect() {

@@ -13,14 +13,11 @@ import com.aiim.app.model.Ticket;
 import com.aiim.app.model.Ticket.Builder;
 import com.aiim.app.resource.ViewNames;
 import com.aiim.app.util.Session;
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.RadioButton;
@@ -28,10 +25,9 @@ import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.ToggleGroup;
-import javafx.scene.control.Alert.AlertType;
 
 /* The following class handles the dashboard interface by switching the current subScene. Part of MVC design Pattern as a controller.
- * Neil Campbell 07/05/2021, B00361078
+ * Neil Campbell 06/01/2022, B00361078
  */
 
 public class DashboardController {
@@ -209,7 +205,4 @@ public class DashboardController {
 			e1.printStackTrace();
 		}
     }
-    
-   
-    
 }

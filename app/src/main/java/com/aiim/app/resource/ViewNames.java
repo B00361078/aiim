@@ -4,5 +4,5 @@ package com.aiim.app.resource;
  * Neil Campbell 07/05/2021, B00361078
  */
 public enum ViewNames {
-	DASHBOARD, LOGIN, SETTINGS, INCIDENT, TICKET, HOME, AMENDTICKET
+	DASHBOARD, LOGIN, SETTINGS, TICKET, HOME, AMENDTICKET
 }

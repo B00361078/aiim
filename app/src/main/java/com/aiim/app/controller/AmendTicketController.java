@@ -85,17 +85,11 @@ public class AmendTicketController {
 		appUtil = new AppUtil();
 		ticketNo.setText(Session.getCurrentTicket());
 		setDetails();
-		assignBtn.setDisable(true);
-		statusBtn.setDisable(true);
-		nteBtn.setDisable(true);
-		assignedTeam.setDisable(true);
 		status(ticketStatus);
 		setDisplay(Session.getPermissionLevel());
-		System.out.println(Session.getPermissionLevel());
 		updateTable();
 		setNoteTable();
 		setAssignedAction();
-		//status(ticketStatus);
 		assignedTeam.getItems();	
     	details.setWrapText(true);
     	details.setEditable(false);
@@ -145,6 +139,7 @@ public class AmendTicketController {
 		        			Alert alert2 = new Alert(AlertType.INFORMATION);
 		    	    		alert2.setHeaderText("Team updated successfully.");
 		    	    		alert2.showAndWait();
+		    	    		ViewController.createInstance().switchToView(ViewNames.DASHBOARD);
 		        		}
 					} catch (Exception e) {
 						// TODO Auto-generated catch block
@@ -216,9 +211,7 @@ public class AmendTicketController {
     		statusBtn.setText("Close Ticket");
     	}
     	else {
-    		statusBtn.setDisable(true);
-    		nteBtn.setDisable(true);
-			assignedTeam.setDisable(true);
+    		statusBtn.setText("Closed");
     	}
     }
 //    @FXML private void clickStatus () throws Exception {
@@ -343,6 +336,7 @@ public class AmendTicketController {
 		}
 	    assignee.setText(Session.getUsername());
 		assignBtn.setDisable(true);
+		statusBtn.setDisable(false);
 		setDisplay(Session.getPermissionLevel());
     }
 
@@ -478,15 +472,16 @@ public class AmendTicketController {
 				break;
 			case 2:
 				if (assignee.getText().contains("Unassigned")) {
-					System.out.println("got here");
-					assignBtn.setDisable(false);
-					assignedTeam.setDisable(false);
+					statusBtn.setDisable(true);
+				}
+				else if (!assignee.getText().contains("Unassigned") && (!ticketStatus.contains("Closed"))) {
+					assignBtn.setDisable(true);
 				}
 				else {
-					System.out.println("got here2");
-					nteBtn.setDisable(false);
-					statusBtn.setDisable(false);
-					assignedTeam.setDisable(false);
+					assignBtn.setDisable(true);
+					nteBtn.setDisable(true);
+					statusBtn.setDisable(true);
+					assignedTeam.setDisable(true);
 				}
 				break;
 			case 3:

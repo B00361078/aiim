@@ -5,7 +5,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.ResourceBundle;
 import com.aiim.app.database.DatabaseConnect;
 import com.aiim.app.resource.ViewNames;
@@ -19,8 +18,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
 
-/* The following class handles the dashboard interface by switching the current subScene. Part of MVC design Pattern as a controller.
- * Neil Campbell 14/12/2021, B00361078
+/* The following class handles the settings view. Only accessible to SysAdmin. Part of MVC design Pattern as a controller.
+ * Neil Campbell 06/01/2022, B00361078
  */
 
 public class SettingController {
@@ -42,8 +41,6 @@ public class SettingController {
 	private int totalClosed;
 	private int totalAssignedCorrect;
 	private float accuracy;
-	private ArrayList<RadioButton> radioBtns;
-	private ToggleGroup radioGrp;
    
 	public void initialize() throws Exception {
 		strBundle = ResourceBundle.getBundle("com.aiim.app.resource.bundle");

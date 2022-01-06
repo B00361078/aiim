@@ -10,7 +10,8 @@ import javafx.scene.SubScene;
 import javafx.stage.Stage;
 
 /* The following class handles the switching between views and is the only class aware of the path to each view. Part of MVC design Pattern as a controller.
- * Neil Campbell 07/05/2021, B00361078
+ * This is also a Singleton.
+ * Neil Campbell 06/01/2022, B00361078
  */
 
 public class ViewController {
@@ -51,12 +52,15 @@ public class ViewController {
 	public void setCurrentStage(Stage stage) {
 		this.currentStage = stage;
 	}
+	
 	public Stage getCurrentStage() {
 		return this.currentStage;
 	}
+	
 	public void setCurrentScene(Scene scene) {
 		this.currentScene = scene;
 	}
+	
 	public void setCurrentSubScene(SubScene subScene) {
 		this.currentSubScene = subScene;
 	}
@@ -72,9 +76,11 @@ public class ViewController {
 	public void initialiseScene() {
 		currentScene.setRoot(root);
 	}
+	
 	public void initialiseSubScene() {
 		currentSubScene.setRoot(root);
 	}
+	
 	private void setRoot(String viewResource2) throws IOException {
 		FXMLLoader loader = new FXMLLoader();
 		loader.setLocation(getClass().getResource(viewResource));

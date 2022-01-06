@@ -7,9 +7,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
-
 import org.nd4j.linalg.api.ndarray.INDArray;
-
 import com.aiim.app.database.DatabaseConnect;
 import com.aiim.app.model.DataSetIter;
 import com.aiim.app.model.Network;
@@ -23,8 +21,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 
-/* The following class handles the dashboard interface by switching the current subScene. Part of MVC design Pattern as a controller.
- * Neil Campbell 14/12/2021, B00361078
+/* The following class handles the creation of new incidents. Part of MVC design Pattern as a controller.
+ * Neil Campbell 06/01/2022, B00361078
  */
 
 public class TicketController {
@@ -42,14 +40,13 @@ public class TicketController {
 	private ResultSet rs;
 	public static String currentDirectory;
 	
-   
 	public void initialize() throws Exception, SQLException {
 		currentDirectory = Paths.get("").toAbsolutePath().toString();
 		strBundle = ResourceBundle.getBundle("com.aiim.app.resource.bundle");
 		network = new Network();
 		appUtil = new AppUtil();
+		con = DatabaseConnect.getConnection();
     	reporter.setText(Session.getFullName());
-    	con = DatabaseConnect.getConnection();
     	reporter.setText(Session.getFullName());
     	details.setWrapText(true);
     	setRaiseAction();
@@ -95,8 +92,6 @@ public class TicketController {
     	}
     }
     
-    
-    
     public void setRaiseAction() {
     	raiseBtn.setOnAction(ae -> {
             ae.consume();
@@ -119,6 +114,7 @@ public class TicketController {
 			});
     	
     }
+    
 	private class ThreadTask extends Task {
 
 		private ThreadTask() {
