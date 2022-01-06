@@ -2,6 +2,10 @@ package com.aiim.app.util;
 
 import java.util.ArrayList;
 
+/* The following class handles the login session. Singleton pattern.
+ * Neil Campbell 06/01/2022, B00361078
+ */
+
 public class Session {
 	
 	private static volatile Session session = null;

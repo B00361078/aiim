@@ -4,6 +4,10 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.util.ResourceBundle;
 
+/* The following class handles the database connection. Singleton pattern.
+ * Neil Campbell 06/01/2022, B00361078
+ */
+
 public class DatabaseConnect {
 	
 	private static volatile Connection con = null;
