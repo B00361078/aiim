@@ -5,16 +5,13 @@ import org.apache.commons.io.FileUtils;
 import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 import java.util.ResourceBundle;
-import java.util.Scanner;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.sql.Connection;
 import com.aiim.app.controller.ViewController;
 import com.aiim.app.database.DatabaseConnect;
 import com.aiim.app.resource.ViewNames;
-import com.aiim.app.util.Session;
 
 public class Main extends Application {
 	
@@ -39,13 +36,6 @@ public class Main extends Application {
 	    FileUtils.cleanDirectory(new File(currentDirectory+"/files")); 
 	    
 	}
-	public void checkSentences() throws FileNotFoundException {
-		for (String label : Session.getPredictionLabels()) {
-			System.out.println(label);
-			Scanner trainFile = new Scanner(new File(currentDirectory+ "/files/"+label+".txt"));
-		}
-	}
-	
 	
 	public void checkDBConnect() {
 		if (con == null) {

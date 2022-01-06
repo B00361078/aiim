@@ -86,7 +86,7 @@ public class Session {
 	}
 	public static void clearSession () {
 		setFullName(null);
-		setPermissionLevel(1);
+		setPermissionLevel(0);
 		setTeamName(null);
 		setUsername(null);
 		setTeamID(null);

@@ -132,7 +132,7 @@ public class TicketController {
             appUtil.setLabels();
             appUtil.downloadFiles();
             DataSetIter dataSetIter = new DataSetIter();
-	        INDArray features = network.getFeatures(details.getText(), dataSetIter.getDataSetIterator());
+	        INDArray features = network.getFeatures(details.getText(), dataSetIter.getDataSetIterator(true));
 				if (appUtil.getMode("assignMode").contains("ON") && (!(features == null))) {
 	            	prediction = network.classify(features, network.restoreModel(currentDirectory + "/files/cnn_model.zip"));
 	            }

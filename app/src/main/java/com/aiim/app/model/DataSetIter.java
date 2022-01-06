@@ -25,12 +25,12 @@ public class DataSetIter {
 		wordVectors = WordVectorSerializer.loadStaticModel(new File(currentDirectory + "/files/word_vectors.txt")); 
 	}
 	
-		public DataSetIterator getDataSetIterator( ) throws FileNotFoundException{
+		public DataSetIterator getDataSetIterator(boolean isTrainFiles) throws FileNotFoundException{
 				List<String> sentences = new ArrayList<>();
 				List<String> sentenceLabels = new ArrayList<>();
 				for (String label : Session.getPredictionLabels()) {
 					System.out.println(label);
-					Scanner trainFile = new Scanner(new File(currentDirectory+ "/files/"+label+".txt"));
+					Scanner trainFile = new Scanner(new File(currentDirectory+(isTrainFiles ? "/files/" : "/testFiles/")+label+".txt"));
 					System.out.println("trainfile is " +trainFile);
 						while (trainFile.hasNextLine()){
 						sentences.add(trainFile.nextLine());

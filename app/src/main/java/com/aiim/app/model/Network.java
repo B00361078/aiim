@@ -1,5 +1,6 @@
 package com.aiim.app.model;
 
+import org.deeplearning4j.eval.Evaluation;
 import org.deeplearning4j.iterator.CnnSentenceDataSetIterator;
 import org.deeplearning4j.nn.conf.ComputationGraphConfiguration;
 import org.deeplearning4j.nn.conf.ConvolutionMode;
@@ -97,6 +98,8 @@ public class Network {
         model.init();
         return model;
     }
+
+	private ComputationGraph trainedModel;
     public ComputationGraph retrain(ComputationGraph model, DataSetIterator iter) throws IOException {
 		model.fit(iter);
 		return model;	
@@ -122,6 +125,11 @@ public class Network {
     		e.printStackTrace();
     	}
 		return features;
+    }
+    
+    public void evaluate(ComputationGraph model, DataSetIterator testIter) {
+    	Evaluation evaluation = model.evaluate(testIter);
+        System.out.println(evaluation.stats());
     }
     
     public String classify(INDArray features,ComputationGraph model) throws IOException {

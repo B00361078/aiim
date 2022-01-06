@@ -1,0 +1,10 @@
+GI Claims Recovery :Cisco Finesse Supervisor Agent remote monitoring is not working:1 Application :
+Cisco Finesse access request Hi Team, Please could you set up Cisco Finess access for the following new starter
+My colleague needs access to Finesse but it seems she only has Finesse 1 installed on her profile and not Finesse 4. please can you clone my access so she can access finesse on her laptop or any desktop she is sat at?
+Are Vodafone able to advise why there is any possible reason why  Cisco Finesse in particular to run slowly - please be advised that this is also under investigation, the customer has asked us to reach out to you specifically as Cisco Finesse appears to be most adversely affected by this software. 
+Yes User reporting 5 home users have been logged out of Finesse and can no longer log on. Finesse will not load. 
+Cisco Finesse Supervisor Agent remote monitoring is not working
+Cisco desktop Cisco desktop will not open.
+CISCO AGENT  [PRD](CISCO AGENT) CISCO AGENT [PRD](CISCO AGENT) not opening
+cisco any connect cisco issue home worker
+reinstall cisco agent reinstall cisco agent

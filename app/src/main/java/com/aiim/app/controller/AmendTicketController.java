@@ -89,11 +89,13 @@ public class AmendTicketController {
 		statusBtn.setDisable(true);
 		nteBtn.setDisable(true);
 		assignedTeam.setDisable(true);
+		status(ticketStatus);
 		setDisplay(Session.getPermissionLevel());
+		System.out.println(Session.getPermissionLevel());
 		updateTable();
 		setNoteTable();
 		setAssignedAction();
-		status(ticketStatus);
+		//status(ticketStatus);
 		assignedTeam.getItems();	
     	details.setWrapText(true);
     	details.setEditable(false);
@@ -210,7 +212,7 @@ public class AmendTicketController {
     	if(status.contains("Raised")) {
     		statusBtn.setText("Move to In Progress");
     	}
-    	else if (status.contains("In Progresss")) {
+    	else if (status.contains("In Progress")) {
     		statusBtn.setText("Close Ticket");
     	}
     	else {
@@ -236,7 +238,7 @@ public class AmendTicketController {
 	    bw.newLine();
 	    bw.write(details.getText());
 	    bw.close();
-	    network.retrain(currentModel, dataSetIter.getDataSetIterator());
+	    network.retrain(currentModel, dataSetIter.getDataSetIterator(true));
     	network.saveModel(currentModel, currentDirectory + "/files/cnn_model.zip");
     	updateFile(filename);
     	updateFile("cnn_model.zip");
@@ -299,6 +301,22 @@ public class AmendTicketController {
         }
  
     	assignedTeam.setValue(teamName);
+    }
+    public void getAssignedTeam() throws SQLException {
+    	sqlStatement = con.prepareStatement(strBundle.getString("sqlSelect12"));
+    	sqlStatement.setString(1, Session.getCurrentTicket());
+    	rs = sqlStatement.executeQuery();
+    	while(rs.next()){
+    		assignedTeamID = rs.getString(1);
+        }
+    	sqlStatement = con.prepareStatement("SELECT name from tblTeam WHERE teamID = ?");
+    	sqlStatement.setString(1, assignedTeamID);
+    	rs = sqlStatement.executeQuery();
+    	//set value here
+    	while(rs.next()){
+    		assignedTeam.setValue(rs.getString(1));
+        }
+    	
     }
     
     public void setAssignee(String sqlString) {
@@ -459,9 +477,13 @@ public class AmendTicketController {
 			case 1:
 				break;
 			case 2:
-				if (assignee.getText().contains("Unassigned"))
+				if (assignee.getText().contains("Unassigned")) {
+					System.out.println("got here");
 					assignBtn.setDisable(false);
+					assignedTeam.setDisable(false);
+				}
 				else {
+					System.out.println("got here2");
 					nteBtn.setDisable(false);
 					statusBtn.setDisable(false);
 					assignedTeam.setDisable(false);
@@ -497,7 +519,7 @@ public class AmendTicketController {
             appUtil.downloadFiles();
     	    DataSetIter dataSetIter = new DataSetIter();
     	    ComputationGraph currentModel = network.restoreModel(currentDirectory + "/files/cnn_model.zip");
-    	    INDArray features = network.getFeatures(details.getText(), dataSetIter.getDataSetIterator());
+    	    INDArray features = network.getFeatures(details.getText(), dataSetIter.getDataSetIterator(true));
 	    	    if ((features  != null) && (appUtil.getMode("trainMode").contains("ON"))) {
 	    	    	retrain(currentModel, dataSetIter);
 	    	    }

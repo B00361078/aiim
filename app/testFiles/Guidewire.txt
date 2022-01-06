@@ -1,0 +1,10 @@
+Guidewire applications are down. Policycenter Claimcenter
+Guidewire services SVC GUIDEWIRE CLAIMCENTER SVC GUIDEWIRE CONTACTMANAGER SVC GUIDEWIRE POLICYCENTER These services are showing as pipeline. They are live services and need to be updated to reflect that. Please check any other HSN's or services that relate to Guidewire
+Guidewire external  ClaimCenter url  down Guidewire URL unavailable.
+Guidewire policy centre slow performance Guidewire policy centre slow performance.
+Guidewire - Policy Error The Guidewire Sys and SIT Database Server is not responding?
+Guidewire access deletion Hi Team, Please delete the guidewire access for the below leavers   Application Name Account Name Technical Access Level  
+Guidewire - Policy Error .
+Guidewire - Claims Error Raised in error
+Missing external user for Guidewire The user is missing from the Prod external domain for Guidewire. It needs to be added to group
+guidewire url issue the user is unable to access guidewire in their laptop, but they can access it on their other machines. When putting in the url he gets the error "page not found".
