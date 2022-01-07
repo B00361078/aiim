@@ -5,6 +5,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 import com.aiim.app.database.DatabaseConnect;
 import com.aiim.app.resource.ViewNames;
@@ -41,30 +42,61 @@ public class SettingController {
 	private int totalClosed;
 	private int totalAssignedCorrect;
 	private float accuracy;
+	private String mode;
+	private String req;
+	private String modeName;
+	private ArrayList<RadioButton> assignBtns;
+	private ToggleGroup assignGrp;
+	private ArrayList<RadioButton> trainBtns;
+	private ToggleGroup trainGrp;
    
 	public void initialize() throws Exception {
 		strBundle = ResourceBundle.getBundle("com.aiim.app.resource.bundle");
 		appUtil = new AppUtil();
 		con = DatabaseConnect.getConnection();
-		ToggleGroup assignRadios = new ToggleGroup();
-		ToggleGroup trainRadios = new ToggleGroup();
+		assignBtns = new ArrayList<RadioButton>();
+		trainBtns = new ArrayList<RadioButton>();
+		assignGrp = new ToggleGroup();
+		trainGrp = new ToggleGroup();
+		assignBtns.add(assignOn);
+		assignBtns.add(assignOff);
+		trainBtns.add(trainOn);
+		trainBtns.add(trainOff);
+		initialiseRadios();
 		setRadio("assignMode", appUtil.getMode("assignMode"));
 		setRadio("trainMode", appUtil.getMode("trainMode"));
-		assignOn.setToggleGroup(assignRadios);
-		assignOff.setToggleGroup(assignRadios);
-		trainOn.setToggleGroup(trainRadios);
-		trainOff.setToggleGroup(trainRadios);
-    	setAction(assignOn, "Are you sure you want to enable Auto-assign mode?", "ON", "Enabled", "Auto-assign");
-    	setAction(assignOff, "Are you sure you want to disable Auto-assign mode?", "OFF", "Disabled", "Auto-assign");
-    	setAction(trainOn, "Are you sure you want to enable Auto-train mode?", "ON", "Enabled", "Auto-train");
-    	setAction(trainOff, "Are you sure you want to disable Auto-train mode?", "OFF", "Disabled", "Auto-train");
     	getPercentage();
     }
+	
+	public void initialiseRadios() {
+		for (RadioButton btn : assignBtns) {
+			btn.setToggleGroup(assignGrp);
+			setRadioAction(btn);
+		}
+		for (RadioButton btn : trainBtns) {
+			btn.setToggleGroup(trainGrp);
+			setRadioAction(btn);
+		}
+    }
     
-    public void setAction (RadioButton button, String message, String mode, String req, String modeName) {
+    public void setRadioAction (RadioButton button) {
     	button.setOnAction(event -> {
+    		if(button.getId().contains("On")) {
+    		 mode = "ON";
+    		 req = "Enabled";
+    		}
+    		else {
+    		 mode = "OFF";
+       		 req = "Disabled";
+    		}
+    		if(button.getId().contains("assign")) {
+    			modeName = "Auto-assign";
+    		}
+    		else {
+    			modeName = "Auto-train";
+    		}
             alert = new Alert(AlertType.CONFIRMATION);
-            alert.setHeaderText(message);
+            alert.setHeaderText(strBundle.getString(button.getId()));
             alert.showAndWait();
             	if (alert.getResult() == ButtonType.OK) {
             		try {
@@ -72,6 +104,14 @@ public class SettingController {
 						alert = new Alert(AlertType.INFORMATION);
 	            		alert.setHeaderText(modeName +" mode now " + req);
 	            		alert.show();
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+            	}
+            	else {
+            		try {
+						setRadio("assignMode", appUtil.getMode("assignMode"));
+						setRadio("trainMode", appUtil.getMode("trainMode"));
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
