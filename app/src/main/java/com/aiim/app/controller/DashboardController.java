@@ -68,9 +68,12 @@ public class DashboardController {
     	radioBtns.add(radioRaised);
     	radioBtns.add(radioProg);
     	radioGrp = new ToggleGroup();
-    	setRadios();
+    	initialiseRadios();
+    	setRowFactory();
     	radioAll.setSelected(true);
-    	
+    }
+    
+    public void setRowFactory() {
     	ticketTable.setRowFactory( tv -> {
     	    TableRow<Ticket.Builder> row = new TableRow<>();
     	    row.setOnMouseClicked(event -> {
@@ -80,7 +83,6 @@ public class DashboardController {
     	            try {
 						ViewController.createInstance().switchToView(ViewNames.AMENDTICKET);
 					} catch (IOException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
     	        }
@@ -88,14 +90,15 @@ public class DashboardController {
     	    return row ;
     	});
     }
-    public void setRadios() {
+    
+    public void initialiseRadios() {
 		for (RadioButton btn : radioBtns) {
 			btn.setToggleGroup(radioGrp);
-			setAction(btn);
+			setRadioAction(btn);
 		}
     }
     
-    public void setAction (RadioButton button) {
+    public void setRadioAction (RadioButton button) {
     	button.setOnAction(event -> {
     		try {
     			ticketTable.getItems().clear();
@@ -108,19 +111,19 @@ public class DashboardController {
     			case "All":
     				break;
     			case "Raised":
-    				setTable("Raised");
+    				resetTable("Raised");
     				break;
     			case "In Progress":
-    				setTable("In Progress");
+    				resetTable("In Progress");
     				break;
     			case "Closed":
-    				setTable("Closed");
+    				resetTable("Closed");
     				break;
     		}
     	});
     }
 
-	private void setTable(String filter) {
+	private void resetTable(String filter) {
 		ObservableList<Ticket.Builder> newlist = FXCollections.observableArrayList();
 		for (Builder item : list) {
 			if (item.status.contains(filter)) {

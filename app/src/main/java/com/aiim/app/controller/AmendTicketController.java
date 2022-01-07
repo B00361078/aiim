@@ -14,8 +14,6 @@ import java.sql.SQLException;
 import java.util.ResourceBundle;
 import org.deeplearning4j.nn.graph.ComputationGraph;
 import org.nd4j.linalg.api.ndarray.INDArray;
-import org.nd4j.linalg.dataset.api.iterator.DataSetIterator;
-
 import com.aiim.app.database.DatabaseConnect;
 import com.aiim.app.model.DataSetIter;
 import com.aiim.app.model.Network;
@@ -80,20 +78,21 @@ public class AmendTicketController {
 		network = new Network();
 		currentDirectory = Paths.get("").toAbsolutePath().toString();
 		con = DatabaseConnect.getConnection();
-		setChangeAction();
+		setStatusAction();
 		strBundle = ResourceBundle.getBundle("com.aiim.app.resource.bundle");
 		appUtil = new AppUtil();
 		ticketNo.setText(Session.getCurrentTicket());
 		setDetails();
 		status(ticketStatus);
 		setDisplay(Session.getPermissionLevel());
-		updateTable();
+		updateNoteTable();
 		setNoteTable();
-		setAssignedAction();
+		setAssignedTeamAction();
 		assignedTeam.getItems();	
     	details.setWrapText(true);
     	details.setEditable(false);
     }
+	
 	public void setNoteTable() {
 		noteTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 		noteTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
@@ -105,7 +104,6 @@ public class AmendTicketController {
     	            try {
 						viewNote(rowData);
 					} catch (SQLException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}  
     	        }
@@ -113,43 +111,40 @@ public class AmendTicketController {
     	    return row ;
     	});
 	}
-	public void setAssignedAction() {
+	
+	public void setAssignedTeamAction() {
 		assignedTeam.setOnAction((event) -> {
 	    	Alert alert = new Alert(AlertType.CONFIRMATION);
-    		alert.setHeaderText("Are you sure you want to change the assigned team?");
+    		alert.setHeaderText(strBundle.getString("e1"));
     		alert.showAndWait();
     		if (alert.getResult() == ButtonType.OK) {
     			try {
-    				sqlStatement = con.prepareStatement("USE [honsdb] SELECT teamID FROM tblTeam WHERE name = ?");
+    				sqlStatement = con.prepareStatement(strBundle.getString("sqlSelect13"));
 					sqlStatement.setString(1, assignedTeam.getValue().toString());
 					rs = sqlStatement.executeQuery();
-
-			        	while(rs.next()){
-			        		updatedTeamID = rs.getString(1);
-			        	}
-	    				
-						sqlStatement = con.prepareStatement("USE [honsdb] UPDATE tblTicket SET updatedTeam = ?, dateUpdated = ?, assignee = ? WHERE ticketID = ?");
-						sqlStatement.setString(1, updatedTeamID);
-		        	    sqlStatement.setObject(2, appUtil.getDate());
-		        	    sqlStatement.setString(3, null);
-		        	    sqlStatement.setString(4, Session.getCurrentTicket());
-		        	    if (sqlStatement.executeUpdate() == 1){
-		        			con.commit();
-		        			System.out.println("team updated");
-		        			Alert alert2 = new Alert(AlertType.INFORMATION);
-		    	    		alert2.setHeaderText("Team updated successfully.");
-		    	    		alert2.showAndWait();
-		    	    		ViewController.createInstance().switchToView(ViewNames.DASHBOARD);
-		        		}
-					} catch (Exception e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}	 	
-	    		}
+		        	while(rs.next()){
+		        		updatedTeamID = rs.getString(1);
+		        	}
+					sqlStatement = con.prepareStatement(strBundle.getString("sqlUpdate3"));
+					sqlStatement.setString(1, updatedTeamID);
+	        	    sqlStatement.setObject(2, appUtil.getDate());
+	        	    sqlStatement.setString(3, null);
+	        	    sqlStatement.setString(4, Session.getCurrentTicket());
+	        	    if (sqlStatement.executeUpdate() == 1){
+	        			con.commit();
+	        			Alert alert2 = new Alert(AlertType.INFORMATION);
+	    	    		alert2.setHeaderText(strBundle.getString("e2"));
+	    	    		alert2.showAndWait();
+	    	    		ViewController.createInstance().switchToView(ViewNames.DASHBOARD);
+	        		}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}	 	
+    		}
 		});
 		
 	}
-	public void setChangeAction() {
+	public void setStatusAction() {
     	statusBtn.setOnAction(ae -> {
             if (statusBtn.getText() == "Close Ticket") {
             	statusBtn.setDisable(true);
@@ -340,7 +335,7 @@ public class AmendTicketController {
 		setDisplay(Session.getPermissionLevel());
     }
 
-    public void insert() throws Exception {
+    public void insertNote() throws Exception {
 	    con.setAutoCommit(false);
 	    
 	   
@@ -396,9 +391,9 @@ public class AmendTicketController {
  
         if (result == "Add note") {
         	message = noteDetail.getText();
-        	insert();
+        	insertNote();
         	noteTable.getItems().clear();
-        	updateTable();
+        	updateNoteTable();
 
         }
         else 
@@ -406,7 +401,7 @@ public class AmendTicketController {
         
     }
     
-    public void updateTable() throws SQLException {
+    public void updateNoteTable() throws SQLException {
 
 	sqlStatement = con.prepareStatement("USE honsdb select noteID,author,message FROM tblNote WHERE ticketRef = ?");
 	sqlStatement.setString(1, Session.getCurrentTicket());
