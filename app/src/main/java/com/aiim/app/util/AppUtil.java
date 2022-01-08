@@ -16,12 +16,10 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
-
 import org.deeplearning4j.nn.graph.ComputationGraph;
 import com.aiim.app.database.DatabaseConnect;
 import com.aiim.app.model.DataSetIter;
 import com.aiim.app.model.Network;
-
 import javafx.beans.binding.Bindings;
 import javafx.concurrent.Task;
 import javafx.scene.Cursor;
@@ -109,13 +107,8 @@ public class AppUtil {
     	updateFile("cnn_model.zip");
     }
 	
-
-	
-	
-	
 	public void updateFile(String filename) throws Exception {
-		File file;
-	    file = new File(currentDirectory+"/files/"+filename);
+	    File file = new File(currentDirectory+"/files/"+filename);
 	    byte[] fileContent = Files.readAllBytes(file.toPath());
 	    long filelength = file.length();
 	    long filelengthinkb = filelength/1024;
@@ -155,6 +148,7 @@ public class AppUtil {
 
         return alert;
     }	
+	
 	public void downloadFiles() throws IOException, SQLException {
     	currentDirectory = Paths.get("").toAbsolutePath().toString();
 		sqlStatement = con.prepareStatement(strBundle.getString("sqlSelect2"));
@@ -182,25 +176,16 @@ public class AppUtil {
     }
 	
 	public void uploadFile(String fileName, String mode) throws Exception {
-		File file;
 		String currentDirectory = Paths.get("").toAbsolutePath().toString();
-		file = new File(currentDirectory + "/files/"+fileName);
+		File file = new File(currentDirectory + "/files/"+fileName);
 	    byte[] fileContent = Files.readAllBytes(file.toPath());
-	    long filelengthinkb = file.length()/1024;
-	    con.setAutoCommit(false);
-	    
-	    sqlStatement = con.prepareStatement("USE [honsdb] UPDATE tblClassifier SET fileName=?,size=?,modDate=?,fileContent=? WHERE fileName=?");
+	    long filelengthinkb = file.length()/1024;    
+	    sqlStatement = con.prepareStatement(strBundle.getString("sqlUpdate8"));
 	    sqlStatement.setString(1, fileName);
 	    sqlStatement.setLong(2, filelengthinkb);
 	    sqlStatement.setObject(3, getDate());
 	    sqlStatement.setBytes(4, fileContent);
 	    sqlStatement.setString(5, fileName);
-    		if (sqlStatement.executeUpdate() == 1) {
-    			con.commit();
-    			System.out.println("Byte Array Stored Successfully in SQL Server");
-    		}
-    		else {
-    			throw new Exception("Problem occured during Save");
-    		}
+    	executeSQL(con, sqlStatement);
 	}
 }
