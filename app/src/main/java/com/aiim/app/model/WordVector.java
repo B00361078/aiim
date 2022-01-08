@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Scanner;
 import org.deeplearning4j.models.embeddings.loader.WordVectorSerializer;
+import org.deeplearning4j.models.embeddings.wordvectors.WordVectors;
 import org.deeplearning4j.models.word2vec.Word2Vec;
 import org.deeplearning4j.text.sentenceiterator.BasicLineIterator;
 import org.deeplearning4j.text.tokenization.tokenizer.preprocessor.CommonPreprocessor;
@@ -33,35 +34,31 @@ public class WordVector {
 	}
 	
 	public Word2Vec buildVectors(String rawTextFilePath, String stopWordsPath) throws IOException {
-	VECTOR_FILE = new File(rawTextFilePath);
-	PATH = VECTOR_FILE.getPath();
-	//System.out.println(filePath);
-
-    // Strip white space before and after for each line
-     sentenceIter = new BasicLineIterator(PATH);
-    // Split on white spaces in the line to get words
-    //TokenizerFactory t = new DefaultTokenizerFactory();
-    
-    tokenizer.setTokenPreProcessor(new CommonPreprocessor()); 
-    
-    Scanner s = new Scanner(new File(stopWordsPath));
-    ArrayList<String> list = new ArrayList<String>();
-    while (s.hasNextLine()){
-        list.add(s.nextLine());
-    }
-    s.close();
-    
-    Word2Vec vec = new Word2Vec.Builder().stopWords(list)
-            .minWordFrequency(MIN_FREQUENCY)
-            .iterations(ITERATIONS)
-            .layerSize(LAYER_SIZE)
-            .seed(SEED)
-            .windowSize(WINDOW_SIZE)
-            .iterate(sentenceIter)
-            .tokenizerFactory(tokenizer)
-            .build();
-    vec.fit();
-    return vec;
+		VECTOR_FILE = new File(rawTextFilePath);
+		PATH = VECTOR_FILE.getPath();
+	    // Strip white space before and after for each line
+	     sentenceIter = new BasicLineIterator(PATH);
+	    // Split on white spaces in the line to get words
+	    tokenizer.setTokenPreProcessor(new CommonPreprocessor()); 
+	    
+	    Scanner s = new Scanner(new File(stopWordsPath));
+	    ArrayList<String> list = new ArrayList<String>();
+	    while (s.hasNextLine()){
+	        list.add(s.nextLine());
+	    }
+	    s.close();
+	    
+	    Word2Vec vec = new Word2Vec.Builder().stopWords(list)
+	            .minWordFrequency(MIN_FREQUENCY)
+	            .iterations(ITERATIONS)
+	            .layerSize(LAYER_SIZE)
+	            .seed(SEED)
+	            .windowSize(WINDOW_SIZE)
+	            .iterate(sentenceIter)
+	            .tokenizerFactory(tokenizer)
+	            .build();
+	    vec.fit();
+	    return vec;
 	}
 	
 	public Collection<String> viewSimilarWords (Word2Vec vec, String target, int numWords) {
@@ -74,4 +71,8 @@ public class WordVector {
 		WordVectorSerializer.writeWord2VecModel(vec, filePath);
 	}
 
+	public WordVectors loadVectors(String path) {
+		WordVectors wordVectors = WordVectorSerializer.loadStaticModel(new File(path)); 
+		return wordVectors;
+	}
 }

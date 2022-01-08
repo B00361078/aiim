@@ -14,7 +14,6 @@ import com.aiim.app.resource.ViewNames;
 import com.aiim.app.util.Session;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -44,19 +43,17 @@ public class LoginController {
 	
 	public void initialize() throws Exception {
     	strBundle = ResourceBundle.getBundle("com.aiim.app.resource.bundle");
-    	ViewController.createInstance();
     	con = DatabaseConnect.getConnection();  	
     }
 
     @FXML protected void dashView(ActionEvent event) throws IOException, SQLException, ClassNotFoundException, NoSuchAlgorithmException, DecoderException  {
-    	Scene scene = passwordField.getScene();
-    	String username = usernameField.getText();
-    	String password = passwordField.getText();
-    	if (username == null | password == null) {
+    	
+    	if (usernameField.getText() == null | passwordField.getText() == null) {
     		new javafx.scene.control.Alert(Alert.AlertType.ERROR, strBundle.getString("e17")).showAndWait();
     	}
     	else {
-        	sqlStatement = con.prepareStatement("USE [honsdb] SELECT* FROM tblUser WHERE username = '" +username+"'");
+        	sqlStatement = con.prepareStatement(strBundle.getString("sqlSelect18"));
+        	sqlStatement.setString(1, usernameField.getText());
         	rs = sqlStatement.executeQuery();
 	        	while(rs.next()){
 	        		user = rs.getString(1);
@@ -70,20 +67,21 @@ public class LoginController {
         		Session.setUsername(user);
         		Session.setFullName(fullname);
         		Session.setTeamID(teamID);
-        		sqlStatement = con.prepareStatement("USE [honsdb] SELECT* FROM tblRole WHERE roleID = '" +roleID+"'");
+        		sqlStatement = con.prepareStatement(strBundle.getString("sqlSelect19"));
+        		sqlStatement.setString(1, roleID);
 	        	rs = sqlStatement.executeQuery();
 		        	while(rs.next()){
 		        		permLevel = rs.getInt("permissionLevel");
 		            }
-		        sqlStatement = con.prepareStatement("USE [honsdb] SELECT* FROM tblTeam WHERE teamID = '" +teamID+"'");
+		        sqlStatement = con.prepareStatement(strBundle.getString("sqlSelect20"));
+		        sqlStatement.setString(1, teamID);
 	        	rs = sqlStatement.executeQuery();
 		        	while(rs.next()){
 		        		teamName = rs.getString("name");
 		            }
         		Session.setPermissionLevel(permLevel);
         		Session.setTeamName(teamName);
-        		
-        		ViewController.createInstance().setCurrentScene(scene);
+        		ViewController.createInstance().setCurrentScene(passwordField.getScene());
         		ViewController.createInstance().switchToView(ViewNames.HOME);
     		}
     		else {

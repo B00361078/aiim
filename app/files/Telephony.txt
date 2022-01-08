@@ -1,0 +1,123 @@
+GI Claims Recovery :Cisco Finesse Supervisor Agent remote monitoring is not working:1 Application :
+Cisco Finesse access request Hi Team, Please could you set up Cisco Finess access for the following new starter
+My colleague needs access to Finesse but it seems she only has Finesse 1 installed on her profile and not Finesse 4. please can you clone my access so she can access finesse on her laptop or any desktop she is sat at?
+Are Vodafone able to advise why there is any possible reason why  Cisco Finesse in particular to run slowly - please be advised that this is also under investigation, the customer has asked us to reach out to you specifically as Cisco Finesse appears to be most adversely affected by this software. 
+Yes User reporting 5 home users have been logged out of Finesse and can no longer log on. Finesse will not load. 
+Cisco Finesse Supervisor Agent remote monitoring is not working
+Cisco desktop Cisco desktop will not open.
+CISCO AGENT  [PRD](CISCO AGENT) CISCO AGENT [PRD](CISCO AGENT) not opening
+cisco any connect cisco issue home worker
+reinstall cisco agent reinstall cisco agent
+Cisco Cisco Agent desktop keeps crashing
+Cant open cisco agaent desktop Cant open cisco agent desktop
+Cisco anyconnect user cannot log onto anyconnect
+User needs to be setup on Cisco VPN system User needs to be setup on Cisco VPN system
+members of staff are faced with a Cisco Screen which will not allow them to click on the 'login button'. When each agent moves to another PC they are able to login fine. 
+Hardphone configuration issue Model Incident notifies phone is being used by another agent Exact Error Message
+User is unable to log out of their hardphone User is unable to log out of their hardphone
+wires pulled out back of hardphone - waiting for phone to reconfigure , never reconfigured. When wires were inserted it didn't click, so likely that these are to become loose again.
+User approached local support as her hardphone has been sitting on `Ethernet Disconnected` since the weekend. I rebooted the hardphone and ensured that the cables were secure but the problem persists 
+Hardphone not working the screen is completely dead, all 6 buttons flash every 2 to 3 seconds.
+all calls going through to voicemail
+User contacted to report that when using headset and pressing "green button" to activate, headset is completely unresponsive and button enables loud speaker of hardphone itself. -Phone was working fine with headset all last week -issue developed for first time this week Please can you advise on this matter?
+Headset not picking up calls through the the headset - forced to use the handset
+ Needs extension number changing
+Believe the issue to be with the hardphone as the PC looses connection, soon as the phone is called the PC then picks up the network again
+Not able to use it as there is no dialing tone.  All cables have been checked on the phone and no issues there.
+she only has Finesse 1 installed on her profile and not Finesse 4.
+User unable to find finesse on her machine and access it. Tried repairing finesse but it didnt work.
+its related to an outage they had - states" the dial number is invalid"
+I have a member of my team who has MAGIC software and is struggling to use cisco finesse which we think is linked to this software. The finesse system is very slow and can take 5 minutes or more to dial out
+Finesse is disconnected, sending back to homepage, number invalid (when logging in)
+We can log into Finesse Telephone system fine however when trying to change the status to " NOT READY" it brings up a pop up box stating there is an error to contact administrator
+Users is  facing  exceed and finesse  Application issues within  the citrix. Particularly Unable to log in to exceed and finesse application getting blank screen
+user is facing an issue with the Cisco Finesse application inside, citrix as user is unable to launch Finesse application getting an error message . Error message : The device is not accessible. 
+Unable to launch finesse What is customer trying to do: Launch Finesse
+Telequest asked if Finess can be removed and reinstalled. 
+Motor Claims having issues with some inbound calls. Rather than hearing the customer they just get themselves playing back to them.
+Finesse will not load. Home users only. 
+Finesse - no longer pinned to desktop - her finesse has disappeared from her desktop - we have tried to set this back up using the finesse guide
+raised ticket for finesse on telequest and got user basic access to exceed and to request the other access via IT self service.
+User is missing Finesse from his start menu. Program appears in Programs and Features, but not anywhere else. 
+colleagues in contact centres experienced brief call disconnects via Finesse.
+User is facing an issue with finesse application inside citrix. As user is unable to launch finesse  application inside citrix. 
+The team are experience an issue with finesse, it is advising that finesse is unable to connect to the server
+GI Claims Recovery :Cisco Finesse Supervisor Agent remote monitoring is not working:1 Application :
+Cisco Finesse access request Hi Team, Please could you set up Cisco Finess access for the following new starter
+My colleague needs access to Finesse but it seems she only has Finesse 1 installed on her profile and not Finesse 4. please can you clone my access so she can access finesse on her laptop or any desktop she is sat at?
+Are Vodafone able to advise why there is any possible reason why  Cisco Finesse in particular to run slowly - please be advised that this is also under investigation, the customer has asked us to reach out to you specifically as Cisco Finesse appears to be most adversely affected by this software. 
+Yes User reporting 5 home users have been logged out of Finesse and can no longer log on. Finesse will not load. 
+Cisco Finesse Supervisor Agent remote monitoring is not working
+Cisco desktop Cisco desktop will not open.
+CISCO AGENT  [PRD](CISCO AGENT) CISCO AGENT [PRD](CISCO AGENT) not opening
+cisco any connect cisco issue home worker
+reinstall cisco agent reinstall cisco agent
+Cisco Cisco Agent desktop keeps crashing
+Cant open cisco agaent desktop Cant open cisco agent desktop
+Cisco anyconnect user cannot log onto anyconnect
+User needs to be setup on Cisco VPN system User needs to be setup on Cisco VPN system
+members of staff are faced with a Cisco Screen which will not allow them to click on the 'login button'. When each agent moves to another PC they are able to login fine. 
+Hardphone configuration issue Model Incident notifies phone is being used by another agent Exact Error Message
+User is unable to log out of their hardphone User is unable to log out of their hardphone
+wires pulled out back of hardphone - waiting for phone to reconfigure , never reconfigured. When wires were inserted it didn't click, so likely that these are to become loose again.
+User approached local support as her hardphone has been sitting on `Ethernet Disconnected` since the weekend. I rebooted the hardphone and ensured that the cables were secure but the problem persists 
+Hardphone not working the screen is completely dead, all 6 buttons flash every 2 to 3 seconds.
+all calls going through to voicemail
+User contacted to report that when using headset and pressing "green button" to activate, headset is completely unresponsive and button enables loud speaker of hardphone itself. -Phone was working fine with headset all last week -issue developed for first time this week Please can you advise on this matter?
+Headset not picking up calls through the the headset - forced to use the handset
+Needs extension number changing
+Believe the issue to be with the hardphone as the PC looses connection, soon as the phone is called the PC then picks up the network again
+Not able to use it as there is no dialing tone.  All cables have been checked on the phone and no issues there. 
+Hardphone Setting up a user on their hardphone MAC address
+user has rebooted, unplugged hardphone and attempted to manually configure it however the issue still persists
+User is unable to log out of their hardphone User is unable to log out of their hardphone -  Can you please assist the user. They have followed the required instructions but don't have all the options available.
+not able to as it says IP configuring on the actual hardphone
+Hardphone network cable missing the phone cable from the hub to the phone Ethernet cable is present but no grey network cable
+No power getting to hardphone - blank screen
+Hardphone in Meeting Room 12 - wires pulled out back of hardphone - waiting for phone to reconfigure , never reconfigured. When wires were inserted it didn't click, so likely that these are to become loose again.
+The hardphone screen keeps going blank which is cancelling out Softphone and stops it from working 
+User approached local support as her hardphone has been sitting on `Ethernet Disconnected` since the weekend. I rebooted the hardphone and ensured that the cables were secure but the problem persists 
+User was experiencing slow network speeds, machine was hotswapped but this didn't resovle the issue. Engineer plugged ethernet cablefrom phone directly into PC and this resovled the issue, so the fault seems to be with the user hardphone. 
+Hardphone not working the screen is completely dead, all 6 buttons flash every 2 to 3 seconds.
+Phone is dead, no connection. Advised customer to speak to vodaphone but they pushed back
+If user tries to take it off while speaking to someone it hangs up on them. If they take it off before calling them they cannot hear me.
+Hardphone missing from users desk User would like to order a new Hardphone for her desk as it is missing one
+hardphones not working. justin from inserve was asked to call us and let us know that there are a bunch of hardphones that do not work. they do not connect and various othe prroblems 
+Faulty cable and faulty hardphone Network cable is faulty also hardphone not working 
+all calls going through to voicemail users ext is , could this be sorted so all calls dont go to voicemail
+Need to configure Hardphone Need you help in configuring a new installed Hardphone in our process.
+Cisco desktop Cisco desktop will not open.
+Cisco Cisco agent not opening
+cisco issue cisco issue
+cisco cisco any connect
+cisco any connect cisco issue home worker
+re-install of cisco cisco resinstalled
+cisco anywhere cisco anywhere check
+Cisco Desktop not opening Cisco Desktop not opening
+Cisco Desktop not opening Cisco Desktop not opening
+Cisco Desktop not opening Cisco Desktop not opening
+Cisco Desktop not opening Cisco Desktop not opening (MCGUINK)
+reinstall cisco agent reinstall cisco agent
+no cisco phone access no cisco phone access
+cisco phone admin password needed cisco phone admin password needed
+cisco vpn issues cisco vpn issues
+Cisco Desktop Cant login to Cisco Desktop
+CISCO anyconnect missing CISCO anyconnect missing Was able to install through software centre
+Softphone Softphone not working
+softphone configuring softphone needed configuring
+no softphone no softphone icon on desktop
+Softphone Can't login to Softphone
+softphone reconfigured softphone reconfigured
+Softphone Softphone not opening for user
+softphone - other softphone - other Click on softphone, logged out
+softphone - freezing softphone - freezing - softphone froze and no wrap up
+Softphone issues Logged for Timothy Gaffney's Softphone issues.
+softphone - not responding softphone - not responding took me 10 mins to logon softphone
+softphone - not responding softphone - not responding took me 8 mins to logon softphone
+SOFTPHONE Users softphone was giving the error Virtual environment was not started, restarted med-v and softphone, issue resolved
+Softphone & Exceed Softphone & Exceed exceed and softphone both crashed and then shut down everything
+Softphone not working Softphone not working Resolved by restarting MEDV
+Softphone issue Softphone issue "desktop not configured" Resolved by restarting MEDV
+softphone - wrap time softphone - wrap time
+my finesse telephone system is not working I cannot move the status to not ready
+ciso desktop agent needs configured

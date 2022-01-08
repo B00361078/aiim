@@ -34,7 +34,7 @@
             <Label text="Assignee" GridPane.rowIndex="1" />
             <Label text="Assigned Team" GridPane.rowIndex="2" />
             <Label text="Status" GridPane.rowIndex="4" />
-            <ChoiceBox fx:id="assignedTeam" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <ChoiceBox fx:id="assignedTeamMenu" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
             <Label text="Date Raised" GridPane.rowIndex="5" />
             <Label fx:id="dateRaised" text="Date Raised" GridPane.columnIndex="1" GridPane.rowIndex="5" />
             <Label fx:id="assignee" text="label2" GridPane.columnIndex="1" GridPane.rowIndex="1" />

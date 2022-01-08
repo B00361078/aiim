@@ -38,6 +38,9 @@ public class TicketController {
 	private AppUtil appUtil;
 	private ResourceBundle strBundle;
 	private ResultSet rs;
+	private Alert alert;
+	private ThreadTask task;
+	private Thread thread;
 	public static String currentDirectory;
 	
 	public void initialize() throws Exception, SQLException {
@@ -53,7 +56,6 @@ public class TicketController {
     }
 
     public void insertTicket() throws Exception {
-	    con.setAutoCommit(false);
 	    sqlStatement = con.prepareStatement(strBundle.getString("sqlSelect8"));
 	    sqlStatement.setString(1, prediction);
 	    rs = sqlStatement.executeQuery();
@@ -64,55 +66,36 @@ public class TicketController {
     	sqlStatement.setString(1, details.getText());
     	sqlStatement.setString(2, Session.getUsername());
     	sqlStatement.setString(3, null);
-    	sqlStatement.setInt(4, isAutoAssigned(prediction));
+    	sqlStatement.setInt(4, appUtil.isAutoAssigned(prediction));
     	sqlStatement.setString(5, teamID);
     	sqlStatement.setString(6, teamID);
     	sqlStatement.setString(7, "Raised");
     	sqlStatement.setObject(8, appUtil.getDate());
     	sqlStatement.setObject(9, appUtil.getDate());
-    		if (sqlStatement.executeUpdate() == 1) {
-    			con.commit();
-    			System.out.println("Ticket raised");
-    		}
-    		else {
-    			throw new Exception("Unable to insert");
-    		}
+    	appUtil.executeSQL(con, sqlStatement);
     }
     
     public void cancel() throws IOException {
     	ViewController.createInstance().switchToView(ViewNames.HOME);
     }
     
-    public int isAutoAssigned(String prediction) {
-    	if (prediction.contains("General")) {
-    		return 0;
-    	}
-    	else {
-    		return 1;
-    	}
-    }
-    
     public void setRaiseAction() {
     	raiseBtn.setOnAction(ae -> {
             ae.consume();
             raiseBtn.setDisable(true);
-            ThreadTask task = new ThreadTask();
+            task = new ThreadTask();
             task.setOnSucceeded(e -> task.getValue());
-            Alert alert = appUtil.createProgressAlert(ViewController.createInstance().getCurrentStage(), task);          
-            Thread thread = new Thread(task, "thread");
-            thread.setDaemon(true);
-            thread.start();
+            alert = appUtil.createProgressAlert(ViewController.createInstance().getCurrentStage(), task);          
+            thread = appUtil.startThread(task, "dbThread");
             alert.showAndWait();
             try {
 				ViewController.createInstance().switchToView(ViewNames.DASHBOARD);
 				//stop the thread
 				thread.interrupt();
 			} catch (IOException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
-			});
-    	
+		});
     }
     
 	private class ThreadTask extends Task {
@@ -125,20 +108,29 @@ public class TicketController {
         protected String call() throws Exception {
         	
             updateMessage("Raising ticket, please wait.");
-            appUtil.setLabels();
-            appUtil.downloadFiles();
-            DataSetIter dataSetIter = new DataSetIter();
-	        INDArray features = network.getFeatures(details.getText(), dataSetIter.getDataSetIterator(true));
-				if (appUtil.getMode("assignMode").contains("ON") && (!(features == null))) {
-	            	prediction = network.classify(features, network.restoreModel(currentDirectory + "/files/cnn_model.zip"));
-	            }
-	            else {
-	        	prediction = "General";
-	            }
+
+            if (appUtil.getMode("assignMode").contains("OFF")) {
+            	prediction = "General";
+            }
+            else if (appUtil.getMode("assignMode").contains("ON")) {
+            	appUtil.setLabels();
+                appUtil.downloadFiles();
+            	DataSetIter dataSetIter = new DataSetIter();
+    	        INDArray features = network.getFeatures(details.getText(), dataSetIter.getDataSetIterator(true));
+	    	        if (!(features == null)) {
+	    	        	prediction = network.classify(features, network.restoreModel(currentDirectory + "/files/cnn_model.zip"));
+	    	        }
+	    	        else {
+	    	        	prediction = "General";
+	    	        }
+            }
+    	    else {
+    	    	prediction = "General";
+    	    }
         	insertTicket();
             updateMessage("Ticket raised successfully, raised to team - " + prediction);
             updateProgress(1, 1);
-            return prediction;
+            return null;
         }
     }
 }

@@ -1,7 +1,9 @@
 package com.aiim.app.util;
 
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -14,7 +16,12 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
+
+import org.deeplearning4j.nn.graph.ComputationGraph;
 import com.aiim.app.database.DatabaseConnect;
+import com.aiim.app.model.DataSetIter;
+import com.aiim.app.model.Network;
+
 import javafx.beans.binding.Bindings;
 import javafx.concurrent.Task;
 import javafx.scene.Cursor;
@@ -40,7 +47,9 @@ public class AppUtil {
 	public AppUtil() {
 		strBundle = ResourceBundle.getBundle("com.aiim.app.resource.bundle");
 		con = DatabaseConnect.getConnection();
+		currentDirectory = Paths.get("").toAbsolutePath().toString();
 	}
+	
 	public String getMode(String param) throws Exception {
 		String mode = null;
 		switch(param) {
@@ -57,6 +66,65 @@ public class AppUtil {
 				mode = rs.getString(1);
 	        }
 		return mode;
+	}
+	
+	public int isAutoAssigned(String prediction) {
+    	if (prediction.contains("General")) {
+    		return 0;
+    	}
+    	else {
+    		return 1;
+    	}
+    }
+	
+	public Thread startThread(Task task, String name) {
+		Thread thread = new Thread(task, name);
+        thread.setDaemon(true);
+        thread.start();
+        return thread;
+	}
+	
+	public void executeSQL(Connection con, PreparedStatement sqlStatement) throws Exception {
+		con.setAutoCommit(false);
+		if (sqlStatement.executeUpdate() == 1) {
+			con.commit();
+		}
+		else {
+			throw new Exception(strBundle.getString("e3"));
+		}
+	}
+	
+	public void retrain(String filename, String details) throws Exception {  	
+		Network network = new Network();
+		DataSetIter dataSetIter = new DataSetIter();
+	    ComputationGraph currentModel = network.restoreModel(currentDirectory + "/files/cnn_model.zip");
+		FileWriter fw = new FileWriter(currentDirectory+"/files/"+filename, true);
+	    BufferedWriter bw = new BufferedWriter(fw);
+	    bw.newLine();
+	    bw.write(details);
+	    bw.close();
+	    network.retrain(currentModel, dataSetIter.getDataSetIterator(true));
+    	network.saveModel(currentModel, currentDirectory + "/files/cnn_model.zip");
+    	updateFile(filename);
+    	updateFile("cnn_model.zip");
+    }
+	
+
+	
+	
+	
+	public void updateFile(String filename) throws Exception {
+		File file;
+	    file = new File(currentDirectory+"/files/"+filename);
+	    byte[] fileContent = Files.readAllBytes(file.toPath());
+	    long filelength = file.length();
+	    long filelengthinkb = filelength/1024;
+		sqlStatement = con.prepareStatement(strBundle.getString("sqlUpdate6"));
+		sqlStatement.setLong(1, filelengthinkb);
+		sqlStatement.setObject(2, getDate());
+		sqlStatement.setBytes(3, fileContent);
+		sqlStatement.setString(4, filename);
+		executeSQL(con, sqlStatement);
 	}
 	
 	public Timestamp getDate() {

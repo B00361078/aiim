@@ -2,7 +2,6 @@ package com.aiim.app.controller;
 
 import java.io.IOException;
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -127,16 +126,11 @@ public class DashboardController {
 		ObservableList<Ticket.Builder> newlist = FXCollections.observableArrayList();
 		for (Builder item : list) {
 			if (item.status.contains(filter)) {
-				
-				String ticketID = item.ticketID;
-	    		String status = item.status;
-	    		String date = item.date;
-	    		String assignedTeam = item.assignedTeam;
-	    		
-	    		newlist.add(new Ticket.Builder().setTicketID(ticketID)
-			    		.setStatus(status)
-			    		.setDate(date)
-			    		.setAssignedTeam(assignedTeam));
+	    		newlist.add(new Ticket.Builder()
+	    				.setTicketID(item.ticketID)
+			    		.setStatus(item.status)
+			    		.setDate(item.date)
+			    		.setAssignedTeam(item.assignedTeam));
 			}
 		}
 		ticketTable.getItems().clear();
@@ -166,17 +160,11 @@ public class DashboardController {
 
     	rs = sqlStatement.executeQuery();
     	while(rs.next()){
-    			
-    		String ticketID = rs.getString(1);
-    		String status = rs.getString(2);
-    		Date date = rs.getDate(3);
-    		String assignedTeam = rs.getString(4);
-    		
     		ticketTable.getItems().add(new Ticket.Builder()
-		    		.setTicketID(ticketID)
-		    		.setStatus(status)
-		    		.setDate(date.toString())
-		    		.setAssignedTeam(assignedTeam));
+		    		.setTicketID(rs.getString(1))
+		    		.setStatus(rs.getString(2))
+		    		.setDate(rs.getDate(3).toString())
+		    		.setAssignedTeam(rs.getString(4)));
     	}		    
 	}
 	

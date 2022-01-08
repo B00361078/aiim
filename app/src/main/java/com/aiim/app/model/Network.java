@@ -29,36 +29,26 @@ import java.util.*;
 
 public class Network {
 
-    /** Data URL for downloading */
 	public static String currentDirectory = Paths.get("").toAbsolutePath().toString();
 	private static ComputationGraph model;
 	private static int VECTORSIZE;
 	private static int FEATURE_MAPS;
 	private static PoolingType POOLTYPE;
 	private static int OUTPUTS;
-	
-    /** Location to save and extract the training/testing data */
-    //public static final String DATA_PATH = FilenameUtils.concat(System.getProperty("java.io.tmpdir"), "dl4j_w2vSentiment/");
-    /** Location (local file system) for the Google News vectors. Set this manually. 
-     * @return */
-    //public static final String WORD_VECTORS_PATH = "/PATH/TO/YOUR/VECTORS/GoogleNews-vectors-negative300.bin.gz";
 
     public static ComputationGraph buildModel() throws Exception {
        
-        VECTORSIZE = 300;               //Size of the word vectors. 300 in the Google News model
-        FEATURE_MAPS = 1000;      //Number of feature maps / channels / depth for each CNN layer
+        VECTORSIZE = 300;       
+        FEATURE_MAPS = 1000;
         POOLTYPE = PoolingType.MAX;
         OUTPUTS = 4;
         new Random(12345);
-
-        //Set up the network configuration. Note that we have multiple convolution layers, each wih filter
-        //widths of 3, 4 and 5 as per Kim (2014) paper.
 
         ComputationGraphConfiguration config = new NeuralNetConfiguration.Builder()
             .weightInit(WeightInit.RELU)
             .activation(Activation.LEAKYRELU)
             .updater(Updater.ADAM)
-            .convolutionMode(ConvolutionMode.Same)      //This is important so we can 'stack' the results later
+            .convolutionMode(ConvolutionMode.Same)
             .regularization(true).l2(0.0001)
             .learningRate(0.01)
             .graphBuilder()
@@ -81,7 +71,7 @@ public class Network {
                 .nIn(1)
                 .nOut(FEATURE_MAPS)
                 .build(), "input")
-            .addVertex("merge", new MergeVertex(), "cnn3", "cnn4", "cnn5")      //Perform depth concatenation
+            .addVertex("merge", new MergeVertex(), "cnn3", "cnn4", "cnn5")
             .addLayer("globalPool", new GlobalPoolingLayer.Builder()
                 .poolingType(POOLTYPE)
                 .build(), "merge")
@@ -99,7 +89,6 @@ public class Network {
         return model;
     }
 
-	private ComputationGraph trainedModel;
     public ComputationGraph retrain(ComputationGraph model, DataSetIterator iter) throws IOException {
 		model.fit(iter);
 		return model;	
@@ -117,7 +106,6 @@ public class Network {
     
     public INDArray getFeatures (String verbatim, DataSetIterator trainIter) {
     	INDArray features = null;
-    	System.out.println("train labels - " + trainIter.getLabels());
     	try {
     		features = ((CnnSentenceDataSetIterator) trainIter).loadSingleSentence(verbatim);
     	}
@@ -144,9 +132,8 @@ public class Network {
 	        for (int a = 0; a < predictions.length(); a++) {
 	            maxAt = predictions.getDouble(a) > predictions.getDouble(maxAt) ? a : maxAt;
 	        }
-        System.out.println("max is at " + maxAt);
+        System.out.println("Max is at " + maxAt);
         String classification = labels.get(maxAt);
-
         System.out.println(classification);
     	//return the label classification here
 		return classification.toString();

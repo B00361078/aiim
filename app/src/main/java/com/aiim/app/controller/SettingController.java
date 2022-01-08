@@ -143,7 +143,6 @@ public class SettingController {
     }
 
     public void updateMode(String modeVal, String mode) throws Exception {
-	    con.setAutoCommit(false);
 	    switch(mode) {
 		    case "Auto-assign":
 		    	sqlStatement = con.prepareStatement(strBundle.getString("sqlUpdate1"));
@@ -155,12 +154,7 @@ public class SettingController {
 	    sqlStatement.setString(1, modeVal);
 	    sqlStatement.setObject(2, appUtil.getDate());
 	    sqlStatement.setInt(3, 1);
-    		if (sqlStatement.executeUpdate() == 1){
-    			con.commit();
-    		}
-    		else {
-    			throw new Exception("Error");
-    		}
+    	appUtil.executeSQL(con, sqlStatement);
     }
     
     @FXML protected void back() throws IOException {
