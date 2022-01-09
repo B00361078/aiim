@@ -1,7 +1,6 @@
 package com.aiim.app.controller;
 
 import java.io.IOException;
-import java.nio.file.Paths;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -18,8 +17,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 
 /* The following class handles the login and authentication of the application. Part of MVC design Pattern as a controller.
  * Neil Campbell 06/01/2022, B00361078
@@ -43,8 +40,6 @@ public class LoginController {
 	private String fullname;
 	private PreparedStatement sqlStatement;
 	private ResultSet rs;
-	private ImageView imageView;
-	private String currentDirectory;
 	
 	public void initialize() throws Exception {
     	strBundle = ResourceBundle.getBundle("com.aiim.app.resource.bundle");

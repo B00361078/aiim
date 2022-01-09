@@ -16,10 +16,13 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
+
+import org.deeplearning4j.models.word2vec.Word2Vec;
 import org.deeplearning4j.nn.graph.ComputationGraph;
 import com.aiim.app.database.DatabaseConnect;
 import com.aiim.app.model.DataSetIter;
 import com.aiim.app.model.Network;
+import com.aiim.app.model.WordVector;
 import javafx.beans.binding.Bindings;
 import javafx.concurrent.Task;
 import javafx.scene.Cursor;
@@ -101,11 +104,31 @@ public class AppUtil {
 	    bw.newLine();
 	    bw.write(details);
 	    bw.close();
-	    network.retrain(currentModel, dataSetIter.getDataSetIterator(true));
+	    network.train(currentModel, dataSetIter.getDataSetIterator(true));
     	network.saveModel(currentModel, currentDirectory + "/files/cnn_model.zip");
     	updateFile(filename);
     	updateFile("cnn_model.zip");
     }
+	//developer methods
+	public void uploadNewModel () throws Exception {
+		setLabels();
+		downloadFiles();
+		Network network = new Network();
+		ComputationGraph model = network.buildModel();
+		DataSetIter dateSetIter = new DataSetIter();
+		ComputationGraph trainedModel = network.train(model, dateSetIter.getDataSetIterator(true));
+		network.saveModel(trainedModel, currentDirectory + "/files/cnn_model.zip");
+		updateFile("cnn_model.zip");
+	}
+	//developer methods
+	public void uploadNewVectors() throws Exception {
+		setLabels();
+		downloadFiles();
+		WordVector wv = new WordVector();
+		Word2Vec wordVec = wv.buildVectors(currentDirectory + "/files/vectors_raw.txt", currentDirectory + "/files/stop_words.txt");
+		wv.saveVectorToFile(wordVec, currentDirectory + "/files/word_vectors.txt");
+		updateFile("word_vectors.txt");
+	}
 	
 	public void updateFile(String filename) throws Exception {
 	    File file = new File(currentDirectory+"/files/"+filename);
@@ -131,21 +154,17 @@ public class AppUtil {
         alert.initOwner(owner);
         alert.titleProperty().bind(task.titleProperty());
         alert.contentTextProperty().bind(task.messageProperty());
-
         ProgressIndicator pIndicator = new ProgressIndicator();
         pIndicator.progressProperty().bind(task.progressProperty());
         alert.setGraphic(pIndicator);
-
         alert.getDialogPane().getButtonTypes().add(ButtonType.OK);
         alert.getDialogPane().lookupButton(ButtonType.OK)
-                .disableProperty().bind(task.runningProperty());       
-
+        .disableProperty().bind(task.runningProperty());       
         alert.getDialogPane().cursorProperty().bind(
 		Bindings.when(task.runningProperty())
-                    .then(Cursor.WAIT)
-                    .otherwise(Cursor.DEFAULT)
+        .then(Cursor.WAIT)
+        .otherwise(Cursor.DEFAULT)
         );
-
         return alert;
     }	
 	
@@ -174,18 +193,4 @@ public class AppUtil {
 		list.sort(String::compareToIgnoreCase);
 		Session.setPredictionLabels(list);
     }
-	
-	public void uploadFile(String fileName, String mode) throws Exception {
-		String currentDirectory = Paths.get("").toAbsolutePath().toString();
-		File file = new File(currentDirectory + "/files/"+fileName);
-	    byte[] fileContent = Files.readAllBytes(file.toPath());
-	    long filelengthinkb = file.length()/1024;    
-	    sqlStatement = con.prepareStatement(strBundle.getString("sqlUpdate8"));
-	    sqlStatement.setString(1, fileName);
-	    sqlStatement.setLong(2, filelengthinkb);
-	    sqlStatement.setObject(3, getDate());
-	    sqlStatement.setBytes(4, fileContent);
-	    sqlStatement.setString(5, fileName);
-    	executeSQL(con, sqlStatement);
-	}
 }

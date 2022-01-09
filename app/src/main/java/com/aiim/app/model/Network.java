@@ -36,7 +36,7 @@ public class Network {
 	private static PoolingType POOLTYPE;
 	private static int OUTPUTS;
 
-    public static ComputationGraph buildModel() throws Exception {
+    public ComputationGraph buildModel() throws Exception {
        
         VECTORSIZE = 300;       
         FEATURE_MAPS = 1000;
@@ -89,7 +89,7 @@ public class Network {
         return model;
     }
 
-    public ComputationGraph retrain(ComputationGraph model, DataSetIterator iter) throws IOException {
+    public ComputationGraph train(ComputationGraph model, DataSetIterator iter) throws IOException {
 		model.fit(iter);
 		return model;	
 	}
