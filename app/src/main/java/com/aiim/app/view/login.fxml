@@ -39,11 +39,10 @@
                     </children>
                  
          </HBox>
-            <ImageView fitHeight="172.0" fitWidth="272.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="1">
+            <ImageView fitHeight="364.0" fitWidth="403.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="1">
                <image>
-                  <Image url="@../../../../../../../../../../../Users/User/Pictures/aiim.PNG" />
-               </image>
-            </ImageView>
+                  <Image url="@style/mainLogo.png" />
+               </image></ImageView>
          </children>
          <columnConstraints>
             <ColumnConstraints />

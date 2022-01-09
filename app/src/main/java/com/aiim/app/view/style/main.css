@@ -3,17 +3,25 @@
     -fx-text-fill: white;
 }
 
+.menu-button > .arrow-button > .arrow {
+    -fx-background-color: white;
+    -fx-size: 5;
+}
+
+.menu-button {
+    -fx-text-fill: white;
+}
 
 .label {
     -fx-font-size: 12px;
-    -fx-text-fill:  #0b2575;
+    -fx-text-fill:  #194B86;
 }
 .button:pressed {
     -fx-background-color: #1c1cb0;
 }
 .table-view .column-header,
 .table-view .column-header-background .filler {
-    -fx-background-color: #0b2575; 
+    -fx-background-color: #194B86; 
 }
 .table-view .column-header .label{
    -fx-text-fill: white;
@@ -85,7 +93,7 @@
     -fx-text-fill: white;
     -fx-font-family: "Arial Narrow";
     -fx-font-weight: bold;
-    -fx-background-color:  #0b2575;
+    -fx-background-color:  #194B86;
     -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 );
 }
 .button:hover {

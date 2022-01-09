@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.SubScene?>
-<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.MenuButton?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.image.Image?>
@@ -11,11 +10,11 @@
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="600.0" style="-fx-background-color: #ffffff;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.aiim.app.controller.HomeController">
+<AnchorPane prefHeight="600.0" style="-fx-background-color: #ffffff;" stylesheets="@style/home.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.aiim.app.controller.HomeController">
    <children>
-      <Pane prefHeight="61.0" prefWidth="820.0" style="-fx-background-color: #0b2575;">
+      <Pane prefHeight="76.0" prefWidth="820.0" style="-fx-background-color: #194B86;">
          <children>
-            <MenuButton fx:id="menuButton" layoutX="616.0" layoutY="12.0" mnemonicParsing="false" style="-fx-background-color: #0b2575;" text="Name" textFill="WHITE">
+            <MenuButton fx:id="menuButton" contentDisplay="RIGHT" layoutX="616.0" layoutY="12.0" mnemonicParsing="false" style="-fx-background-color: #194B86;" text="Name" textFill="WHITE">
               <items>
                 <MenuItem fx:id="menuItemLogout" mnemonicParsing="false" onAction="#logout" text="Logout" />
               </items>
@@ -23,22 +22,14 @@
                   <Font size="14.0" />
                </font>
             </MenuButton>
-            <ImageView fitHeight="36.0" fitWidth="107.0" layoutX="38.0" layoutY="13.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="175.0" fitWidth="184.0" layoutX="-17.0" layoutY="-28.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@style/aiimWhite.png" />
+                  <Image url="@style/aiimWhiteLogo.png" />
                </image>
             </ImageView>
          </children>
       </Pane>
-      <Pane layoutY="61.0" prefHeight="20.0" prefWidth="820.0" style="-fx-background-color: #0341fc;" AnchorPane.topAnchor="61.0">
-         <children>
-            <Label alignment="CENTER" layoutX="279.0" layoutY="2.0" text="Artificial Intelligence Incident Management" textAlignment="CENTER" textFill="WHITE">
-               <font>
-                  <Font name="System Bold" size="14.0" />
-               </font>
-            </Label>
-         </children></Pane>
-      <SubScene fx:id="subScene" height="538.0" layoutY="81.0" width="820.0">
+      <SubScene fx:id="subScene" height="510.0" layoutY="75.0" width="820.0">
         <root>
           <Region />
         </root>
