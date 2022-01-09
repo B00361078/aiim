@@ -95,15 +95,19 @@ public class AppUtil {
 		}
 	}
 	
-	public void retrain(String filename, String details) throws Exception {  	
-		Network network = new Network();
-		DataSetIter dataSetIter = new DataSetIter();
-	    ComputationGraph currentModel = network.restoreModel(currentDirectory + "/files/cnn_model.zip");
+	public void appendToFile(String filename, String details) throws IOException  {
 		FileWriter fw = new FileWriter(currentDirectory+"/files/"+filename, true);
 	    BufferedWriter bw = new BufferedWriter(fw);
 	    bw.newLine();
 	    bw.write(details);
 	    bw.close();
+	}
+	
+	public void retrain(String filename, String details) throws Exception {  	
+		Network network = new Network();
+		DataSetIter dataSetIter = new DataSetIter();
+	    ComputationGraph currentModel = network.restoreModel(currentDirectory + "/files/cnn_model.zip");
+		appendToFile(filename, details);
 	    network.train(currentModel, dataSetIter.getDataSetIterator(true));
     	network.saveModel(currentModel, currentDirectory + "/files/cnn_model.zip");
     	updateFile(filename);
