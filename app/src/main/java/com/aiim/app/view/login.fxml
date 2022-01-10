@@ -35,7 +35,7 @@
                  
                  <HBox alignment="bottom_right" prefHeight="43.0" prefWidth="251.0" spacing="10" GridPane.columnIndex="1" GridPane.rowIndex="5">
                     <children>
-                    <Button onAction="#dashView" prefHeight="42.0" prefWidth="74.0" text="Sign In" />
+                    <Button fx:id="loginBtn" onAction="#dashView" prefHeight="42.0" prefWidth="74.0" text="Sign In" />
                     </children>
                  
          </HBox>

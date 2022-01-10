@@ -87,6 +87,10 @@ public class ViewController {
 		root = loader.load();
 	}
 	
+	public String getResource() {
+		return viewResource;
+	}
+	
 	public void switchToView(ViewNames view) throws IOException {
 		switch(view) {
 		  case LOGIN:
