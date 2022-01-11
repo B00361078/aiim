@@ -136,7 +136,8 @@ public class AmendTicketController {
 	        			alert = new Alert(AlertType.INFORMATION);
 	    	    		alert.setHeaderText(strBundle.getString("e2"));
 	    	    		alert.showAndWait();
-	    	    		ViewController.createInstance().switchToView(ViewNames.DASHBOARD);
+	    	    		ViewController.createInstance().setView(ViewNames.DASHBOARD);	
+	    	        	ViewController.createInstance().switchToView(ViewNames.HOME);
 	        		}
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -156,7 +157,8 @@ public class AmendTicketController {
 	            thread = appUtil.startThread(task, "dbThread");
 	            alert.showAndWait();
 	            try {
-					ViewController.createInstance().switchToView(ViewNames.DASHBOARD);
+	            	ViewController.createInstance().setView(ViewNames.DASHBOARD);	
+	            	ViewController.createInstance().switchToView(ViewNames.HOME);
 					//stop the thread
 					thread.interrupt();
 				} catch (IOException e) {
@@ -270,6 +272,7 @@ public class AmendTicketController {
     }
     
     public void back() throws IOException {
+    	ViewController.createInstance().setView(ViewNames.DASHBOARD);	
     	ViewController.createInstance().switchToView(ViewNames.HOME);
     }
     

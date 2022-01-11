@@ -41,7 +41,7 @@ public class Network {
         VECTORSIZE = 300;       
         FEATURE_MAPS = 1000;
         POOLTYPE = PoolingType.MAX;
-        OUTPUTS = 4;
+        OUTPUTS = 4;        
         new Random(12345);
 
         ComputationGraphConfiguration config = new NeuralNetConfiguration.Builder()

@@ -6,7 +6,6 @@ import com.aiim.app.resource.ViewNames;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.SubScene;
 import javafx.stage.Stage;
 
 /* The following class handles the switching between views and is the only class aware of the path to each view. Part of MVC design Pattern as a controller.
@@ -22,8 +21,8 @@ public class ViewController {
 	private String viewResource;
 	private Stage currentStage;
 	private Scene mainScene;
-	private Scene currentScene;
-	private SubScene currentSubScene;	
+	private Scene currentScene;	
+	private ViewNames view;
 	
 	private ViewController() {
 		if(vc != null) {
@@ -60,10 +59,6 @@ public class ViewController {
 	public void setCurrentScene(Scene scene) {
 		this.currentScene = scene;
 	}
-	
-	public void setCurrentSubScene(SubScene subScene) {
-		this.currentSubScene = subScene;
-	}
 		
 	public void initialiseStage() {
 		mainScene = new Scene(root, 800, 600);
@@ -77,10 +72,6 @@ public class ViewController {
 		currentScene.setRoot(root);
 	}
 	
-	public void initialiseSubScene() {
-		currentSubScene.setRoot(root);
-	}
-	
 	private void setRoot(String viewResource2) throws IOException {
 		FXMLLoader loader = new FXMLLoader();
 		loader.setLocation(getClass().getResource(viewResource));
@@ -91,40 +82,41 @@ public class ViewController {
 		return viewResource;
 	}
 	
-	public void switchToView(ViewNames view) throws IOException {
+	public String switchToView(ViewNames view) throws IOException {
 		switch(view) {
 		  case LOGIN:
 				viewResource  = "/com/aiim/app/view/login.fxml";
 				setRoot(viewResource);
 				initialiseStage();
-			break;
+				return viewResource;
 		  case DASHBOARD:
 			  	viewResource  = "/com/aiim/app/view/dashboard.fxml";
-			  	setRoot(viewResource);
-			  	initialiseSubScene();
-		    break;
+			  	return viewResource;
 		  case TICKET:
 			  	viewResource  = "/com/aiim/app/view/ticket.fxml";
-			  	setRoot(viewResource);
-			  	initialiseSubScene();
-			break;
+			  	return viewResource;
 		  case SETTINGS:
 			  	viewResource  = "/com/aiim/app/view/settings.fxml";
-			  	setRoot(viewResource);
-			  	initialiseSubScene();
-			break;
+			  	return viewResource;
 		  case HOME:
 			  	viewResource  = "/com/aiim/app/view/home.fxml";
 			  	setRoot(viewResource);
 			  	initialiseScene();
-			break;
+			  	return viewResource;
 		  case AMENDTICKET:
 			  	viewResource  = "/com/aiim/app/view/amendTicket.fxml";
-			  	setRoot(viewResource);
-			  	initialiseSubScene();
-			break;
+			  	return viewResource;
 		  default:
 			  currentStage.close();
+			  return null;
 			}
+	}
+
+	public ViewNames getView() {
+		return view;
+	}
+
+	public void setView(ViewNames view) {
+		this.view = view;
 	}
 }

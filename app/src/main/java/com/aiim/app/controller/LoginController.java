@@ -82,6 +82,7 @@ public class LoginController {
         		Session.setPermissionLevel(permLevel);
         		Session.setTeamName(teamName);
         		ViewController.createInstance().setCurrentScene(passwordField.getScene());
+        		ViewController.createInstance().setView(ViewNames.DASHBOARD);
         		ViewController.createInstance().switchToView(ViewNames.HOME);
     		}
     		else {

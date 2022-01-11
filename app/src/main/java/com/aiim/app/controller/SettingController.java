@@ -158,7 +158,8 @@ public class SettingController {
     }
     
     @FXML protected void back() throws IOException {
-    	ViewController.createInstance().switchToView(ViewNames.DASHBOARD);
+    	ViewController.createInstance().setView(ViewNames.DASHBOARD);	
+    	ViewController.createInstance().switchToView(ViewNames.HOME);
     }
     
     private void getPercentage() throws SQLException {

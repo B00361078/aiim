@@ -76,6 +76,7 @@ public class TicketController {
     }
     
     public void cancel() throws IOException {
+    	ViewController.createInstance().setView(ViewNames.DASHBOARD);	
     	ViewController.createInstance().switchToView(ViewNames.HOME);
     }
     
@@ -89,7 +90,8 @@ public class TicketController {
             thread = appUtil.startThread(task, "dbThread");
             alert.showAndWait();
             try {
-				ViewController.createInstance().switchToView(ViewNames.DASHBOARD);
+            	ViewController.createInstance().setView(ViewNames.DASHBOARD);
+				ViewController.createInstance().switchToView(ViewNames.HOME);
 				//stop the thread
 				thread.interrupt();
 			} catch (IOException e1) {

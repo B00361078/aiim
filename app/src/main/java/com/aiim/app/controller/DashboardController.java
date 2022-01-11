@@ -24,6 +24,7 @@ import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.layout.AnchorPane;
 
 /* The following class handles the dashboard interface by switching the current subScene. Part of MVC design Pattern as a controller.
  * Neil Campbell 06/01/2022, B00361078
@@ -51,8 +52,12 @@ public class DashboardController {
 	private ObservableList<Ticket.Builder> list;
 	private ArrayList<RadioButton> radioBtns;
 	private ToggleGroup radioGrp;
+	private AnchorPane anchorP;
+	private HomeController homeController;
+	
    
     public void initialize() throws Exception  {
+    	homeController = new HomeController();
     	con = DatabaseConnect.getConnection();
     	strBundle = ResourceBundle.getBundle("com.aiim.app.resource.bundle");
     	settingsBtn.setVisible(false);
@@ -79,9 +84,11 @@ public class DashboardController {
     	        if (event.getClickCount() == 2 && (! row.isEmpty()) ) {
     	            String rowData = row.getItem().ticketID;
     	            Session.setCurrentTicket(rowData);
-    	            try {
-						ViewController.createInstance().switchToView(ViewNames.AMENDTICKET);
+					ViewController.createInstance().setView(ViewNames.AMENDTICKET);
+					try {
+						ViewController.createInstance().switchToView(ViewNames.HOME);
 					} catch (IOException e) {
+						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
     	        }
@@ -172,26 +179,32 @@ public class DashboardController {
 		switch(permLevel) {
 			case 1:
 				raiseNewBtn.setVisible(true);
+				settingsBtn.setVisible(false);
 				break;
 			case 2:
+				raiseNewBtn.setVisible(false);
+				settingsBtn.setVisible(false);
 				break;
 			case 3:
 				settingsBtn.setVisible(true);
+				raiseNewBtn.setVisible(false);
 				break;
 		}
 	}
 	   
-    @FXML protected void raiseIncidentView(ActionEvent event) {
+    public void raiseIncidentView(ActionEvent event) {
         try {
-        	ViewController.createInstance().switchToView(ViewNames.TICKET);
+        	ViewController.createInstance().setView(ViewNames.TICKET);	
+        	ViewController.createInstance().switchToView(ViewNames.HOME);
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
     }
     
-    @FXML protected void settingsView(ActionEvent event) {
+    public void settingsView(ActionEvent event) {
         try {
-        	ViewController.createInstance().switchToView(ViewNames.SETTINGS);		
+        	ViewController.createInstance().setView(ViewNames.SETTINGS);	
+        	ViewController.createInstance().switchToView(ViewNames.HOME);		
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
