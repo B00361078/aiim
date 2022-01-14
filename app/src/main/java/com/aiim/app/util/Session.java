@@ -2,6 +2,9 @@ package com.aiim.app.util;
 
 import java.util.ArrayList;
 
+import org.deeplearning4j.nn.graph.ComputationGraph;
+import org.nd4j.linalg.dataset.api.iterator.DataSetIterator;
+
 /* The following class handles the login session. Singleton pattern.
  * Neil Campbell 06/01/2022, B00361078
  */
@@ -13,6 +16,23 @@ public class Session {
 	private static String teamName;
 	private static String username;
 	private static String fullName;
+	private static ComputationGraph model;
+	private static DataSetIterator dataSetIterator;
+	public static ComputationGraph getModel() {
+		return model;
+	}
+
+	public static void setModel(ComputationGraph model) {
+		Session.model = model;
+	}
+
+	public static DataSetIterator getDataSetIterator() {
+		return dataSetIterator;
+	}
+
+	public static void setDataSetIterator(DataSetIterator dataSetIterator) {
+		Session.dataSetIterator = dataSetIterator;
+	}
 	private static String teamID;
 	private static String currentTicket;
 	private static ArrayList<String> predictionLabels;
@@ -70,7 +90,7 @@ public class Session {
 	}
 	public static String getTeamID() {
 		return teamID;
-	}
+		}
 	public static String getFullName() {
 		return fullName;
 	}
@@ -96,6 +116,8 @@ public class Session {
 		setTeamID(null);
 		setCurrentTicket(null);
 		setPredictionLabels(null);
+		setDataSetIterator(null);
+		setModel(null);
 		session = null;
 	}
 }

@@ -12,7 +12,7 @@
 <AnchorPane prefHeight="397.0" prefWidth="609.0" stylesheets="@style/main.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.aiim.app.controller.SettingController">
    <children>
       <VBox layoutX="14.0" layoutY="14.0" />
-      <GridPane layoutX="58.0" layoutY="133.0" prefHeight="66.0" prefWidth="362.0">
+      <GridPane layoutX="58.0" layoutY="133.0" prefHeight="174.0" prefWidth="362.0">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -20,30 +20,23 @@
         </columnConstraints>
         <rowConstraints>
           <RowConstraints maxHeight="85.0" minHeight="0.0" prefHeight="27.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="85.0" minHeight="10.0" prefHeight="50.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="85.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
             <Label text="Auto assignment:" />
             <RadioButton fx:id="assignOn" mnemonicParsing="false" text="Enable" GridPane.columnIndex="1" />
             <RadioButton fx:id="assignOff" mnemonicParsing="false" text="Disable" GridPane.columnIndex="2" />
+            <Label text="Auto training:" GridPane.rowIndex="1" />
+            <RadioButton fx:id="trainOn" mnemonicParsing="false" text="Enable" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <RadioButton fx:id="trainOff" mnemonicParsing="false" text="Disable" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+            <Label text="Live Model Loading" GridPane.rowIndex="2" />
+            <RadioButton fx:id="mlOn" mnemonicParsing="false" text="Enable" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <RadioButton fx:id="mlOff" mnemonicParsing="false" text="Disable" GridPane.columnIndex="2" GridPane.rowIndex="2" />
          </children>
       </GridPane>
       <Button fx:id="backBtn" layoutX="58.0" layoutY="331.0" mnemonicParsing="false" onAction="#back" text="Back to dashboard" />
       <Label alignment="TOP_LEFT" layoutX="58.0" layoutY="67.0" prefHeight="66.0" prefWidth="493.0" text="The following toggles allow you to enable/disable the auto assignment of new tickets and auto training of the machine learning algorithm." wrapText="true" />
-      <GridPane layoutX="58.0" layoutY="217.0" prefHeight="66.0" prefWidth="362.0">
-         <columnConstraints>
-            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-         </columnConstraints>
-         <rowConstraints>
-            <RowConstraints maxHeight="85.0" minHeight="0.0" prefHeight="27.0" vgrow="SOMETIMES" />
-         </rowConstraints>
-         <children>
-            <Label text="Auto training:" />
-            <RadioButton fx:id="trainOn" mnemonicParsing="false" text="Enable" GridPane.columnIndex="1" />
-            <RadioButton fx:id="trainOff" mnemonicParsing="false" text="Disable" GridPane.columnIndex="2" />
-         </children>
-      </GridPane>
       <Label layoutX="457.0" layoutY="116.0" text="Current AI accuracy:" />
       <Label fx:id="percentage" layoutX="480.0" layoutY="135.0" text="percentage" />
    </children>

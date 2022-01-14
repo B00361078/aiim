@@ -34,6 +34,8 @@ public class SettingController {
 	@FXML private RadioButton assignOff;
 	@FXML private RadioButton trainOn;
 	@FXML private RadioButton trainOff;
+	@FXML private RadioButton mlOn;
+	@FXML private RadioButton mlOff;
 	@FXML private Label percentage;
 	private AppUtil appUtil;
 	private Alert alert;
@@ -49,6 +51,8 @@ public class SettingController {
 	private ToggleGroup assignGrp;
 	private ArrayList<RadioButton> trainBtns;
 	private ToggleGroup trainGrp;
+	private ArrayList<RadioButton> mlBtns;
+	private ToggleGroup mlGrp;
    
 	public void initialize() throws Exception {
 		strBundle = ResourceBundle.getBundle("com.aiim.app.resource.bundle");
@@ -56,15 +60,20 @@ public class SettingController {
 		con = DatabaseConnect.getConnection();
 		assignBtns = new ArrayList<RadioButton>();
 		trainBtns = new ArrayList<RadioButton>();
+		mlBtns = new ArrayList<RadioButton>();
 		assignGrp = new ToggleGroup();
 		trainGrp = new ToggleGroup();
+		mlGrp = new ToggleGroup();
 		assignBtns.add(assignOn);
 		assignBtns.add(assignOff);
 		trainBtns.add(trainOn);
 		trainBtns.add(trainOff);
+		mlBtns.add(mlOn);
+		mlBtns.add(mlOff);
 		initialiseRadios();
 		setRadio("assignMode", appUtil.getMode("assignMode"));
 		setRadio("trainMode", appUtil.getMode("trainMode"));
+		setRadio("mlMode", appUtil.getMode("mlMode"));
     	getPercentage();
     }
 	
@@ -77,24 +86,32 @@ public class SettingController {
 			btn.setToggleGroup(trainGrp);
 			setRadioAction(btn);
 		}
+		for (RadioButton btn : mlBtns) {
+			btn.setToggleGroup(mlGrp);
+			setRadioAction(btn);
+		}
     }
     
     public void setRadioAction (RadioButton button) {
     	button.setOnAction(event -> {
     		if(button.getId().contains("On")) {
-    		 mode = "ON";
-    		 req = "Enabled";
-    		}
-    		else {
-    		 mode = "OFF";
-       		 req = "Disabled";
-    		}
-    		if(button.getId().contains("assign")) {
-    			modeName = "Auto-assign";
-    		}
-    		else {
-    			modeName = "Auto-train";
-    		}
+       		 mode = "ON";
+       		 req = "Enabled";
+       		}
+       		else {
+       		 mode = "OFF";
+          		 req = "Disabled";
+       		}
+       		if(button.getId().contains("assign")) {
+       			modeName = "Auto-assign";
+       		}
+       		if(button.getId().contains("train")) {
+       			modeName = "Auto-train";
+       		}
+       		else {
+       			modeName = "Live-Model-Loading";
+       		}
+    		
             alert = new Alert(AlertType.CONFIRMATION);
             alert.setHeaderText(strBundle.getString(button.getId()));
             alert.showAndWait();
@@ -112,6 +129,7 @@ public class SettingController {
             		try {
 						setRadio("assignMode", appUtil.getMode("assignMode"));
 						setRadio("trainMode", appUtil.getMode("trainMode"));
+						setRadio("mlMode", appUtil.getMode("mlMode"));
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
@@ -139,6 +157,15 @@ public class SettingController {
     			trainOff.setSelected(true);
     		}
     		break;
+    	case "mlMode":
+    		if (modeVal.contains("ON")) {
+    			mlOn.setSelected(true);
+    		}
+    		else {
+    			mlOn.setSelected(false);	
+    			mlOff.setSelected(true);
+    		}
+    		break;
     	}
     }
 
@@ -149,6 +176,9 @@ public class SettingController {
 		    	break;
 		    case "Auto-train":
 		    	sqlStatement = con.prepareStatement(strBundle.getString("sqlUpdate2"));
+		    	break;
+		    case "Live-Model-Loading":
+		    	sqlStatement = con.prepareStatement(strBundle.getString("sqlUpdate9"));
 		    	break;
 	    }
 	    sqlStatement.setString(1, modeVal);

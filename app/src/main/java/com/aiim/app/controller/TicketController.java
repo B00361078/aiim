@@ -114,13 +114,24 @@ public class TicketController {
             if (appUtil.getMode("assignMode").contains("OFF")) {
             	prediction = "General";
             }
-            else if (appUtil.getMode("assignMode").contains("ON")) {
+            //live mode
+            else if (appUtil.getMode("assignMode").contains("ON") && appUtil.getMode("mlMode").contains("ON")) {
             	appUtil.setLabels();
                 appUtil.downloadFiles();
             	DataSetIter dataSetIter = new DataSetIter();
     	        INDArray features = network.getFeatures(details.getText(), dataSetIter.getDataSetIterator(true));
 	    	        if (!(features == null)) {
 	    	        	prediction = network.classify(features, network.restoreModel(currentDirectory + "/files/cnn_model.zip"));
+	    	        }
+	    	        else {
+	    	        	prediction = "General";
+	    	        }
+            }
+            //login mode
+            else if (appUtil.getMode("assignMode").contains("ON") && appUtil.getMode("mlMode").contains("OFF")) {
+    	        INDArray features = network.getFeatures(details.getText(), Session.getDataSetIterator());
+	    	        if (!(features == null)) {
+	    	        	prediction = network.classify(features, Session.getModel());
 	    	        }
 	    	        else {
 	    	        	prediction = "General";

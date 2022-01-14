@@ -60,6 +60,9 @@ public class AppUtil {
 			case "trainMode":
 				sqlStatment = con.prepareStatement(strBundle.getString("sqlSelect9"));
 				break;
+			case "mlMode":
+				sqlStatment = con.prepareStatement(strBundle.getString("sqlSelect21"));
+				break;
 		}
 		sqlStatment.setInt(1, 1);
 		rs = sqlStatment.executeQuery();
