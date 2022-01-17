@@ -9,7 +9,6 @@ import java.sql.SQLException;
 import java.util.ResourceBundle;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import com.aiim.app.database.DatabaseConnect;
-import com.aiim.app.model.DataSetIter;
 import com.aiim.app.model.Network;
 import com.aiim.app.model.Note;
 import com.aiim.app.resource.ViewNames;
@@ -291,9 +290,6 @@ public class AmendTicketController {
     @FXML public void addNote() throws Exception {
     	
     	setDialog("Add a note to " + Session.getCurrentTicket(), "Add note");
-    	//Dialog<String> dialog = new Dialog<>();
-        //dialog.setTitle("Add a note to " + Session.getCurrentTicket());
-        //ButtonType loginButtonType = new ButtonType("Add note", ButtonData.OK_DONE);
         dialog.getDialogPane().getButtonTypes().addAll(btn, ButtonType.CANCEL);
 
         noteDetail.setPromptText("Add note details...");
@@ -398,10 +394,7 @@ public class AmendTicketController {
             	System.out.println("Will not retrain");
             }
             else if (appUtil.getMode("trainMode").contains("ON")) {
-            	appUtil.setLabels();
-                appUtil.downloadFiles();
-                DataSetIter dataSetIter = new DataSetIter();
-        	    INDArray features = network.getFeatures(details.getText(), dataSetIter.getDataSetIterator(true));
+        	    INDArray features = network.getFeatures(details.getText(), Session.getDataSetIterator());
         	    if (!(features == null)) {
         	    	appUtil.retrain(assignedTeamMenu.getValue() + ".txt", details.getText());
         	    }

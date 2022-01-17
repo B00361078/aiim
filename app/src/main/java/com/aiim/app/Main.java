@@ -44,7 +44,12 @@ public class Main extends Application {
 	
 	@Override
 	public void stop() throws IOException{
-	    FileUtils.cleanDirectory(new File(currentDirectory+"/files"));
+		try {
+			FileUtils.cleanDirectory(new File(currentDirectory+"/files"));
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public void checkDBConnect() {
