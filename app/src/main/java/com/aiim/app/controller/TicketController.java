@@ -9,7 +9,6 @@ import java.sql.SQLException;
 import java.util.ResourceBundle;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import com.aiim.app.database.DatabaseConnect;
-import com.aiim.app.model.DataSetIter;
 import com.aiim.app.model.Network;
 import com.aiim.app.resource.ViewNames;
 import com.aiim.app.util.AppUtil;
@@ -85,18 +84,20 @@ public class TicketController {
             ae.consume();
             raiseBtn.setDisable(true);
             task = new ThreadTask();
-            task.setOnSucceeded(e -> task.getValue());
+            task.setOnSucceeded(e -> {
+            	ViewController.createInstance().setView(ViewNames.DASHBOARD);
+            	try {
+    				ViewController.createInstance().switchToView(ViewNames.HOME);
+    				thread.interrupt();
+    			} catch (IOException e1) {
+    				e1.printStackTrace();
+    			}
+            }	
+            );
             alert = appUtil.createProgressAlert(ViewController.createInstance().getCurrentStage(), task);          
             thread = appUtil.startThread(task, "dbThread");
-            alert.showAndWait();
-            try {
-            	ViewController.createInstance().setView(ViewNames.DASHBOARD);
-				ViewController.createInstance().switchToView(ViewNames.HOME);
-				//stop the thread
-				thread.interrupt();
-			} catch (IOException e1) {
-				e1.printStackTrace();
-			}
+            alert.show();
+            
 		});
     }
     
@@ -114,21 +115,7 @@ public class TicketController {
             if (appUtil.getMode("assignMode").contains("OFF")) {
             	prediction = "General";
             }
-            //live mode
-            else if (appUtil.getMode("assignMode").contains("ON") && appUtil.getMode("mlMode").contains("ON")) {
-            	appUtil.setLabels();
-                appUtil.downloadFiles();
-            	DataSetIter dataSetIter = new DataSetIter();
-    	        INDArray features = network.getFeatures(details.getText(), dataSetIter.getDataSetIterator(true));
-	    	        if (!(features == null)) {
-	    	        	prediction = network.classify(features, network.restoreModel(currentDirectory + "/files/cnn_model.zip"));
-	    	        }
-	    	        else {
-	    	        	prediction = "General";
-	    	        }
-            }
-            //login mode
-            else if (appUtil.getMode("assignMode").contains("ON") && appUtil.getMode("mlMode").contains("OFF")) {
+            else if (appUtil.getMode("assignMode").contains("ON")) {
     	        INDArray features = network.getFeatures(details.getText(), Session.getDataSetIterator());
 	    	        if (!(features == null)) {
 	    	        	prediction = network.classify(features, Session.getModel());

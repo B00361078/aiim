@@ -171,16 +171,15 @@ public class AmendTicketController {
         		alert.showAndWait();
         		if (alert.getResult() == ButtonType.OK) {
 	            	try {
-	            		con.setAutoCommit(false);
 						sqlStatement = con.prepareStatement(strBundle.getString("sqlUpdate7"));	 	
 		        	    sqlStatement.setString(1, "In Progress");
 		        	    sqlStatement.setObject(2, appUtil.getDate());
 		        	    sqlStatement.setString(3, Session.getCurrentTicket());
-		        	    if (sqlStatement.executeUpdate() == 1){
-		        			con.commit();
-		        			status.setText("In Progress");
+		        	    if (appUtil.executeSQL(con, sqlStatement) == 1) {
+		        	    	status.setText("In Progress");
 		        			statusBtn.setText("Close Ticket");
-		        		}
+		        	    	
+		        	    }
 		        		else {
 		        			throw new Exception("Error");
 		        		}

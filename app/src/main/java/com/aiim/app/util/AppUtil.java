@@ -60,9 +60,6 @@ public class AppUtil {
 			case "trainMode":
 				sqlStatment = con.prepareStatement(strBundle.getString("sqlSelect9"));
 				break;
-			case "mlMode":
-				sqlStatment = con.prepareStatement(strBundle.getString("sqlSelect21"));
-				break;
 		}
 		sqlStatment.setInt(1, 1);
 		rs = sqlStatment.executeQuery();
@@ -88,14 +85,16 @@ public class AppUtil {
         return thread;
 	}
 	
-	public void executeSQL(Connection con, PreparedStatement sqlStatement) throws Exception {
+	public int executeSQL(Connection con, PreparedStatement sqlStatement) throws Exception {
 		con.setAutoCommit(false);
-		if (sqlStatement.executeUpdate() == 1) {
+		int res = sqlStatement.executeUpdate();
+		if (res == 1) {
 			con.commit();
 		}
 		else {
 			throw new Exception(strBundle.getString("e3"));
 		}
+		return res;
 	}
 	
 	public void appendToFile(String filename, String details) throws IOException  {

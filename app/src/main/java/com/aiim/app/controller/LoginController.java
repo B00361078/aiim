@@ -6,14 +6,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ResourceBundle;
 import org.apache.commons.codec.digest.DigestUtils;
-import org.nd4j.linalg.dataset.api.iterator.DataSetIterator;
 import com.aiim.app.database.DatabaseConnect;
-import com.aiim.app.model.DataSetIter;
-import com.aiim.app.model.Network;
 import com.aiim.app.resource.ViewNames;
-import com.aiim.app.util.AppUtil;
 import com.aiim.app.util.Session;
-import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -42,23 +37,15 @@ public class LoginController {
 	private String fullname;
 	private PreparedStatement sqlStatement;
 	private ResultSet rs;
-	private AppUtil appUtil;
-	private DataSetIterator DataSetIterator;
-	private Network network;
-	private ThreadTask task;
-	private Alert alert;
-	private Thread thread;
 	private static String currentDirectory;
 	
 	public void initialize() throws Exception {
     	strBundle = ResourceBundle.getBundle("com.aiim.app.resource.bundle");
     	con = DatabaseConnect.getConnection(); 
-    	appUtil = new AppUtil();
     	currentDirectory = Paths.get("").toAbsolutePath().toString();
     }
 
-    @FXML protected void dashView(ActionEvent event) throws Exception  {
-    	
+    @FXML protected void dashView(ActionEvent event) throws Exception  {   	
     	if (usernameField.getText() == null | passwordField.getText() == null) {
     		new javafx.scene.control.Alert(Alert.AlertType.ERROR, strBundle.getString("e17")).showAndWait();
     	}
@@ -93,7 +80,6 @@ public class LoginController {
         		Session.setPermissionLevel(permLevel);
         		Session.setTeamName(teamName);
         		ViewController.createInstance().setCurrentScene(passwordField.getScene());
-        		liveModelLoadCheck();
         		ViewController.createInstance().setView(ViewNames.DASHBOARD);
         		ViewController.createInstance().switchToView(ViewNames.HOME);
     		}
@@ -101,43 +87,6 @@ public class LoginController {
     			new Alert(Alert.AlertType.ERROR, strBundle.getString("e10")).showAndWait();
         	}
     	}
-    }
-    //load model at login only
-    public void liveModelLoadCheck() throws Exception {
-    	
-    	if (appUtil.getMode("mlMode").contains("OFF")) {
-    		task = new ThreadTask();
-            task.setOnSucceeded(e -> task.getValue());
-            alert = appUtil.createProgressAlert(ViewController.createInstance().getCurrentStage(), task);          
-            thread = appUtil.startThread(task, "dbThread");
-            alert.showAndWait();
-            thread.interrupt(); 		
-    	}
-    	else {
-    		System.out.println("live loading only");
-    	}
-    }
-    
-    
-    private class ThreadTask extends Task {
-
-		private ThreadTask() {
-			updateTitle("Loading model");
-        }
-        @Override
-        protected String call() throws Exception {
-        	updateMessage("Loading model, please wait.");
-        	appUtil.setLabels();
-    		appUtil.downloadFiles();
-    		network = new Network();
-    		DataSetIter dataSetIter = new DataSetIter();
-    		Session.setModel(network.restoreModel(currentDirectory + "/files/cnn_model.zip"));
-    		Session.setDataSetIterator(dataSetIter.getDataSetIterator(true)); 
-    		updateMessage("Model loaded successfully");
-            updateProgress(1, 1);
-            return null;
-        }
-    }
-    
+    }        
 }
 
