@@ -85,6 +85,27 @@ public class AppUtil {
         return thread;
 	}
 	
+	public void insertTicket(String prediction, String details) throws Exception {
+		String teamID = null;
+	    sqlStatement = con.prepareStatement(strBundle.getString("sqlSelect8"));
+	    sqlStatement.setString(1, prediction);
+	    rs = sqlStatement.executeQuery();
+	    	while(rs.next()){
+	    		teamID = rs.getString(1);
+	        }
+    	sqlStatement = con.prepareStatement(strBundle.getString("sqlInsert1"));
+    	sqlStatement.setString(1, details);
+    	sqlStatement.setString(2, Session.getUsername());
+    	sqlStatement.setString(3, null);
+    	sqlStatement.setInt(4, isAutoAssigned(prediction));
+    	sqlStatement.setString(5, teamID);
+    	sqlStatement.setString(6, teamID);
+    	sqlStatement.setString(7, "Raised");
+    	sqlStatement.setObject(8, getDate());
+    	sqlStatement.setObject(9, getDate());
+    	executeSQL(con, sqlStatement);
+    }
+	
 	public int executeSQL(Connection con, PreparedStatement sqlStatement) throws Exception {
 		con.setAutoCommit(false);
 		int res = sqlStatement.executeUpdate();

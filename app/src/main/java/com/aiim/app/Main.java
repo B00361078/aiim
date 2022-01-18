@@ -15,6 +15,8 @@ import com.aiim.app.database.DatabaseConnect;
 import com.aiim.app.model.DataSetIter;
 import com.aiim.app.model.Network;
 import com.aiim.app.resource.ViewNames;
+import com.aiim.app.task.DataTask;
+import com.aiim.app.task.ThreadTask;
 import com.aiim.app.util.AppUtil;
 import com.aiim.app.util.Session;
 
@@ -53,14 +55,14 @@ public class Main extends Application {
 	}
 	
 	public void checkDBConnect() {
-		if (con == null) {
+		if (task.getValue() == null) {
 			new javafx.scene.control.Alert(Alert.AlertType.ERROR, strBundle.getString("e11")).showAndWait();
 			stage.close();
 		}	
 	}
 	
 	public void dbAndModelLoad() throws Exception {
-		task = new ThreadTask();
+		task = new DataTask("Loading data");
         task.setOnSucceeded(e -> {
         	alert.close();
         	checkDBConnect();
@@ -72,9 +74,9 @@ public class Main extends Application {
         alert.show(); 		
 	}
 	
-	private class ThreadTask extends Task {
+	private class ThreadTask1 extends Task {
 		
-		private ThreadTask() {
+		private ThreadTask1() {
 			updateTitle("Loading data");
 			
 	    }

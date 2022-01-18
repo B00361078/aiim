@@ -12,6 +12,7 @@ import com.aiim.app.database.DatabaseConnect;
 import com.aiim.app.model.Network;
 import com.aiim.app.model.Note;
 import com.aiim.app.resource.ViewNames;
+import com.aiim.app.task.CloseTicketTask;
 import com.aiim.app.util.AppUtil;
 import com.aiim.app.util.Session;
 import javafx.concurrent.Task;
@@ -65,7 +66,7 @@ public class AmendTicketController {
 	private AppUtil appUtil;
 	private Network network;
 	private Alert alert;
-	private ThreadTask task;
+	private com.aiim.app.task.ThreadTask task;
 	private Thread thread;
 	private Dialog<String> dialog;
 	private ButtonType btn;
@@ -150,7 +151,7 @@ public class AmendTicketController {
             if (statusBtn.getText() == "Close Ticket") {
             	statusBtn.setDisable(true);
             	ae.consume();
-	            task = new ThreadTask();
+	            task = new CloseTicketTask("Close Ticket", details.getText(), assignedTeamMenu.getValue().toString());
 	            task.setOnSucceeded(e -> task.getValue());
 	            alert = appUtil.createProgressAlert(ViewController.createInstance().getCurrentStage(), task);          
 	            thread = appUtil.startThread(task, "dbThread");
