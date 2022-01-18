@@ -20,8 +20,10 @@ public class ThreadTask extends Task {
 	
 	protected ThreadTask(String taskTitle) {
 		updateTitle(taskTitle);
+		System.out.println("got here");
 		appUtil = new AppUtil();
 		network = new Network();
+		System.out.println("got here2");
 		con = DatabaseConnect.getConnection();
 		strBundle = ResourceBundle.getBundle("com.aiim.app.resource.bundle");
 		currentDirectory = Paths.get("").toAbsolutePath().toString();	

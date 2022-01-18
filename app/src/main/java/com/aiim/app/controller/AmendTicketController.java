@@ -7,15 +7,12 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
-import org.nd4j.linalg.api.ndarray.INDArray;
 import com.aiim.app.database.DatabaseConnect;
-import com.aiim.app.model.Network;
 import com.aiim.app.model.Note;
 import com.aiim.app.resource.ViewNames;
 import com.aiim.app.task.CloseTicketTask;
 import com.aiim.app.util.AppUtil;
 import com.aiim.app.util.Session;
-import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.control.Alert;
@@ -64,7 +61,6 @@ public class AmendTicketController {
 	private ResultSet rs;
 	private ResourceBundle strBundle;
 	private AppUtil appUtil;
-	private Network network;
 	private Alert alert;
 	private com.aiim.app.task.ThreadTask task;
 	private Thread thread;
@@ -376,40 +372,5 @@ public class AmendTicketController {
 				break;
 		}
 	}
-    private class ThreadTask extends Task {
-
-		private ThreadTask() {
-            updateTitle("Close Ticket");
-        }
-
-        @Override
-        protected String call() throws Exception {
-        	network = new Network();
-            updateMessage("Closing ticket, please wait.");	
-    	    sqlStatement = con.prepareStatement(strBundle.getString("sqlUpdate5"));	 	
-    	    sqlStatement.setString(1, "Closed");
-    	    sqlStatement.setObject(2, appUtil.getDate());
-    	    sqlStatement.setString(3, Session.getCurrentTicket());
-	    	appUtil.executeSQL(con, sqlStatement);
-            if (appUtil.getMode("trainMode").contains("OFF")) {
-            	System.out.println("Will not retrain");
-            }
-            else if (appUtil.getMode("trainMode").contains("ON")) {
-        	    INDArray features = network.getFeatures(details.getText(), Session.getDataSetIterator());
-        	    if (!(features == null)) {
-        	    	appUtil.retrain(assignedTeamMenu.getValue() + ".txt", details.getText());
-        	    }
-        	    else {
-        	    	System.out.println("Will not retrain");
-        	    }
-            }
-            else {
-            	System.out.println("Will not retrain");
-            }
-            updateMessage("Ticket closed successfully");
-            updateProgress(1, 1);
-            return null;
-        }
-    }
 }
     

@@ -13,13 +13,13 @@ public class CloseTicketTask extends ThreadTask {
 		this.setTeam(team);
 		this.setDetails(details);
 	}
-	
-	public String getDetails() {
-		return details;
-	}
 
 	public void setDetails(String details) {
 		this.details = details;
+	}
+	
+	public void setTeam(String team) {
+		this.team = team;
 	}
 
 	@Override
@@ -49,13 +49,4 @@ public class CloseTicketTask extends ThreadTask {
         updateProgress(1, 1);
 		return null;
 	}
-
-	public String getTeam() {
-		return team;
-	}
-
-	public void setTeam(String team) {
-		this.team = team;
-	}
-
 }
