@@ -14,6 +14,10 @@ import com.aiim.app.task.DataTask;
 import com.aiim.app.task.ThreadTask;
 import com.aiim.app.util.AppUtil;
 
+/* Main class to start the application.
+ * Neil Campbell 19/01/2022, B00361078
+ */
+
 public class Main extends Application {
 	
 	private ResourceBundle strBundle;
@@ -53,7 +57,7 @@ public class Main extends Application {
 	}
 	
 	public void dbAndModelLoad() throws Exception {
-		task = new DataTask("Loading data");
+		task = new DataTask(strBundle.getString("dataTaskTitle"));
         task.setOnSucceeded(e -> {
         	alert.close();
         	checkDBConnect();
@@ -61,7 +65,7 @@ public class Main extends Application {
         	}
         );
         alert = appUtil.createProgressAlert(ViewController.createInstance().getCurrentStage(), task);          
-        thread = appUtil.startThread(task, "dbThread");
+        thread = appUtil.startThread(task, strBundle.getString("threadName"));
         alert.show(); 		
 	}
 }

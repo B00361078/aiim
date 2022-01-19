@@ -18,21 +18,6 @@ public class Session {
 	private static String fullName;
 	private static ComputationGraph model;
 	private static DataSetIterator dataSetIterator;
-	public static ComputationGraph getModel() {
-		return model;
-	}
-
-	public static void setModel(ComputationGraph model) {
-		Session.model = model;
-	}
-
-	public static DataSetIterator getDataSetIterator() {
-		return dataSetIterator;
-	}
-
-	public static void setDataSetIterator(DataSetIterator dataSetIterator) {
-		Session.dataSetIterator = dataSetIterator;
-	}
 	private static String teamID;
 	private static String currentTicket;
 	private static ArrayList<String> predictionLabels;
@@ -57,6 +42,22 @@ public class Session {
 			}
 		}
 		return session;
+	}
+	
+	public static ComputationGraph getModel() {
+		return model;
+	}
+
+	public static void setModel(ComputationGraph model) {
+		Session.model = model;
+	}
+
+	public static DataSetIterator getDataSetIterator() {
+		return dataSetIterator;
+	}
+
+	public static void setDataSetIterator(DataSetIterator dataSetIterator) {
+		Session.dataSetIterator = dataSetIterator;
 	}
 	
 

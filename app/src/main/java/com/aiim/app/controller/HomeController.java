@@ -12,7 +12,7 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
-/* The following class handles the dashboard interface by switching the current subScene. Part of MVC design Pattern as a controller.
+/* The following class handles the home view internal view via border pane. Part of MVC design Pattern as a controller.
  * Neil Campbell 07/05/2021, B00361078
  */
 

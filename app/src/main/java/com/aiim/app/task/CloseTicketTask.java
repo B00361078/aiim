@@ -3,12 +3,17 @@ package com.aiim.app.task;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import com.aiim.app.util.Session;
 
+/* Sub class of ThreadTask for closing ticket and retraining model.
+ * Neil Campbell 19/01/2022, B00361078
+ */
+
 public class CloseTicketTask extends ThreadTask {
 	
 	private String team;
 	private String details;
 	
 	public CloseTicketTask (String title, String details, String team) {
+		
 		super(title);
 		this.setTeam(team);
 		this.setDetails(details);
@@ -24,14 +29,14 @@ public class CloseTicketTask extends ThreadTask {
 
 	@Override
 	protected Object call() throws Exception {
-        updateMessage("Closing ticket, please wait.");	
+        updateMessage(strBundle.getString("closeTicket"));	
 	    sqlStatement = con.prepareStatement(strBundle.getString("sqlUpdate5"));	 	
 	    sqlStatement.setString(1, "Closed");
 	    sqlStatement.setObject(2, appUtil.getDate());
 	    sqlStatement.setString(3, Session.getCurrentTicket());
     	appUtil.executeSQL(con, sqlStatement);
         if (appUtil.getMode("trainMode").contains("OFF")) {
-        	System.out.println("Will not retrain");
+        	System.out.println(strBundle.getString("noTrain"));
         }
         else if (appUtil.getMode("trainMode").contains("ON")) {
     	    INDArray features = network.getFeatures(details, Session.getDataSetIterator());
@@ -39,13 +44,13 @@ public class CloseTicketTask extends ThreadTask {
     	    	appUtil.retrain(team + ".txt", details);
     	    }
     	    else {
-    	    	System.out.println("Will not retrain");
+    	    	System.out.println(strBundle.getString("noTrain"));
     	    }
         }
         else {
-        	System.out.println("Will not retrain");
+        	System.out.println(strBundle.getString("noTrain"));
         }
-        updateMessage("Ticket closed successfully");
+        updateMessage(strBundle.getString("closeSuccess"));
         updateProgress(1, 1);
 		return null;
 	}

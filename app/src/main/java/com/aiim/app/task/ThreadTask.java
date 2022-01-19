@@ -9,6 +9,10 @@ import com.aiim.app.model.Network;
 import com.aiim.app.util.AppUtil;
 import javafx.concurrent.Task;
 
+/* Super class which extends JavaFX task to allow for threading.
+ * Neil Campbell 19/01/2022, B00361078
+ */
+
 public class ThreadTask extends Task {
 	
 	protected Network network;
@@ -20,10 +24,8 @@ public class ThreadTask extends Task {
 	
 	protected ThreadTask(String taskTitle) {
 		updateTitle(taskTitle);
-		System.out.println("got here");
 		appUtil = new AppUtil();
 		network = new Network();
-		System.out.println("got here2");
 		con = DatabaseConnect.getConnection();
 		strBundle = ResourceBundle.getBundle("com.aiim.app.resource.bundle");
 		currentDirectory = Paths.get("").toAbsolutePath().toString();	

@@ -16,6 +16,7 @@ public class DatabaseConnect {
 	private static String dbUser;
 	private static String dbPass;
 	private static ResourceBundle strBundle;
+	private static String connectionURL;
 	
 	private DatabaseConnect() {
 		if(con != null) {
@@ -34,13 +35,13 @@ public class DatabaseConnect {
 						dbUser = strBundle.getString("dbUser");
 						dbPass = strBundle.getString("dbPass");
 						Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-						String connectionURL = "jdbc:sqlserver://"+dbEndpoint+":"+dbPort+";"+"user="+dbUser+";password="+dbPass;
+						connectionURL = "jdbc:sqlserver://"+dbEndpoint+":"+dbPort+";"+"user="+dbUser+";password="+dbPass;
 						con = DriverManager.getConnection(connectionURL); 
 						con.setAutoCommit(false);
 						return con;
 					}
 					catch (Exception e) {
-						// TODO: handle exception
+						e.printStackTrace();
 					}
 					return con;
 				}

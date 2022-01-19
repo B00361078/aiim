@@ -19,13 +19,15 @@ import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.dataset.api.iterator.DataSetIterator;
 import org.nd4j.linalg.exception.ND4JIllegalStateException;
 import org.nd4j.linalg.lossfunctions.LossFunctions;
-
 import com.aiim.app.util.Session;
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.*;
+
+/* Class to hold model builder and related methods.
+ * Neil Campbell 19/01/2022, B00361078
+ */
 
 public class Network {
 

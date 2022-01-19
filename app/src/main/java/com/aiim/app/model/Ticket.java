@@ -1,8 +1,7 @@
 package com.aiim.app.model;
 
-
-/* The following class builds a Client object when clients are to be created (Builder design pattern). Part of MVC design Pattern as model class.
- * Neil Campbell 07/05/2021, B00361078
+/* The following class builds a Ticket object when tickets are created (Builder design pattern). Part of MVC design Pattern as model class.
+ * Neil Campbell 06/01/2022, B00361078
  */
 
 public class Ticket {
@@ -64,19 +63,4 @@ public class Ticket {
             return ticket;
         }
     }
-
-	public Object getInProgressState() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public void setStatus(Object inProgressState) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public Object getClosedState() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 }

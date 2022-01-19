@@ -13,6 +13,10 @@ import org.deeplearning4j.models.embeddings.wordvectors.WordVectors;
 import org.nd4j.linalg.dataset.api.iterator.DataSetIterator;
 import com.aiim.app.util.Session;
 
+/* Class holding methods to iterate over train or test data.
+ * Neil Campbell 19/01/2022, B00361078
+ */
+
 public class DataSetIter {
 	
 	public static String currentDirectory;

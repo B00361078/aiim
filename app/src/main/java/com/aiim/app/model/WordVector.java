@@ -12,6 +12,10 @@ import org.deeplearning4j.text.sentenceiterator.BasicLineIterator;
 import org.deeplearning4j.text.tokenization.tokenizer.preprocessor.CommonPreprocessor;
 import org.deeplearning4j.text.tokenization.tokenizerfactory.DefaultTokenizerFactory;
 
+/* The following class builds WordVectors required for the model along with related methods.
+ * Neil Campbell 06/01/2022, B00361078
+ */
+
 public class WordVector {
 	
 	private File VECTOR_FILE;

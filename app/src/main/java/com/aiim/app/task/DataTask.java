@@ -2,8 +2,11 @@ package com.aiim.app.task;
 
 import com.aiim.app.database.DatabaseConnect;
 import com.aiim.app.model.DataSetIter;
-import com.aiim.app.model.Network;
 import com.aiim.app.util.Session;
+
+/* Sub class of ThreadTask for loading model after successful connection to database.
+ * Neil Campbell 19/01/2022, B00361078
+ */
 
 public class DataTask extends ThreadTask {
 	
@@ -13,13 +16,12 @@ public class DataTask extends ThreadTask {
 
 	@Override
 	protected Object call() throws Exception {
-		updateMessage("Checking database connection, please wait.");
+		updateMessage(strBundle.getString("dbConnect"));
     	con = DatabaseConnect.getConnection();
 	    	if (con != null) {
-	    		updateMessage("Database connected, loading model, please wait.");
+	    		updateMessage(strBundle.getString("dbSuccess"));
 		    	appUtil.setLabels();
 				appUtil.downloadFiles();
-				network = new Network();
 				DataSetIter dataSetIter = new DataSetIter();
 				Session.setModel(network.restoreModel(currentDirectory + "/files/cnn_model.zip"));
 				Session.setDataSetIterator(dataSetIter.getDataSetIterator(true)); 

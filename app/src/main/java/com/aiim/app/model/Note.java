@@ -1,8 +1,7 @@
 package com.aiim.app.model;
 
-
-/* The following class builds a Client object when clients are to be created (Builder design pattern). Part of MVC design Pattern as model class.
- * Neil Campbell 07/05/2021, B00361078
+/* The following class builds a Note object when notes are created (Builder design pattern). Part of MVC design Pattern as model class.
+ * Neil Campbell 06/01/2022, B00361078
  */
 
 public class Note {
@@ -72,7 +71,5 @@ public class Note {
             setDateCreated(this.dateCreated);
             return note;
         }
-
-
     }
 }

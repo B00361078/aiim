@@ -30,7 +30,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.GridPane;
 
-/* The following class handles the dashboard interface by switching the current subScene. Part of MVC design Pattern as a controller.
+/* The following class handles the amendment of tickets. Part of MVC design Pattern as a controller.
  * Neil Campbell 14/12/2021, B00361078
  */
 
@@ -147,7 +147,7 @@ public class AmendTicketController {
             if (statusBtn.getText() == "Close Ticket") {
             	statusBtn.setDisable(true);
             	ae.consume();
-	            task = new CloseTicketTask("Close Ticket", details.getText(), assignedTeamMenu.getValue().toString());
+	            task = new CloseTicketTask(strBundle.getString("closeTitle"), details.getText(), assignedTeamMenu.getValue().toString());
 	            task.setOnSucceeded(e -> task.getValue());
 	            alert = appUtil.createProgressAlert(ViewController.createInstance().getCurrentStage(), task);          
 	            thread = appUtil.startThread(task, "dbThread");
@@ -163,7 +163,7 @@ public class AmendTicketController {
 			}
             else if (statusBtn.getText() == "Move to In Progress") {
             	alert = new Alert(AlertType.CONFIRMATION);
-        		alert.setHeaderText("Are you sure you want to move to in progress?");
+        		alert.setHeaderText(strBundle.getString("moveProg"));
         		alert.showAndWait();
         		if (alert.getResult() == ButtonType.OK) {
 	            	try {
@@ -291,22 +291,16 @@ public class AmendTicketController {
 
         noteDetail.setPromptText("Add note details...");
         noteDetail.setWrapText(true);
-
         gridPane.add(noteDetail, 0, 0);
-
-        //dialog.getDialogPane().setContent(gridPane);
         String result = dialog.showAndWait().orElse(null);
- 
         if (result == "Add note") {
         	message = noteDetail.getText();
         	insertNote();
         	noteTable.getItems().clear();
         	updateNoteTable();
-
         }
         else 
         	System.out.println("Cancelling note");
-        
     }
     
     public void viewNote(String noteID) throws SQLException {

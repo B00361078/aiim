@@ -1,6 +1,5 @@
 package com.aiim.app.controller;
 
-import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -37,12 +36,10 @@ public class LoginController {
 	private String fullname;
 	private PreparedStatement sqlStatement;
 	private ResultSet rs;
-	private static String currentDirectory;
 	
 	public void initialize() throws Exception {
     	strBundle = ResourceBundle.getBundle("com.aiim.app.resource.bundle");
     	con = DatabaseConnect.getConnection(); 
-    	currentDirectory = Paths.get("").toAbsolutePath().toString();
     }
 
     @FXML protected void dashView(ActionEvent event) throws Exception  {   	

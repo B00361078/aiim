@@ -24,9 +24,8 @@ import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.ToggleGroup;
-import javafx.scene.layout.AnchorPane;
 
-/* The following class handles the dashboard interface by switching the current subScene. Part of MVC design Pattern as a controller.
+/* The following class handles the dashboard view. Part of MVC design Pattern as a controller.
  * Neil Campbell 06/01/2022, B00361078
  */
 
@@ -51,13 +50,9 @@ public class DashboardController {
 	private ResourceBundle strBundle;
 	private ObservableList<Ticket.Builder> list;
 	private ArrayList<RadioButton> radioBtns;
-	private ToggleGroup radioGrp;
-	private AnchorPane anchorP;
-	private HomeController homeController;
-	
+	private ToggleGroup radioGrp;	
    
     public void initialize() throws Exception  {
-    	homeController = new HomeController();
     	con = DatabaseConnect.getConnection();
     	strBundle = ResourceBundle.getBundle("com.aiim.app.resource.bundle");
     	settingsBtn.setVisible(false);

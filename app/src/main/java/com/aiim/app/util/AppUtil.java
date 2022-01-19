@@ -136,7 +136,7 @@ public class AppUtil {
     	updateFile(filename);
     	updateFile("cnn_model.zip");
     }
-	//developer methods
+	//developer method
 	public void uploadNewModel () throws Exception {
 		setLabels();
 		downloadFiles();
@@ -147,7 +147,7 @@ public class AppUtil {
 		network.saveModel(trainedModel, currentDirectory + "/files/cnn_model.zip");
 		updateFile("cnn_model.zip");
 	}
-	//developer methods
+	//developer method
 	public void uploadNewVectors() throws Exception {
 		setLabels();
 		downloadFiles();

@@ -3,6 +3,10 @@ package com.aiim.app.task;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import com.aiim.app.util.Session;
 
+/* Sub class of ThreadTask which is responsible for classifying tickets.
+ * Neil Campbell 19/01/2022, B00361078
+ */
+
 public class ClassifyTicketTask extends ThreadTask {
 	
 	private String details;
@@ -19,7 +23,7 @@ public class ClassifyTicketTask extends ThreadTask {
 	
 	@Override
 	protected Object call() throws Exception {
-		updateMessage("Raising ticket, please wait.");
+		updateMessage(strBundle.getString("raiseTicket"));
 
         if (appUtil.getMode("assignMode").contains("OFF")) {
         	prediction = "General";
@@ -37,7 +41,7 @@ public class ClassifyTicketTask extends ThreadTask {
 	    	prediction = "General";
 	    }
     	appUtil.insertTicket(prediction, details);
-        updateMessage("Ticket raised successfully, raised to team - " + prediction);
+        updateMessage(strBundle.getString("ticketRaised") + prediction);
         updateProgress(1, 1);
 		return prediction;
 	}
