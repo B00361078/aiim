@@ -150,7 +150,7 @@ public class AmendTicketController {
 	            task = new CloseTicketTask(strBundle.getString("closeTitle"), details.getText(), assignedTeamMenu.getValue().toString());
 	            task.setOnSucceeded(e -> task.getValue());
 	            alert = appUtil.createProgressAlert(ViewController.createInstance().getCurrentStage(), task);          
-	            thread = appUtil.startThread(task, "dbThread");
+	            thread = appUtil.startThread(task, strBundle.getString("threadName"));
 	            alert.showAndWait();
 	            try {
 	            	ViewController.createInstance().setView(ViewNames.DASHBOARD);	
@@ -347,6 +347,10 @@ public class AmendTicketController {
     public void setDisplay(int permLevel) {
 		switch(permLevel) {
 			case 1:
+				assignBtn.setDisable(true);
+				statusBtn.setDisable(true);
+				nteBtn.setDisable(true);
+				assignedTeamMenu.setDisable(true);
 				break;
 			case 2:
 				if (assignee.getText().contains("Unassigned")) {
@@ -363,6 +367,10 @@ public class AmendTicketController {
 				}
 				break;
 			case 3:
+				assignBtn.setDisable(true);
+				statusBtn.setDisable(true);
+				nteBtn.setDisable(true);
+				assignedTeamMenu.setDisable(true);
 				break;
 		}
 	}

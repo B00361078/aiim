@@ -37,6 +37,7 @@ public class Main extends Application {
 		strBundle = ResourceBundle.getBundle("com.aiim.app.resource.bundle");
 		currentDirectory = Paths.get("").toAbsolutePath().toString(); 
     	dbAndModelLoad();
+    	//appUtil.evaluateAcc();
     }
 	
 	@Override

@@ -220,4 +220,11 @@ public class AppUtil {
 		list.sort(String::compareToIgnoreCase);
 		Session.setPredictionLabels(list);
     }
+    
+    public void evaluateAcc() throws Exception {
+    	Network network = new Network();
+    	ComputationGraph currentModel = network.restoreModel(currentDirectory + "/files/cnn_model.zip");
+    	DataSetIter dataSetIter = new DataSetIter();
+    	network.evaluate(currentModel, dataSetIter.getDataSetIterator(false));
+    }
 }

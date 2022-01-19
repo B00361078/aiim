@@ -3,6 +3,9 @@ package com.aiim.app;
 import static org.junit.jupiter.api.Assertions.*;
 import java.io.IOException;
 import java.util.ResourceBundle;
+
+import org.junit.BeforeClass;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -19,8 +22,15 @@ import javafx.stage.Stage;
 
 class MainIT extends ApplicationTest {
 	
+	private String USERNAME;
+	private String PASSWORD;
 	private ResourceBundle strBundle = ResourceBundle.getBundle("com.aiim.app.resource.bundle");
 	
+	@BeforeEach
+	public void setup() {
+		USERNAME = "tstuser3";
+		PASSWORD = "testing3";
+    }
 	
 	@Override
 	public void start (Stage stage) throws Exception {
@@ -36,10 +46,10 @@ class MainIT extends ApplicationTest {
 	@Order(2)
 	@Test
 	public void testSuccessfulLoginLogout() throws IOException {
-	    clickOn("#usernameField").write("user2020");
-	    clickOn("#passwordField").write("user2020");
+	    clickOn("#usernameField").write(USERNAME);
+	    clickOn("#passwordField").write(PASSWORD);
 	    clickOn("#loginBtn");
-	    //assertEquals("/com/aiim/app/view/dashboard.fxml", ViewController.createInstance().getResource(), strBundle.getString("testError1"));
+	    assertEquals("/com/aiim/app/view/dashboard.fxml", ViewController.createInstance().getResource(), strBundle.getString("testError1"));
 	    clickOn("#menuButton");
 	    clickOn("#menuItemLogout");
 	    assertEquals("/com/aiim/app/view/login.fxml", ViewController.createInstance().getResource(), strBundle.getString("testError1"));
@@ -48,8 +58,8 @@ class MainIT extends ApplicationTest {
 	@Order(3)
 	@Test
 	public void testUnSuccessfulLogin() throws IOException, InterruptedException {
-	    clickOn("#usernameField").write("user20");
-	    clickOn("#passwordField").write("user2020");
+	    clickOn("#usernameField").write(USERNAME+"x");
+	    clickOn("#passwordField").write(PASSWORD);
 	    clickOn("#loginBtn");
 	    FxAssert.verifyThat("OK", NodeMatchers.isVisible());
 	}
@@ -57,8 +67,8 @@ class MainIT extends ApplicationTest {
 	@Order(4)
 	@Test
 	public void testSettingsAccessible() throws IOException, InterruptedException {
-	    clickOn("#usernameField").write("user2020");
-	    clickOn("#passwordField").write("user2020");
+	    clickOn("#usernameField").write(USERNAME);
+	    clickOn("#passwordField").write(PASSWORD);
 	    clickOn("#loginBtn");
 	    lookupById("#settingsBtn");
 	    clickOn("#settingsBtn");

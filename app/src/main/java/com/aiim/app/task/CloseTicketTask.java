@@ -35,7 +35,7 @@ public class CloseTicketTask extends ThreadTask {
 	    sqlStatement.setObject(2, appUtil.getDate());
 	    sqlStatement.setString(3, Session.getCurrentTicket());
     	appUtil.executeSQL(con, sqlStatement);
-        if (appUtil.getMode("trainMode").contains("OFF")) {
+        if (appUtil.getMode("trainMode").contains("OFF") || team.contains("General")) {
         	System.out.println(strBundle.getString("noTrain"));
         }
         else if (appUtil.getMode("trainMode").contains("ON")) {
