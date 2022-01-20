@@ -46,7 +46,7 @@ public class AppUtil {
 	private ArrayList<String> list;	
 	
 	public AppUtil() {
-		strBundle = ResourceBundle.getBundle("com.aiim.app.resource.bundle");
+		strBundle = ResourceBundle.getBundle("bundle");
 		con = DatabaseConnect.getConnection();
 		currentDirectory = Paths.get("").toAbsolutePath().toString();
 	}

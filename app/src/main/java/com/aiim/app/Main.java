@@ -9,10 +9,10 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
 import com.aiim.app.controller.ViewController;
-import com.aiim.app.resource.ViewNames;
 import com.aiim.app.task.DataTask;
 import com.aiim.app.task.ThreadTask;
 import com.aiim.app.util.AppUtil;
+import com.aiim.app.view.ViewNames;
 
 /* Main class to start the application.
  * Neil Campbell 19/01/2022, B00361078
@@ -34,7 +34,7 @@ public class Main extends Application {
 		appUtil = new AppUtil();
 		ViewController.createInstance().setCurrentStage(stage);
 		ViewController.createInstance().switchToView(ViewNames.LOGIN);
-		strBundle = ResourceBundle.getBundle("com.aiim.app.resource.bundle");
+		strBundle = ResourceBundle.getBundle("bundle");
 		currentDirectory = Paths.get("").toAbsolutePath().toString(); 
     	dbAndModelLoad();
     	//appUtil.evaluateAcc();

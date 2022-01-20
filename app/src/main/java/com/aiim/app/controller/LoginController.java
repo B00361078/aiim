@@ -6,8 +6,9 @@ import java.sql.ResultSet;
 import java.util.ResourceBundle;
 import org.apache.commons.codec.digest.DigestUtils;
 import com.aiim.app.database.DatabaseConnect;
-import com.aiim.app.resource.ViewNames;
 import com.aiim.app.util.Session;
+import com.aiim.app.view.ViewNames;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -38,7 +39,7 @@ public class LoginController {
 	private ResultSet rs;
 	
 	public void initialize() throws Exception {
-    	strBundle = ResourceBundle.getBundle("com.aiim.app.resource.bundle");
+    	strBundle = ResourceBundle.getBundle("bundle");
     	con = DatabaseConnect.getConnection(); 
     }
 

@@ -1,4 +1,4 @@
-package com.aiim.app.resource;
+package com.aiim.app.view;
 
 /* The following class holds a list of enums for each view.
  * Neil Campbell 06/01/2022, B00361078

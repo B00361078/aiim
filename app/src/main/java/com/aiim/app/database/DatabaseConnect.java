@@ -29,7 +29,7 @@ public class DatabaseConnect {
 			synchronized (DatabaseConnect.class) {
 				if(con == null) {
 					try {
-						strBundle = ResourceBundle.getBundle("com.aiim.app.resource.jdbc");
+						strBundle = ResourceBundle.getBundle("jdbc");
 						dbEndpoint = strBundle.getString("dbEndpoint");
 						dbPort = strBundle.getString("dbPort");
 						dbUser = strBundle.getString("dbUser");

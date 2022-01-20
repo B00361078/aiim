@@ -9,8 +9,8 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.testfx.framework.junit5.ApplicationTest;
 
-import com.aiim.app.resource.ViewNames;
 import com.aiim.app.util.Session;
+import com.aiim.app.view.ViewNames;
 
 import javafx.fxml.FXML;
 import javafx.scene.SubScene;

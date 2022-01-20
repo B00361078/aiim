@@ -31,7 +31,7 @@ class AppUtilTest {
 	@BeforeEach
     public void setUp() {
         appUtil = new AppUtil();
-        strBundle = ResourceBundle.getBundle("com.aiim.app.resource.bundle");
+        strBundle = ResourceBundle.getBundle("bundle");
         currentDirectory = Paths.get("").toAbsolutePath().toString();
 	}
 	

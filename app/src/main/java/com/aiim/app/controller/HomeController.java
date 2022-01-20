@@ -2,8 +2,10 @@ package com.aiim.app.controller;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import com.aiim.app.resource.ViewNames;
+
 import com.aiim.app.util.Session;
+import com.aiim.app.view.ViewNames;
+
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;

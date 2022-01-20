@@ -8,8 +8,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 import com.aiim.app.database.DatabaseConnect;
-import com.aiim.app.resource.ViewNames;
 import com.aiim.app.util.AppUtil;
+import com.aiim.app.view.ViewNames;
+
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -53,7 +54,7 @@ public class SettingController {
 	private ToggleGroup trainGrp;
    
 	public void initialize() throws Exception {
-		strBundle = ResourceBundle.getBundle("com.aiim.app.resource.bundle");
+		strBundle = ResourceBundle.getBundle("bundle");
 		appUtil = new AppUtil();
 		con = DatabaseConnect.getConnection();
 		assignBtns = new ArrayList<RadioButton>();

@@ -14,7 +14,8 @@ import org.testfx.api.FxAssert;
 import org.testfx.framework.junit5.ApplicationTest;
 import org.testfx.matcher.base.NodeMatchers;
 import com.aiim.app.controller.ViewController;
-import com.aiim.app.resource.ViewNames;
+import com.aiim.app.view.ViewNames;
+
 import javafx.scene.Node;
 import javafx.stage.Stage;
 
@@ -24,7 +25,7 @@ class MainIT extends ApplicationTest {
 	
 	private String USERNAME;
 	private String PASSWORD;
-	private ResourceBundle strBundle = ResourceBundle.getBundle("com.aiim.app.resource.bundle");
+	private ResourceBundle strBundle = ResourceBundle.getBundle("bundle");
 	
 	@BeforeEach
 	public void setup() {

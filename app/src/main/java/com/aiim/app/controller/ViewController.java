@@ -2,7 +2,9 @@ package com.aiim.app.controller;
 
 import java.io.IOException;
 import java.util.ResourceBundle;
-import com.aiim.app.resource.ViewNames;
+
+import com.aiim.app.view.ViewNames;
+
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -36,7 +38,7 @@ public class ViewController {
 				if(vc == null) {
 					try {	
 						vc = new ViewController();
-						strBundle = ResourceBundle.getBundle("com.aiim.app.resource.bundle");
+						strBundle = ResourceBundle.getBundle("bundle");
 						return vc;
 					}
 					catch (Exception e) {

@@ -10,8 +10,9 @@ import java.util.ResourceBundle;
 import com.aiim.app.database.DatabaseConnect;
 import com.aiim.app.model.Ticket;
 import com.aiim.app.model.Ticket.Builder;
-import com.aiim.app.resource.ViewNames;
 import com.aiim.app.util.Session;
+import com.aiim.app.view.ViewNames;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -54,7 +55,7 @@ public class DashboardController {
    
     public void initialize() throws Exception  {
     	con = DatabaseConnect.getConnection();
-    	strBundle = ResourceBundle.getBundle("com.aiim.app.resource.bundle");
+    	strBundle = ResourceBundle.getBundle("bundle");
     	settingsBtn.setVisible(false);
     	raiseNewBtn.setVisible(false);
     	setDisplay(Session.getPermissionLevel());

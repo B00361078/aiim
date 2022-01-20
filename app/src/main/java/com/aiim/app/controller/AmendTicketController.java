@@ -9,10 +9,11 @@ import java.sql.SQLException;
 import java.util.ResourceBundle;
 import com.aiim.app.database.DatabaseConnect;
 import com.aiim.app.model.Note;
-import com.aiim.app.resource.ViewNames;
 import com.aiim.app.task.CloseTicketTask;
 import com.aiim.app.util.AppUtil;
 import com.aiim.app.util.Session;
+import com.aiim.app.view.ViewNames;
+
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.control.Alert;
@@ -77,7 +78,7 @@ public class AmendTicketController {
 		con = DatabaseConnect.getConnection();
 		appUtil = new AppUtil();
 		setStatusBtnAction();
-		strBundle = ResourceBundle.getBundle("com.aiim.app.resource.bundle");
+		strBundle = ResourceBundle.getBundle("bundle");
 		ticketNo.setText(Session.getCurrentTicket());
 		setTicketDetails();
 		setStatusBtnDisplay(ticketStatus);

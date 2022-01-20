@@ -27,7 +27,7 @@ public class ThreadTask extends Task {
 		appUtil = new AppUtil();
 		network = new Network();
 		con = DatabaseConnect.getConnection();
-		strBundle = ResourceBundle.getBundle("com.aiim.app.resource.bundle");
+		strBundle = ResourceBundle.getBundle("bundle");
 		currentDirectory = Paths.get("").toAbsolutePath().toString();	
 	}
 

@@ -4,11 +4,12 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 
-import com.aiim.app.resource.ViewNames;
 import com.aiim.app.task.ClassifyTicketTask;
 import com.aiim.app.task.ThreadTask;
 import com.aiim.app.util.AppUtil;
 import com.aiim.app.util.Session;
+import com.aiim.app.view.ViewNames;
+
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -36,7 +37,7 @@ public class TicketController {
     	details.setWrapText(true);
     	setRaiseAction();
     	appUtil = new AppUtil();
-    	strBundle = ResourceBundle.getBundle("com.aiim.app.resource.bundle");
+    	strBundle = ResourceBundle.getBundle("bundle");
     }
     
     public void cancel() throws IOException {
