@@ -25,7 +25,6 @@ public class HomeController  {
 	@FXML private BorderPane borderPane;
    
     public void initialize() throws IOException, SQLException {
-    	ViewController.createInstance().getView();
     	menuButton.setText(Session.getFullName());
     	init(ViewController.createInstance().getView());
     }

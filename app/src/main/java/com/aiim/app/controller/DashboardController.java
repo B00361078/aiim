@@ -10,6 +10,7 @@ import java.util.ResourceBundle;
 import com.aiim.app.database.DatabaseConnect;
 import com.aiim.app.model.Ticket;
 import com.aiim.app.model.Ticket.Builder;
+import com.aiim.app.util.AppUtil;
 import com.aiim.app.util.Session;
 import com.aiim.app.view.ViewNames;
 
@@ -71,6 +72,8 @@ public class DashboardController {
     	initialiseRadios();
     	setRowFactory();
     	radioAll.setSelected(true);
+    	//AppUtil appUtil = new AppUtil();
+    	//appUtil.evaluateAcc();
     }
     
     public void setRowFactory() {

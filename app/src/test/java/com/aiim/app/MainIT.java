@@ -23,14 +23,22 @@ import javafx.stage.Stage;
 
 class MainIT extends ApplicationTest {
 	
-	private String USERNAME;
-	private String PASSWORD;
+	private String SYSADMINUSER;
+	private String SYSADMINPASS;
 	private ResourceBundle strBundle = ResourceBundle.getBundle("bundle");
+	private String AGENTUSER;
+	private String AGENTPASS;
+	private String OWNERUSER;
+	private String OWNERPASS;
 	
 	@BeforeEach
 	public void setup() {
-		USERNAME = "tstuser3";
-		PASSWORD = "testing3";
+		SYSADMINUSER = "tstuser3";
+		SYSADMINPASS = "testing3";
+		OWNERUSER = "tstuser2";
+		OWNERPASS = "testing2";
+		AGENTUSER = "tstuser1";
+		AGENTPASS = "testing1";
     }
 	
 	@Override
@@ -47,8 +55,8 @@ class MainIT extends ApplicationTest {
 	@Order(2)
 	@Test
 	public void testSuccessfulLoginLogout() throws IOException {
-	    clickOn("#usernameField").write(USERNAME);
-	    clickOn("#passwordField").write(PASSWORD);
+	    clickOn("#usernameField").write(SYSADMINUSER);
+	    clickOn("#passwordField").write(SYSADMINPASS);
 	    clickOn("#loginBtn");
 	    assertEquals("/com/aiim/app/view/dashboard.fxml", ViewController.createInstance().getResource(), strBundle.getString("testError1"));
 	    clickOn("#menuButton");
@@ -59,8 +67,8 @@ class MainIT extends ApplicationTest {
 	@Order(3)
 	@Test
 	public void testUnSuccessfulLogin() throws IOException, InterruptedException {
-	    clickOn("#usernameField").write(USERNAME+"x");
-	    clickOn("#passwordField").write(PASSWORD);
+	    clickOn("#usernameField").write(SYSADMINUSER+"x");
+	    clickOn("#passwordField").write(SYSADMINPASS);
 	    clickOn("#loginBtn");
 	    FxAssert.verifyThat("OK", NodeMatchers.isVisible());
 	}
@@ -68,12 +76,44 @@ class MainIT extends ApplicationTest {
 	@Order(4)
 	@Test
 	public void testSettingsAccessible() throws IOException, InterruptedException {
-	    clickOn("#usernameField").write(USERNAME);
-	    clickOn("#passwordField").write(PASSWORD);
+	    clickOn("#usernameField").write(SYSADMINUSER);
+	    clickOn("#passwordField").write(SYSADMINPASS);
 	    clickOn("#loginBtn");
-	    lookupById("#settingsBtn");
 	    clickOn("#settingsBtn");
-	    clickOn("#assignOff");
+	    clickOn("#assignOn");
+	    FxAssert.verifyThat("OK", NodeMatchers.isVisible());
+	    clickOn("Cancel");
+	    //clickOn("OK");
+	    clickOn("#backBtn");
+	    clickOn("#radioRaised");
+	    clickOn("#radioProg");
+	    clickOn("#radioClosed");
+	    clickOn("#menuButton");
+	    clickOn("#menuItemLogout");
+	}
+	
+	@Order(5)
+	@Test
+	public void testRaiseIncidentAccessible() throws IOException, InterruptedException {
+	    clickOn("#usernameField").write(AGENTUSER);
+	    clickOn("#passwordField").write(AGENTPASS);
+	    clickOn("#loginBtn");
+	    clickOn("#raiseNewBtn");
+	    clickOn("#details").write("testing here");
+	    clickOn("#cancelBtn");
+	    clickOn("#menuButton");
+	    clickOn("#menuItemLogout");
+	}
+	
+	@Order(7)
+	@Test
+	public void testAmendTicketTable() throws IOException, InterruptedException {
+		clickOn("#usernameField").write(OWNERUSER);
+	    clickOn("#passwordField").write(OWNERPASS);
+	    clickOn("#loginBtn");
+	    doubleClickOn("#ticketTable");
+	    clickOn("#menuButton");
+	    clickOn("#menuItemLogout");
 	}
 	
 	public <T extends Node> T lookupById(final String controlId) {
