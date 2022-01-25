@@ -2,24 +2,14 @@ package com.aiim.app.util;
 
 import static org.junit.Assert.assertSame;
 import static org.junit.jupiter.api.Assertions.*;
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.sql.Timestamp;
 import java.util.ResourceBundle;
-
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.net.ntp.TimeStamp;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.nd4j.linalg.api.ndarray.INDArray;
-
-import com.aiim.app.model.DataSetIter;
-import com.aiim.app.model.Network;
-
 import javafx.concurrent.Task;
 
 class AppUtilTest {
@@ -61,7 +51,6 @@ class AppUtilTest {
 	public void testIsAutoAssignedNeg() {
 		String prediction = "Guidewire";
 		int expectedResult = 0;
-		System.out.println(appUtil);
 		int result = appUtil.isAutoAssigned(prediction);
 		assertNotEquals(expectedResult, result);
 	}
@@ -101,9 +90,4 @@ class AppUtilTest {
 		assertTrue(file.length() > 0);
 		FileUtils.forceDelete(FileUtils.getFile(currentDirectory+"/files/"+filename));
 	}
-	
-	
-	
-	
-
 }
