@@ -120,6 +120,8 @@ public class Network {
     public void evaluate(ComputationGraph model, DataSetIterator testIter) {
     	Evaluation evaluation = model.evaluate(testIter);
         System.out.println(evaluation.stats());
+        System.out.println(evaluation.confusionToString());
+        evaluation.getConfusionMatrix().toHTML();
     }
     
     public String classify(INDArray features,ComputationGraph model) throws IOException {
@@ -135,7 +137,7 @@ public class Network {
 	            maxAt = predictions.getDouble(a) > predictions.getDouble(maxAt) ? a : maxAt;
 	        }
         System.out.println("Max is at " + maxAt);
-        String classification = labels.get(maxAt);
+        String classification = labels.get(maxAt); 
         System.out.println(classification);
     	//return the label classification here
 		return classification.toString();

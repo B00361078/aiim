@@ -116,9 +116,6 @@ public class Session {
 		setUsername(null);
 		setTeamID(null);
 		setCurrentTicket(null);
-		setPredictionLabels(null);
-		setDataSetIterator(null);
-		setModel(null);
-		session = null;
+		//session = null;
 	}
 }
