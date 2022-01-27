@@ -3,8 +3,6 @@ package com.aiim.app;
 import static org.junit.jupiter.api.Assertions.*;
 import java.io.IOException;
 import java.util.ResourceBundle;
-
-import org.junit.BeforeClass;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
@@ -80,10 +78,9 @@ class MainIT extends ApplicationTest {
 	    clickOn("#passwordField").write(SYSADMINPASS);
 	    clickOn("#loginBtn");
 	    clickOn("#settingsBtn");
-	    clickOn("#assignOn");
+	    clickOn("#assignOff");
 	    FxAssert.verifyThat("OK", NodeMatchers.isVisible());
 	    clickOn("Cancel");
-	    //clickOn("OK");
 	    clickOn("#backBtn");
 	    clickOn("#radioRaised");
 	    clickOn("#radioProg");
@@ -114,6 +111,21 @@ class MainIT extends ApplicationTest {
 	    doubleClickOn("#ticketTable");
 	    clickOn("#menuButton");
 	    clickOn("#menuItemLogout");
+	}
+	
+	@Order(8)
+	@Test
+	public void testRaise() throws IOException, InterruptedException {
+	    clickOn("#usernameField").write(AGENTUSER);
+	    clickOn("#passwordField").write(AGENTPASS);
+	    clickOn("#loginBtn");
+	    clickOn("#raiseNewBtn");
+	    clickOn("#details").write("I have an issue with guidewire claimcenter");
+	    clickOn("#raiseBtn"); 
+	    FxAssert.verifyThat("OK", NodeMatchers.isVisible());
+
+	    
+	    //assertEquals("/com/aiim/app/view/login.fxml", ViewController.createInstance().getResource(), strBundle.getString("testError1"));
 	}
 	
 	public <T extends Node> T lookupById(final String controlId) {
