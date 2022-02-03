@@ -1,11 +1,12 @@
 package com.aiim.app.model;
 
 import static org.junit.jupiter.api.Assertions.*;
-
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-
 import com.aiim.app.model.Ticket.Builder;
+
+/* Unit test class for Ticket Builder
+ * Neil Campbell 14/12/2021, B00361078
+ */
 
 class TicketTest {
 

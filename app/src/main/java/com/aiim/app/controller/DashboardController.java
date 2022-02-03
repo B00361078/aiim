@@ -8,10 +8,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
-
 import org.deeplearning4j.models.embeddings.wordvectors.WordVectors;
 import org.deeplearning4j.models.word2vec.Word2Vec;
-
 import com.aiim.app.database.DatabaseConnect;
 import com.aiim.app.model.Ticket;
 import com.aiim.app.model.Ticket.Builder;
@@ -19,7 +17,6 @@ import com.aiim.app.model.WordVector;
 import com.aiim.app.util.AppUtil;
 import com.aiim.app.util.Session;
 import com.aiim.app.view.ViewNames;
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;

@@ -8,3 +8,5 @@ Install java for oracle app for requested user
 Oracle requiring update, unable to launch, receiving error
 Oracle fin password reset Model Incident: ORACLE OTHER AI 2nd Line Service Request: Oracle Password reset
 Oracle client install requested to be installed onto machine
+Transaction delays between exceed and oracle
+Oracle watchlist is currently not working

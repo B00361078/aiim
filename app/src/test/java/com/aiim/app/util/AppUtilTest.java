@@ -12,6 +12,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import javafx.concurrent.Task;
 
+/* Unit test class for AppUtil class
+ * Neil Campbell 14/12/2021, B00361078
+ */
+
 class AppUtilTest {
 	
 	private AppUtil appUtil;

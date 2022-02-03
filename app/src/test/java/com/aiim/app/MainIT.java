@@ -13,9 +13,12 @@ import org.testfx.framework.junit5.ApplicationTest;
 import org.testfx.matcher.base.NodeMatchers;
 import com.aiim.app.controller.ViewController;
 import com.aiim.app.view.ViewNames;
-
 import javafx.scene.Node;
 import javafx.stage.Stage;
+
+/* Main integration class to test the UI and elements
+ * Neil Campbell 14/12/2021, B00361078
+ */
 
 @TestMethodOrder(OrderAnnotation.class)
 
@@ -23,11 +26,11 @@ class MainIT extends ApplicationTest {
 	
 	private String SYSADMINUSER;
 	private String SYSADMINPASS;
-	private ResourceBundle strBundle = ResourceBundle.getBundle("bundle");
 	private String AGENTUSER;
 	private String AGENTPASS;
 	private String OWNERUSER;
 	private String OWNERPASS;
+	private ResourceBundle strBundle = ResourceBundle.getBundle("bundle");
 	
 	@BeforeEach
 	public void setup() {
@@ -123,13 +126,9 @@ class MainIT extends ApplicationTest {
 	    clickOn("#details").write("I have an issue with guidewire claimcenter");
 	    clickOn("#raiseBtn"); 
 	    FxAssert.verifyThat("OK", NodeMatchers.isVisible());
-
-	    
-	    //assertEquals("/com/aiim/app/view/login.fxml", ViewController.createInstance().getResource(), strBundle.getString("testError1"));
 	}
 	
 	public <T extends Node> T lookupById(final String controlId) {
 	    return (T) lookup(controlId).queryAll().iterator().next();
 	}
-	
 }
