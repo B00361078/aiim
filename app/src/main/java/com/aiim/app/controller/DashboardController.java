@@ -77,10 +77,10 @@ public class DashboardController {
     	radioAll.setSelected(true);
     	//AppUtil appUtil = new AppUtil();
     	//appUtil.evaluateAcc();
-//    	String currentDirectory = Paths.get("").toAbsolutePath().toString();
-//    	WordVector wv = new WordVector();
-//    	Word2Vec vec = wv.buildVectors(currentDirectory + "/files/vectors_raw.txt", currentDirectory+"/files/stop_words.txt");
-//    	wv.viewSimilarWords(vec, "guidewire", 10);
+    	//String currentDirectory = Paths.get("").toAbsolutePath().toString();
+    	//WordVector wv = new WordVector();
+    	//Word2Vec vec = wv.buildVectors(currentDirectory + "/files/vectors_raw.txt", currentDirectory+"/files/stop_words.txt");
+    	//wv.viewSimilarWords(vec, "claimcenter", 10);
     }
     
     public void setRowFactory() {
