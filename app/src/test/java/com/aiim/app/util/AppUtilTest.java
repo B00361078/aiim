@@ -84,7 +84,7 @@ class AppUtilTest {
 		Timestamp timestamp = appUtil.getDate();
 		assertSame(strBundle.getString("testError4"), timestamp.getClass(), Timestamp.class);
 	}
-	
+	/**
 	@Test
 	public void testAppendToFile() throws IOException {
 		String filename = "test.txt";
@@ -94,4 +94,5 @@ class AppUtilTest {
 		assertTrue(file.length() > 0);
 		FileUtils.forceDelete(FileUtils.getFile(currentDirectory+"/files/"+filename));
 	}
+	*/
 }

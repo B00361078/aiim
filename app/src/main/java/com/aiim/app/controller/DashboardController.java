@@ -1,20 +1,15 @@
 package com.aiim.app.controller;
 
 import java.io.IOException;
-import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
-import org.deeplearning4j.models.embeddings.wordvectors.WordVectors;
-import org.deeplearning4j.models.word2vec.Word2Vec;
 import com.aiim.app.database.DatabaseConnect;
 import com.aiim.app.model.Ticket;
 import com.aiim.app.model.Ticket.Builder;
-import com.aiim.app.model.WordVector;
-import com.aiim.app.util.AppUtil;
 import com.aiim.app.util.Session;
 import com.aiim.app.view.ViewNames;
 import javafx.collections.FXCollections;
@@ -75,12 +70,6 @@ public class DashboardController {
     	initialiseRadios();
     	setRowFactory();
     	radioAll.setSelected(true);
-    	//AppUtil appUtil = new AppUtil();
-    	//appUtil.evaluateAcc();
-    	//String currentDirectory = Paths.get("").toAbsolutePath().toString();
-    	//WordVector wv = new WordVector();
-    	//Word2Vec vec = wv.buildVectors(currentDirectory + "/files/vectors_raw.txt", currentDirectory+"/files/stop_words.txt");
-    	//wv.viewSimilarWords(vec, "claimcenter", 10);
     }
     
     public void setRowFactory() {

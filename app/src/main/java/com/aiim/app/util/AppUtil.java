@@ -16,7 +16,6 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
-
 import org.deeplearning4j.models.word2vec.Word2Vec;
 import org.deeplearning4j.nn.graph.ComputationGraph;
 import com.aiim.app.database.DatabaseConnect;
@@ -38,12 +37,11 @@ import javafx.stage.Stage;
 public class AppUtil {
 	
 	private ResourceBundle strBundle;
-	private PreparedStatement sqlStatment;
 	private Connection con;
 	private ResultSet rs;
 	private PreparedStatement sqlStatement;
 	private String currentDirectory;
-	private ArrayList<String> list;	
+	private ArrayList<String> list;
 	
 	public AppUtil() {
 		strBundle = ResourceBundle.getBundle("bundle");
@@ -55,14 +53,14 @@ public class AppUtil {
 		String mode = null;
 		switch(param) {
 			case "assignMode":
-				sqlStatment = con.prepareStatement(strBundle.getString("sqlSelect1"));
+				sqlStatement = con.prepareStatement(strBundle.getString("sqlSelect1"));
 				break;
 			case "trainMode":
-				sqlStatment = con.prepareStatement(strBundle.getString("sqlSelect9"));
+				sqlStatement = con.prepareStatement(strBundle.getString("sqlSelect9"));
 				break;
 		}
-		sqlStatment.setInt(1, 1);
-		rs = sqlStatment.executeQuery();
+		sqlStatement.setInt(1, 1);
+		rs = sqlStatement.executeQuery();
 			while(rs.next()){
 				mode = rs.getString(1);
 	        }
