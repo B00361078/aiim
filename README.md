@@ -12,15 +12,16 @@ Run as Java application. Project is "app" and Main class is "com.aiim.app.Main",
 
 ###List of available users###
 
-username				password			role
 
-jsmt1010				user1010			agent
-ncam0310				AvaArran			owner (guidewire)
-user2020				user2020			sysadmin
-userfin1				userfin1			owner (finance)
-usergen1				usergen1			owner (general)
-usertel1				usertel1			owner (telephony)
-usersec1				usersec1			owner (security)
+| username      | password      | role             |
+| ------------- | ------------- | ---------------- |
+| jsmt1010		| user1010      | agent            |
+| ncam0310		| AvaArran      | owner (guidewire)|
+| user2020		| user2020      | sysadmin         |
+| userfin1		| userfin1      | owner (finance)  |
+| usergen1		| usergen1      | owner (general)  |
+| usertel1		| usertel1      | owner (telephony)|
+| usersec1		| usersec1      | owner (security) |
 
 
 
