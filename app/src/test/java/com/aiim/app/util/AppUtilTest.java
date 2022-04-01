@@ -2,12 +2,8 @@ package com.aiim.app.util;
 
 import static org.junit.Assert.assertSame;
 import static org.junit.jupiter.api.Assertions.*;
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Paths;
 import java.sql.Timestamp;
 import java.util.ResourceBundle;
-import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import javafx.concurrent.Task;
@@ -20,13 +16,11 @@ class AppUtilTest {
 	
 	private AppUtil appUtil;
 	private ResourceBundle strBundle;
-	private String currentDirectory;
 	
 	@BeforeEach
     public void setUp() {
         appUtil = new AppUtil();
         strBundle = ResourceBundle.getBundle("bundle");
-        currentDirectory = Paths.get("").toAbsolutePath().toString();
 	}
 	
 	@Test
