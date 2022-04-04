@@ -8,7 +8,7 @@
 repository. Select "Add project(s) to working set". Dependencies will automatically download to your USER_HOME directory.
 6. Locate the Main.java class located under com.aiim.app package. Right click then Run As>Run configurations. 
 Run as Java application. Project is "app" and Main class is "com.aiim.app.Main", this will launch the app.
-7. Right click the top level pakcage in package explorer. Select Run As>Maven Install, this is a simple way for unit tests to run then auto integration tests.
+7. Right click the top level package in package explorer. Select Run As>Maven Install, this is a simple way for unit tests to run then auto integration tests.
 
 ###Steps to launch from zipped folder###
 1. Extract the zipped folder.
